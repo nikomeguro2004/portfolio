@@ -148,7 +148,7 @@ function NeonNodes() {
           radius * Math.cos(phi)
         ),
         color: i % 2 === 0 ? NEON.cyan : NEON.pink,
-        size: 0.12 + (i % 3) * 0.04,
+        size: 0.06 + (i % 3) * 0.02,
       });
     }
     return data;

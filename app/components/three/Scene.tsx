@@ -109,8 +109,8 @@ export function Scene() {
     >
       <Canvas
         camera={{ 
-          position: [0, 0, 20],
-          fov: 50,
+          position: [0, 0, isMobile ? 25 : 20],
+          fov: isMobile ? 60 : 50,
           near: 0.1,
           far: 100,
         }}

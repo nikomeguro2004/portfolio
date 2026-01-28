@@ -1,12 +1,13 @@
 # S Adityan — Portfolio
 
 > **High-performance portfolio** showcasing full-stack engineering and AI development expertise.  
-> Built with **Next.js 16**, **Three.js**, and **GSAP** for immersive scroll-driven experiences.
+> Built with **Next.js 15**, **Three.js**, and **GSAP** for immersive 3D scroll-driven experiences.
 
-[![Next.js](https://img.shields.io/badge/Next.js-16.1.6-black?logo=next.js)](https://nextjs.org/)
-[![React](https://img.shields.io/badge/React-19.2.3-blue?logo=react)](https://react.dev/)
+[![Next.js](https://img.shields.io/badge/Next.js-15.1-black?logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-blue?logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.x-38bdf8?logo=tailwindcss)](https://tailwindcss.com/)
+[![Three.js](https://img.shields.io/badge/Three.js-r170-black?logo=three.js)](https://threejs.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.x-38bdf8?logo=tailwindcss)](https://tailwindcss.com/)
 
 ---
 
@@ -297,44 +298,39 @@ Take products from concept to deployment with a strong balance of engineering ri
 
 ---
 
-## 🎨 Animation System Architecture
+## 🎨 3D Visual System
 
-This portfolio implements **7 advanced animation features**:
+This portfolio features a **custom Three.js-powered 3D visualization system** with advanced interactions:
 
-### 1. Scroll-Driven Hero Narrative *(GSAP + Three.js)*
-- Three.js particle scene progresses with scroll
-- Camera dolly, particle density, color shifts at milestones
-- `ScrollTrigger.scrub = true` for smooth synchronization
+### Core 3D Features
 
-### 2. Section-Based Scene Morphing
-- Single persistent canvas
-- Geometry morphs: **Sphere → Network → Grid → Lines**
-- Triggered on section enter, zero reload cost
+#### Interactive System Core Visualization
+- **Neon-styled 3D planet** with glowing core, orbital rings, and particle nodes
+- **Real-time rotation** with mouse parallax effects
+- **Dynamic lighting** using multiple colored point lights
+- **Scroll-responsive animations** that react to page navigation
+- **Mobile-optimized rendering** with adaptive camera positioning and performance tuning
 
-### 3. Scroll-Activated Exploded Diagrams
-- 3D system components separate in space on scroll
-- Labels fade in with GSAP stagger
-- Z-depth separation for architecture visualization
+#### Visual Elements
+- **Glowing Core**: Pulsating icosahedron with cyan neon wireframe
+- **Orbital Rings**: Three rotating torus geometries with different neon colors
+- **Node Network**: Distributed sphere particles in cyan and pink
+- **Connection Lines**: Dynamic arc paths linking system components
+- **Ambient Lighting**: Multi-colored point lights creating depth and atmosphere
 
-### 4. Intelligent Cursor-Driven Micro-Interactions
-- Magnetic hover on buttons, links, cards
-- Cursor-proximity deformation
-- `GSAP.quickTo()` for performance
+#### Performance Optimizations
+- **Tab visibility detection** - pauses animation when tab is inactive
+- **Intersection Observer** - stops rendering when off-screen
+- **Mobile detection** - simplified rendering and adjusted camera for mobile devices
+- **Frame rate control** - demand vs. always frameloop based on visibility
+- **Geometry memoization** - prevents unnecessary re-creation of 3D objects
 
-### 5. Scroll-Pinned Technical Storytelling
-- Section pins for focused attention
-- Content changes while viewport stays fixed
-- Timeline with labeled steps
-
-### 6. Ambient Background Intelligence
-- Slow-moving particles react to scroll velocity
-- Low poly count, single shader
-- Respects `prefers-reduced-motion`
-
-### 7. Performance-Aware Loading Sequence
-- Progress-aware loader with stages
-- Smooth clip-path reveal transition
-- Hides WebGL initialization cost
+### Animation Philosophy
+Built with **scroll-driven storytelling** in mind:
+- Smooth, physics-based interactions
+- Responsive to user input (scroll, mouse movement)
+- Performance-first approach with lazy loading and conditional rendering
+- Accessibility-aware with reduced motion support
 
 ---
 
@@ -343,27 +339,25 @@ This portfolio implements **7 advanced animation features**:
 ```
 app/
 ├── components/
-│   ├── ClientLayout.tsx       # Client wrapper with cursor & loading
-│   ├── MagneticEffects.tsx    # Magnetic buttons, cards, cursor
-│   ├── Navigation.tsx         # Site navigation
-│   ├── LoadingSequence.tsx    # Performance-aware loader
-│   ├── ScrollPinnedSection.tsx # Scroll-pinned storytelling
+│   ├── ClientLayout.tsx           # Client wrapper with magnetic effects
+│   ├── MagneticEffects.tsx        # Magnetic buttons & cards
+│   ├── Navigation.tsx             # Site navigation with mobile support
+│   ├── LoadingSequence.tsx        # Initial loading animation
+│   ├── ScrollPinnedSection.tsx    # Scroll-pinned content sections
 │   └── three/
-│       ├── Scene.tsx          # Main Three.js scene
-│       ├── ParticleField.tsx  # Ambient particles
-│       ├── SceneMorph.tsx     # Section morphing geometries
-│       ├── AmbientBackground.tsx # Scroll-reactive background
-│       └── ExplodedDiagram.tsx # 3D exploded diagrams
+│       ├── Scene.tsx              # Main Three.js canvas & camera setup
+│       ├── SystemCore.tsx         # 3D planet with rings, nodes & core
+│       ├── InfrastructureMachine.tsx
+│       └── SystemDiagram.tsx
 ├── projects/
-│   └── page.tsx               # Projects page
-├── globals.css                # Global styles & CSS variables
-├── layout.tsx                 # Root layout with metadata
-├── page.tsx                   # Home page
-└── sitemap.ts                 # SEO sitemap
+│   └── page.tsx                   # Projects showcase page
+├── globals.css                    # Global styles, animations & variables
+├── layout.tsx                     # Root layout with metadata & fonts
+├── page.tsx                       # Home page
+└── sitemap.ts                     # SEO sitemap generation
 public/
-├── favicon.ico
-├── robots.txt
-└── site.webmanifest
+├── robots.txt                     # SEO crawler instructions
+└── site.webmanifest               # PWA manifest
 ```
 
 ---
@@ -393,13 +387,24 @@ npx tsc --noEmit
 
 | Category | Technologies |
 |----------|-------------|
-| **Framework** | Next.js 16.1.6 |
-| **UI** | React 19.2.3 |
-| **Styling** | Tailwind CSS 4 |
+| **Framework** | Next.js 15.1 (App Router) |
+| **UI Library** | React 19 |
+| **Styling** | Tailwind CSS 3 |
 | **Animation** | GSAP, ScrollTrigger |
 | **3D Graphics** | Three.js, @react-three/fiber, @react-three/drei |
 | **Language** | TypeScript 5.x |
+| **Development** | ESLint, PostCSS |
 | **Deployment** | Vercel (recommended) |
+
+## ✨ Key Features
+
+- 🎯 **Interactive 3D Visualization** - Custom Three.js planet system
+- 📱 **Fully Responsive** - Optimized for desktop, tablet, and mobile
+- ⚡ **Performance Optimized** - Lazy loading, code splitting, efficient rendering
+- 🎨 **Magnetic Interactions** - GSAP-powered magnetic buttons and cards
+- 🌐 **SEO Ready** - Comprehensive meta tags, sitemap, and semantic HTML
+- ♿ **Accessible** - Keyboard navigation, reduced motion support
+- 🔒 **Type Safe** - Built with TypeScript for reliability
 
 ---
 
