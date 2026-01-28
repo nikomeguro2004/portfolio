@@ -28,12 +28,16 @@ const ExperienceContext = createContext<ExperienceContextType>({
 
 export const useExperience = () => useContext(ExperienceContext);
 
-// Hook to detect touch devices
+// Hook to detect touch devices - only true for small-screen mobile devices
 function useIsTouchDevice(): boolean {
   const subscribe = useCallback(() => () => {}, []);
   const getSnapshot = useCallback(() => {
     if (typeof window === 'undefined') return false;
-    return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    // Only consider it a "touch device" if it's a small screen mobile
+    // Many laptops have touch but should still show Three.js
+    const isMobile = window.innerWidth < 768;
+    const hasTouchOnly = ('ontouchstart' in window || navigator.maxTouchPoints > 0) && !window.matchMedia('(pointer: fine)').matches;
+    return isMobile && hasTouchOnly;
   }, []);
   const getServerSnapshot = () => false;
   
@@ -127,18 +131,18 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const isTouchDevice = useIsTouchDevice();
   const mounted = useMounted();
   const prefersReducedMotion = usePrefersReducedMotion();
-  const isFirstVisit = useFirstVisit();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const _isFirstVisit = useFirstVisit(); // Keep for session tracking side effect
   const [scrollVelocity, setScrollVelocity] = useState(0);
   const lastScrollRef = useRef(0);
   
   // Initialize phase based on conditions to avoid effect setState
   const [phase, setPhase] = useState<ExperiencePhase>(() => {
     if (typeof window === 'undefined') return 'live'; // Default to live for SSR
-    // Skip loader for repeat visits or reduced motion
-    const hasVisited = sessionStorage.getItem('portfolio-visited-once');
+    // Skip loader only for reduced motion preference
     const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
-    if (hasVisited || reducedMotion) return 'live';
-    return 'loading';
+    if (reducedMotion) return 'live';
+    return 'loading'; // Always show loading on page load/reload
   });
   const [cursorVisible, setCursorVisible] = useState(() => phase === 'live');
 
@@ -190,8 +194,13 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const showSimplifiedScene = mounted && isTouchDevice && !prefersReducedMotion;
   const showReducedScene = mounted && prefersReducedMotion;
 
+  // Debug logging
+  useEffect(() => {
+    console.log('ClientLayout state:', { mounted, isTouchDevice, prefersReducedMotion, showFullScene, showSimplifiedScene, showReducedScene, effectivePhase });
+  }, [mounted, isTouchDevice, prefersReducedMotion, showFullScene, showSimplifiedScene, showReducedScene, effectivePhase]);
+
   // Show loading only for first visit and not reduced motion
-  const shouldShowLoader = mounted && isFirstVisit && effectivePhase === 'loading' && !prefersReducedMotion;
+  const shouldShowLoader = mounted && effectivePhase === 'loading' && !prefersReducedMotion;
 
   return (
     <ExperienceContext.Provider value={contextValue}>

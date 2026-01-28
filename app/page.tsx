@@ -64,6 +64,11 @@ const whatIDo = [
     desc: 'Scalable AWS solutions with Docker, Kubernetes, and CI/CD automation.',
     priority: 'tertiary'
   },
+  { 
+    title: 'Security & DevOps', 
+    desc: 'Web security best practices, SSL/HTTPS implementation, and automated deployment pipelines.',
+    priority: 'tertiary'
+  },
 ];
 
 export default function Home() {
@@ -203,7 +208,7 @@ export default function Home() {
   }, [hasScrolledOnce]);
 
   return (
-    <div className="relative">
+    <div className="relative" style={{ position: 'relative', zIndex: 10 }}>
       {/* 2. ORBS: Reduced count, semantic meaning */}
       {/* Hero Orb = Identity (single, intentional) */}
       <div
@@ -220,7 +225,7 @@ export default function Home() {
       />
 
       {/* Hero */}
-      <section ref={heroRef} className="min-h-screen flex items-center pt-12 pb-24">
+      <section ref={heroRef} className="min-h-screen flex items-center pt-12 pb-12">
         <div className="container">
           <div className="max-w-3xl">
             {/* 1. Name: Animated */}
@@ -264,7 +269,7 @@ export default function Home() {
       </section>
 
       {/* 4. What I Do - Cards with visual hierarchy */}
-      <section id="about" className="py-24">
+      <section id="about" className="py-16">
         <div className="container">
           <h2 className="fade-up text-3xl font-bold mb-12">What I Do</h2>
           
@@ -327,7 +332,7 @@ export default function Home() {
       {/* 10. SIGNATURE MOMENT: Deliberate pause point */}
       <div 
         ref={signaturePauseRef}
-        className="py-16 my-8"
+        className="py-8 my-4"
         style={{
           background: 'linear-gradient(180deg, transparent, rgba(56, 189, 248, 0.02), transparent)',
         }}
@@ -345,7 +350,7 @@ export default function Home() {
       </div>
 
       {/* 5. Experience - NO fade-up (counter-pattern), reduced motion, increased weight */}
-      <section id="experience" className="py-24">
+      <section id="experience" className="py-16">
         <div className="container">
           {/* No fade-up class - section is static */}
           <h2 className="text-3xl font-bold mb-12">Experience</h2>
@@ -376,7 +381,7 @@ export default function Home() {
       </section>
 
       {/* 6. Skills - Reframed as senior systems, reduced badges, stronger categories */}
-      <section id="skills" className="py-24">
+      <section id="skills" className="py-16">
         <div className="container">
           <h2 className="fade-up text-3xl font-bold mb-4">Systems I Work With</h2>
           <p className="fade-up text-sm mb-12" style={{ color: 'var(--text-tertiary)' }}>
@@ -406,7 +411,7 @@ export default function Home() {
       </section>
 
       {/* 7. Certifications - Collapsible, not flat */}
-      <section id="certifications" className="py-24">
+      <section id="certifications" className="py-16">
         <div className="container">
           <h2 className="fade-up text-3xl font-bold mb-12">Certifications</h2>
           
@@ -457,7 +462,7 @@ export default function Home() {
       </section>
 
       {/* 8. Contact - Confident, specific tone */}
-      <section id="contact" className="py-24">
+      <section id="contact" className="py-16">
         <div className="container">
           <div className="fade-up max-w-2xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Let&apos;s Connect</h2>
