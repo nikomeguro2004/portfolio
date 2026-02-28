@@ -7,18 +7,17 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { MagneticButton, MagneticCard } from '../components/MagneticInteractions';
 import ProjectsMilestoneDeck from '../components/ProjectsMilestoneDeck';
 import FloatingSectionNavbar from '../components/FloatingSectionNavbar';
+import SiteFooter from '../components/SiteFooter';
 import { projects, type Project } from './projectData';
 
 function ProjectsHeader({
   headerRef,
   totalProjects,
   activeProjects,
-  flagshipProjects,
 }: {
   headerRef: React.RefObject<HTMLDivElement | null>;
   totalProjects: number;
   activeProjects: number;
-  flagshipProjects: number;
 }) {
   return (
     <div ref={headerRef} className="mb-14">
@@ -57,7 +56,7 @@ function ProjectsHeader({
         </div>
       </div>
 
-      <div className="projects-intro mt-8 grid gap-3 opacity-0 sm:grid-cols-3">
+      <div className="projects-intro mt-8 grid gap-3 opacity-0 sm:grid-cols-2">
         <div className="rounded-xl border border-cyan-400/20 bg-cyan-500/5 px-4 py-3">
           <p className="text-xs uppercase tracking-[0.16em]" style={{ color: 'var(--text-tertiary)' }}>Total Projects</p>
           <p className="mt-2 text-2xl font-bold text-white">{totalProjects}</p>
@@ -65,10 +64,6 @@ function ProjectsHeader({
         <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/5 px-4 py-3">
           <p className="text-xs uppercase tracking-[0.16em]" style={{ color: 'var(--text-tertiary)' }}>Live / Active</p>
           <p className="mt-2 text-2xl font-bold text-white">{activeProjects}</p>
-        </div>
-        <div className="rounded-xl border border-indigo-400/20 bg-indigo-500/5 px-4 py-3">
-          <p className="text-xs uppercase tracking-[0.16em]" style={{ color: 'var(--text-tertiary)' }}>Flagship Builds</p>
-          <p className="mt-2 text-2xl font-bold text-white">{flagshipProjects}</p>
         </div>
       </div>
     </div>
@@ -85,8 +80,8 @@ function ProjectNavigator({
   onSelectProject: (index: number) => void;
 }) {
   return (
-    <aside className="hidden self-start lg:block lg:fixed lg:top-28 lg:left-[max(1.5rem,calc((100vw-1200px)/2+1.5rem))] lg:z-50 lg:w-57.5 lg:max-h-[calc(100vh-8rem)]">
-      <div className="rounded-xl border border-white/10 bg-black/20 p-4 backdrop-blur-sm lg:h-full lg:overflow-y-auto">
+    <aside className="hidden self-start md:block">
+      <div className="rounded-xl border border-white/10 bg-black/20 p-4 backdrop-blur-sm md:sticky md:top-28 md:max-h-[calc(100vh-8rem)] md:overflow-y-auto">
         <p className="mb-4 text-xs uppercase tracking-[0.16em]" style={{ color: 'var(--text-tertiary)' }}>Project Navigator</p>
         <div className="space-y-3">
           {sortedProjects.map((project, index) => (
@@ -135,7 +130,6 @@ function ProjectTimelineCard({
   onLeave: () => void;
 }) {
   const isLive = project.status === 'Live' || project.status === 'In Progress';
-  const isFlagship = project.priority === 'flagship';
 
   return (
     <motion.div
@@ -146,12 +140,12 @@ function ProjectTimelineCard({
       transition={{ duration: 0.45, delay: index * 0.04 }}
     >
       <MagneticCard
-        className={`project-card relative overflow-hidden transition-all duration-300 ${isFlagship ? 'border-cyan-500/20' : ''}`}
-        rotationStrength={isFlagship ? 3.2 : 1.8}
+        className="project-card relative overflow-hidden transition-all duration-300"
+        rotationStrength={1.8}
         onMouseEnter={() => onHover(project.title)}
         onMouseLeave={onLeave}
         style={{
-          boxShadow: isLive ? `0 0 ${isHovered ? 48 : 24}px rgba(56, 189, 248, ${isFlagship ? 0.16 : 0.08})` : 'none',
+          boxShadow: isLive ? `0 0 ${isHovered ? 48 : 24}px rgba(56, 189, 248, 0.1)` : 'none',
           borderColor: cardActive ? 'rgba(94, 234, 212, 0.36)' : undefined,
         }}
       >
@@ -165,15 +159,13 @@ function ProjectTimelineCard({
           Project {String(index + 1).padStart(2, '0')}
         </div>
 
-        <div className="relative grid gap-6 lg:grid-cols-[140px_1fr]">
-          <div className="rounded-xl border border-cyan-300/20 bg-cyan-500/5 p-3">
-            <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: 'var(--text-tertiary)' }}>Record</p>
-            <p className="mt-2 text-xl font-bold text-cyan-200">{String(index + 1).padStart(2, '0')}</p>
-            <p className="mt-2 text-xs" style={{ color: 'var(--text-tertiary)' }}>{project.period}</p>
-          </div>
+        <div className="absolute right-3 top-11">
+          <ProjectStatusPill status={project.status} />
+        </div>
 
+        <div className="relative">
           <div className="flex-1">
-            <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
+            <div className="mb-4 flex flex-wrap items-start justify-between gap-4 pr-24">
               <div>
                 <div className="flex items-center gap-3">
                   <h2 className="text-xl font-bold text-white">{project.title}</h2>
@@ -182,21 +174,18 @@ function ProjectTimelineCard({
                       href={project.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-500/15 text-cyan-400 hover:bg-cyan-500/25 transition-all hover:scale-105 group"
+                      className="inline-flex items-center gap-1 rounded-full bg-cyan-500/15 px-2.5 py-1 text-xs font-semibold text-cyan-400 transition-all hover:scale-105 hover:bg-cyan-500/25 group"
                       style={{ pointerEvents: 'auto' }}
                     >
-                      Live
+                      Open
                       <svg className="w-3 h-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                       </svg>
                     </a>
                   )}
                 </div>
-                <p className="text-cyan-400 text-sm font-medium mt-1">{project.subtitle}</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <ProjectStatusPill status={project.status} />
-                <span className="text-xs" style={{ color: 'var(--text-tertiary)' }}>{project.priority}</span>
+                <p className="mt-1 text-sm font-medium text-cyan-400">{project.subtitle}</p>
+                <p className="mt-2 text-xs" style={{ color: 'var(--text-tertiary)' }}>{project.period}</p>
               </div>
             </div>
 
@@ -248,26 +237,6 @@ function ProjectsCta() {
         Start a Conversation
       </MagneticButton>
     </div>
-  );
-}
-
-function ProjectsFooter() {
-  return (
-    <footer className="py-8 border-t group" style={{ borderColor: 'var(--border)' }}>
-      <div className="container">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
-            © {new Date().getFullYear()} S Adityan
-          </p>
-          <Link href="/" className="text-sm transition-all hover:text-cyan-400 group/link flex items-center gap-2" style={{ color: 'var(--text-tertiary)' }}>
-            <svg className="w-4 h-4 transition-transform group-hover/link:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to Home
-          </Link>
-        </div>
-      </div>
-    </footer>
   );
 }
 
@@ -377,14 +346,13 @@ export default function ProjectsPage() {
             headerRef={headerRef}
             totalProjects={sortedProjects.length}
             activeProjects={sortedProjects.filter((project) => project.status !== 'Completed').length}
-            flagshipProjects={sortedProjects.filter((project) => project.priority === 'flagship').length}
           />
 
           <div className="mb-10">
             <ProjectsMilestoneDeck />
           </div>
 
-          <div className="grid items-start gap-7 lg:grid-cols-[230px_1fr]">
+          <div className="grid items-start gap-7 md:grid-cols-[230px_minmax(0,1fr)]">
             <ProjectNavigator
               sortedProjects={sortedProjects}
               activeProjectIndex={activeProjectIndex}
@@ -412,7 +380,7 @@ export default function ProjectsPage() {
         </div>
       </div>
 
-      <ProjectsFooter />
+      <SiteFooter />
     </div>
   );
 }

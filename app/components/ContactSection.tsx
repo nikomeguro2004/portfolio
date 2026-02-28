@@ -1,7 +1,7 @@
 'use client';
 
-import Link from 'next/link';
 import { MagneticButton } from './MagneticInteractions';
+import SiteFooter from './SiteFooter';
 
 interface SocialItem {
   href: string;
@@ -90,18 +90,7 @@ export default function ContactSection({ socials }: ContactSectionProps) {
         </div>
       </section>
 
-      <footer className="py-8 border-t" style={{ borderColor: 'var(--border)' }}>
-        <div className="container">
-          <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-cyan-400/10 bg-slate-900/20 px-4 py-4 md:flex-row">
-            <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
-              © {new Date().getFullYear()} S Adityan
-            </p>
-            <Link href="/projects" className="text-sm transition-colors hover:text-cyan-400" style={{ color: 'var(--text-tertiary)' }}>
-              View Projects →
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   );
 }

@@ -1,16 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="A favicon">
-  <rect width="64" height="64" rx="12" fill="#000000" />
-  <text
-    x="50%"
-    y="52%"
-    text-anchor="middle"
-    dominant-baseline="middle"
-    fill="#2563EB"
-    font-family="Segoe UI, Inter, Arial, sans-serif"
-    font-size="42"
-    font-weight="700"
-    letter-spacing="0.5"
-  >
-    A
-  </text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="S Adityan favicon">
+  <defs>
+    <linearGradient id="bgGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#04060D" />
+      <stop offset="100%" stop-color="#0A0A0F" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#2563EB" />
+    </linearGradient>
+  </defs>
+
+  <rect width="64" height="64" rx="14" fill="url(#bgGradient)" />
+  <rect x="2" y="2" width="60" height="60" rx="12" fill="none" stroke="#1E293B" stroke-width="1.2" />
+
+  <path
+    d="M32 13 L17 51 H24.1 L27.3 42.4 H36.7 L39.9 51 H47 L32 13 Z M32 24.8 L34.4 31.4 H29.6 L32 24.8 Z"
+    fill="url(#accentGradient)"
+  />
+
+  <circle cx="47" cy="17" r="2.2" fill="#38BDF8" opacity="0.85" />
 </svg>
