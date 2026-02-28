@@ -9,6 +9,7 @@ import ServicesSection from './components/ServicesSection';
 import ExperienceBroadcastSection from './components/ExperienceBroadcastSection';
 import SkillsWorkspaceSection from './components/SkillsWorkspaceSection';
 import ContactSection from './components/ContactSection';
+import FloatingSectionNavbar from './components/FloatingSectionNavbar';
 
 const skills = {
   'Frontend Systems': [
@@ -239,6 +240,8 @@ export default function Home() {
 
   return (
     <div className="relative" style={{ position: 'relative', zIndex: 10 }}>
+      <FloatingSectionNavbar />
+
       <div
         className="fixed pointer-events-none"
         style={{
@@ -261,7 +264,7 @@ export default function Home() {
         aria-hidden="true"
       />
 
-      <section ref={heroRef} className="flex min-h-[90vh] items-center pt-12 pb-12 sm:min-h-[92vh]">
+      <section id="home" ref={heroRef} className="flex min-h-[90vh] items-center pt-12 pb-12 sm:min-h-[92vh]">
         <div className="container">
           <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-8 items-center">
             <div className="max-w-3xl">
@@ -346,7 +349,9 @@ export default function Home() {
         </div>
       </section>
 
-      <PinnedEvolutionSection steps={storySteps} />
+      <div id="process">
+        <PinnedEvolutionSection steps={storySteps} />
+      </div>
 
       <ServicesSection items={whatIDo} quote={guidingQuote} />
 
