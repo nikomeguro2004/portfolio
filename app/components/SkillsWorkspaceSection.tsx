@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 
-interface CinematicSolarSystemSkillsProps {
+interface SkillsWorkspaceSectionProps {
   skills: Record<string, string[]>;
 }
 
@@ -12,6 +12,7 @@ type FileId = 'frontend' | 'backend' | 'ai' | 'cloud' | 'data';
 type FileConfig = {
   id: FileId;
   name: string;
+  tabLabel: string;
   path: string;
   sourceKey: string;
   summary: string;
@@ -24,6 +25,7 @@ const FILES: FileConfig[] = [
   {
     id: 'frontend',
     name: 'frontend.systems.tsx',
+    tabLabel: 'Frontend',
     path: 'src/ui/frontend.systems.tsx',
     sourceKey: 'Frontend Systems',
     summary: 'Interface engineering focused on speed, clarity, and maintainability.',
@@ -34,6 +36,7 @@ const FILES: FileConfig[] = [
   {
     id: 'backend',
     name: 'backend.api.ts',
+    tabLabel: 'Backend',
     path: 'src/server/backend.api.ts',
     sourceKey: 'Backend & APIs',
     summary: 'Service contracts and orchestration for resilient product workflows.',
@@ -44,6 +47,7 @@ const FILES: FileConfig[] = [
   {
     id: 'ai',
     name: 'ai.pipeline.py',
+    tabLabel: 'AI',
     path: 'src/ai/ai.pipeline.py',
     sourceKey: 'AI Engineering',
     summary: 'Practical intelligence systems for retrieval and inference behavior.',
@@ -54,6 +58,7 @@ const FILES: FileConfig[] = [
   {
     id: 'cloud',
     name: 'cloud.delivery.yml',
+    tabLabel: 'Cloud',
     path: 'ops/cloud.delivery.yml',
     sourceKey: 'Cloud & Delivery',
     summary: 'Release pipelines and runtime discipline for predictable deployments.',
@@ -64,6 +69,7 @@ const FILES: FileConfig[] = [
   {
     id: 'data',
     name: 'data.storage.ts',
+    tabLabel: 'Data',
     path: 'src/data/data.storage.ts',
     sourceKey: 'Data & Storage',
     summary: 'Structured persistence decisions for product correctness and scale.',
@@ -92,7 +98,7 @@ function buildCodeLines(file: FileConfig, technologies: string[]) {
   ];
 }
 
-export default function CinematicSolarSystemSkills({ skills }: CinematicSolarSystemSkillsProps) {
+export default function SkillsWorkspaceSection({ skills }: SkillsWorkspaceSectionProps) {
   const [selectedFileId, setSelectedFileId] = useState<FileId>('frontend');
   const [hoveredFileId, setHoveredFileId] = useState<FileId | null>(null);
 
@@ -158,11 +164,17 @@ export default function CinematicSolarSystemSkills({ skills }: CinematicSolarSys
                   aria-pressed={isSelected}
                 >
                   <span
-                    className="h-2 w-2 rounded-full"
-                    style={{ background: file.accent, boxShadow: isActive ? `0 0 10px ${file.accent}` : 'none' }}
-                  />
+                    aria-hidden="true"
+                    className="text-sm font-black leading-none tracking-tight"
+                    style={{
+                      color: isActive ? '#3B82F6' : '#6366F1',
+                      fontFamily: 'var(--font-heading), var(--font-geist-sans), sans-serif',
+                    }}
+                  >
+                    A
+                  </span>
                   <span className="text-[11px] font-medium sm:text-xs" style={{ color: isActive ? '#E6EDF3' : 'rgba(230, 237, 243, 0.72)' }}>
-                    {file.name}
+                    {file.tabLabel}
                   </span>
                 </button>
               );

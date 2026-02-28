@@ -33,7 +33,7 @@ const SIGNALS = [
   { label: 'Health', value: 'Measured' },
 ];
 
-export default function HeroNarrativeCluster() {
+export default function HeroDeliveryPanel() {
   const rootRef = useRef<HTMLDivElement>(null);
   const [activeCard, setActiveCard] = useState(0);
 

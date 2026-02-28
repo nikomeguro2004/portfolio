@@ -3,13 +3,13 @@
 import { useEffect, useRef } from 'react';
 import { animate, stagger } from 'animejs';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { MagneticButton } from './components/MagneticEffects';
-import HeroNarrativeCluster from './components/HeroNarrativeCluster';
-import NarrativeAxisSection from './components/NarrativeAxisSection';
-import ServiceConstellation from './components/ServiceConstellation';
-import ExperienceTV from './components/ExperienceTV';
-import CinematicSolarSystemSkills from './components/CinematicSolarSystemSkills';
-import ContactRelay from './components/ContactRelay';
+import { MagneticButton } from './components/MagneticInteractions';
+import HeroDeliveryPanel from './components/HeroDeliveryPanel';
+import PinnedEvolutionSection from './components/PinnedEvolutionSection';
+import ServicesSection from './components/ServicesSection';
+import ExperienceBroadcastSection from './components/ExperienceBroadcastSection';
+import SkillsWorkspaceSection from './components/SkillsWorkspaceSection';
+import ContactSection from './components/ContactSection';
 
 function ViewportParallaxPanel({
   children,
@@ -305,7 +305,7 @@ export default function Home() {
       />
 
       <motion.div
-        className="fixed pointer-events-none left-[8%] top-[40%] h-[340px] w-[340px] rounded-full blur-3xl"
+        className="fixed pointer-events-none left-[8%] top-[40%] h-85 w-85 rounded-full blur-3xl"
         style={{
           background: 'radial-gradient(circle, rgba(123,97,255,0.2), transparent 72%)',
           y: globalOrbY,
@@ -336,7 +336,7 @@ export default function Home() {
                 </p>
 
                 <div className="mb-6 w-full max-w-2xl">
-                  <HeroNarrativeCluster />
+                  <HeroDeliveryPanel />
                 </div>
 
                 <div ref={ctaRef} className="flex flex-wrap gap-4 mb-10">
@@ -403,23 +403,23 @@ export default function Home() {
       </ViewportParallaxPanel>
 
       <ViewportParallaxPanel glow="violet" mode="content">
-        <NarrativeAxisSection steps={storySteps} />
+        <PinnedEvolutionSection steps={storySteps} />
       </ViewportParallaxPanel>
 
       <ViewportParallaxPanel glow="cyan" mode="content">
-        <ServiceConstellation items={whatIDo} quote={guidingQuote} />
+        <ServicesSection items={whatIDo} quote={guidingQuote} />
       </ViewportParallaxPanel>
 
       <ViewportParallaxPanel glow="violet">
-        <ExperienceTV />
+        <ExperienceBroadcastSection />
       </ViewportParallaxPanel>
 
       <ViewportParallaxPanel glow="cyan">
-        <CinematicSolarSystemSkills skills={skills} />
+        <SkillsWorkspaceSection skills={skills} />
       </ViewportParallaxPanel>
 
       <ViewportParallaxPanel glow="violet">
-        <ContactRelay socials={socials} />
+        <ContactSection socials={socials} />
       </ViewportParallaxPanel>
     </div>
   );

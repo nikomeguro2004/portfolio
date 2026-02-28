@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { MagneticButton } from './MagneticEffects';
+import { MagneticButton } from './MagneticInteractions';
 
 interface SocialItem {
   href: string;
@@ -9,11 +9,11 @@ interface SocialItem {
   icon: string;
 }
 
-interface ContactRelayProps {
+interface ContactSectionProps {
   socials: SocialItem[];
 }
 
-export default function ContactRelay({ socials }: ContactRelayProps) {
+export default function ContactSection({ socials }: ContactSectionProps) {
   return (
     <>
       <section id="contact" className="py-16">

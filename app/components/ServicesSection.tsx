@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { animate, stagger } from 'animejs';
-import { MagneticCard } from './MagneticEffects';
+import { MagneticCard } from './MagneticInteractions';
 
 interface ServiceItem {
   title: string;
@@ -10,12 +10,12 @@ interface ServiceItem {
   chips: string[];
 }
 
-interface ServiceConstellationProps {
+interface ServicesSectionProps {
   items: ServiceItem[];
   quote: string;
 }
 
-export default function ServiceConstellation({ items, quote }: ServiceConstellationProps) {
+export default function ServicesSection({ items, quote }: ServicesSectionProps) {
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

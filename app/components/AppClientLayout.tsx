@@ -2,8 +2,8 @@
 
 import { useSyncExternalStore, useCallback, useState, createContext, useContext, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
-import LoadingSequence from '@/app/components/LoadingSequence';
-import StoryMotionBackdrop from './StoryMotionBackdrop';
+import AppLoadingSequence from '@/app/components/AppLoadingSequence';
+import StoryBackdrop from './StoryBackdrop';
 
 // EXPERIENCE CONTEXT: Global narrative state
 type ExperiencePhase = 'loading' | 'revealing' | 'live';
@@ -83,11 +83,11 @@ function SimplifiedSceneFallback() {
   );
 }
 
-interface ClientLayoutProps {
+interface AppClientLayoutProps {
   children: React.ReactNode;
 }
 
-export default function ClientLayout({ children }: ClientLayoutProps) {
+export default function AppClientLayout({ children }: AppClientLayoutProps) {
   const pathname = usePathname();
   const isTouchDevice = useIsTouchDevice();
   const mounted = useMounted();
@@ -154,11 +154,11 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
     <ExperienceContext.Provider value={contextValue}>
       {/* Loading sequence - every full reload */}
       {shouldShowLoader && (
-        <LoadingSequence onComplete={handleLoadingComplete} minDuration={2800} />
+        <AppLoadingSequence onComplete={handleLoadingComplete} minDuration={2800} />
       )}
       
       {/* Story-first Anime.js backdrop (desktop) */}
-      {showStoryBackdrop && <StoryMotionBackdrop emphasize={pathname === '/'} />}
+      {showStoryBackdrop && <StoryBackdrop emphasize={pathname === '/'} />}
       
       {/* TOUCH DEVICE: Simplified atmosphere instead of nothing */}
       {showSimplifiedScene && <SimplifiedSceneFallback />}

@@ -4,8 +4,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { animate, stagger } from 'animejs';
 import { AnimatePresence, motion } from 'framer-motion';
-import { MagneticButton, MagneticCard } from '../components/MagneticEffects';
-import ProjectMilestoneDeck from '../components/ProjectMilestoneDeck';
+import { MagneticButton, MagneticCard } from '../components/MagneticInteractions';
+import ProjectsMilestoneDeck from '../components/ProjectsMilestoneDeck';
 
 type Project = {
   title: string;
@@ -245,7 +245,7 @@ export default function ProjectsPage() {
           </div>
 
           <div className="mb-10">
-            <ProjectMilestoneDeck />
+            <ProjectsMilestoneDeck />
           </div>
 
           <div className="grid items-start gap-7 lg:grid-cols-[230px_1fr]">

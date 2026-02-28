@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { animate, stagger } from 'animejs';
 
-interface StoryMotionBackdropProps {
+interface StoryBackdropProps {
   emphasize?: boolean;
 }
 
@@ -64,7 +64,7 @@ const FAR_STARS = [
   { x: 93, y: 86, size: 3 },
 ];
 
-export default function StoryMotionBackdrop({ emphasize = false }: StoryMotionBackdropProps) {
+export default function StoryBackdrop({ emphasize = false }: StoryBackdropProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const nearStarRef = useRef<HTMLDivElement>(null);
   const farStarRef = useRef<HTMLDivElement>(null);

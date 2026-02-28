@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono, Manrope, Sora, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import ClientLayout from "./components/ClientLayout";
+import AppClientLayout from "./components/AppClientLayout";
 
 const interSans = Inter({
   variable: "--font-geist-sans",
@@ -115,9 +115,9 @@ export default function RootLayout({
       <body
         className={`${interSans.variable} ${manrope.variable} ${jetbrainsMono.variable} ${spaceGrotesk.variable} ${sora.variable} antialiased`}
       >
-        <ClientLayout>
+        <AppClientLayout>
           <main className="relative z-10">{children}</main>
-        </ClientLayout>
+        </AppClientLayout>
       </body>
     </html>
   );

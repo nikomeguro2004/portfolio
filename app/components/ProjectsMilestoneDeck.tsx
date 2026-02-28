@@ -10,7 +10,7 @@ const MILESTONES = [
   { step: '04', title: 'Growth Tuning', note: 'Improve via real telemetry', command: 'iterate --signals --impact' },
 ];
 
-export default function ProjectMilestoneDeck() {
+export default function ProjectsMilestoneDeck() {
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

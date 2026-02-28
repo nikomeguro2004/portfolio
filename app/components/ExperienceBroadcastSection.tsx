@@ -96,7 +96,7 @@ const CHANNELS: ExperienceChannel[] = [
   },
 ];
 
-export default function ExperienceTV() {
+export default function ExperienceBroadcastSection() {
   const rootRef = useRef<HTMLDivElement>(null);
   const screenRef = useRef<HTMLDivElement>(null);
   const [activeChannel, setActiveChannel] = useState(2);

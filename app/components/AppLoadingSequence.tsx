@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { animate, stagger } from 'animejs';
 
-interface LoadingSequenceProps {
+interface AppLoadingSequenceProps {
   onComplete: () => void;
   minDuration?: number;
 }
@@ -16,7 +16,7 @@ const LOADING_STAGES = [
   'Preparing launch corridor',
 ];
 
-export default function LoadingSequence({ onComplete, minDuration = 2800 }: LoadingSequenceProps) {
+export default function AppLoadingSequence({ onComplete, minDuration = 2800 }: AppLoadingSequenceProps) {
   const [progress, setProgress] = useState(0);
   const [stageIndex, setStageIndex] = useState(0);
   const [complete, setComplete] = useState(false);

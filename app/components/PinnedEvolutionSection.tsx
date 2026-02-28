@@ -10,7 +10,7 @@ interface Step {
   metric: { value: string; label: string };
 }
 
-interface NarrativeAxisSectionProps {
+interface PinnedEvolutionSectionProps {
   steps: Step[];
 }
 
@@ -47,7 +47,7 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
 
-export default function NarrativeAxisSection({ steps }: NarrativeAxisSectionProps) {
+export default function PinnedEvolutionSection({ steps }: PinnedEvolutionSectionProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const stages = useMemo(() => (steps.length >= 4 ? steps.slice(0, 4) : FALLBACK_STAGES), [steps]);
 
