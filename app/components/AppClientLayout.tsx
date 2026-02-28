@@ -148,7 +148,7 @@ export default function AppClientLayout({ children }: AppClientLayoutProps) {
   const showReducedScene = mounted && prefersReducedMotion;
 
   // Show loading on every full reload (except reduced motion users)
-  const shouldShowLoader = mounted && effectivePhase === 'loading' && !prefersReducedMotion;
+  const shouldShowLoader = mounted && effectivePhase === 'loading' && !prefersReducedMotion && pathname !== '/projects';
 
   return (
     <ExperienceContext.Provider value={contextValue}>

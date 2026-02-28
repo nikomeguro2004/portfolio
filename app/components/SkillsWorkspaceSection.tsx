@@ -21,6 +21,10 @@ type FileConfig = {
   language: 'tsx' | 'ts' | 'py' | 'yml';
 };
 
+type FileWithTechnologies = FileConfig & {
+  technologies: string[];
+};
+
 const FILES: FileConfig[] = [
   {
     id: 'frontend',
@@ -98,6 +102,188 @@ function buildCodeLines(file: FileConfig, technologies: string[]) {
   ];
 }
 
+function SkillsTabs({
+  files,
+  activeFileId,
+  selectedFileId,
+  onHover,
+  onLeave,
+  onSelect,
+}: {
+  files: FileWithTechnologies[];
+  activeFileId: FileId;
+  selectedFileId: FileId;
+  onHover: (fileId: FileId) => void;
+  onLeave: () => void;
+  onSelect: (fileId: FileId) => void;
+}) {
+  return (
+    <div className="flex gap-1 overflow-x-auto border-b border-white/10 px-2 py-2 sm:px-3">
+      {files.map((file) => {
+        const isActive = file.id === activeFileId;
+        const isSelected = file.id === selectedFileId;
+
+        return (
+          <button
+            key={file.id}
+            type="button"
+            onMouseEnter={() => onHover(file.id)}
+            onMouseLeave={onLeave}
+            onFocus={() => onHover(file.id)}
+            onBlur={onLeave}
+            onClick={() => onSelect(file.id)}
+            className="group flex shrink-0 items-center gap-2 rounded-md border px-3 py-2 text-left transition-colors duration-200"
+            style={{
+              borderColor: isActive ? `${file.accent}80` : 'rgba(255,255,255,0.12)',
+              background: isActive ? 'rgba(15, 23, 42, 0.9)' : 'rgba(2, 6, 23, 0.55)',
+            }}
+            aria-pressed={isSelected}
+          >
+            <span
+              aria-hidden="true"
+              className="text-sm font-black leading-none tracking-tight"
+              style={{
+                color: isActive ? '#3B82F6' : '#6366F1',
+                fontFamily: 'var(--font-heading), var(--font-geist-sans), sans-serif',
+              }}
+            >
+              A
+            </span>
+            <span className="text-[11px] font-medium sm:text-xs" style={{ color: isActive ? '#E6EDF3' : 'rgba(230, 237, 243, 0.72)' }}>
+              {file.tabLabel}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function SkillsExplorer({ files, activeFileId }: { files: FileWithTechnologies[]; activeFileId: FileId }) {
+  return (
+    <aside className="border-b border-white/10 bg-slate-950/75 p-4 lg:border-b-0 lg:border-r">
+      <p className="text-[10px] uppercase tracking-[0.16em]" style={{ color: 'rgba(230, 237, 243, 0.62)' }}>
+        Explorer
+      </p>
+      <div className="mt-3 space-y-1.5">
+        {files.map((file) => {
+          const isActive = file.id === activeFileId;
+          return (
+            <div
+              key={`tree-${file.id}`}
+              className="rounded-md border px-3 py-2 transition-all duration-200"
+              style={{
+                borderColor: isActive ? `${file.accent}66` : 'rgba(255,255,255,0.1)',
+                background: isActive ? 'rgba(15, 23, 42, 0.62)' : 'rgba(2, 6, 23, 0.42)',
+              }}
+            >
+              <p className="text-[11px] font-medium" style={{ color: isActive ? '#E6EDF3' : 'rgba(230, 237, 243, 0.76)' }}>
+                {file.name}
+              </p>
+              <p className="mt-1 text-[10px]" style={{ color: 'rgba(230, 237, 243, 0.5)' }}>
+                {file.path}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+    </aside>
+  );
+}
+
+function SkillsCodePanel({ activeFile }: { activeFile: FileWithTechnologies }) {
+  const lines = buildCodeLines(activeFile, activeFile.technologies);
+
+  return (
+    <div className="relative border-b border-white/10 bg-[#020617]/70 p-4 sm:p-5 lg:border-b-0 lg:border-r">
+      <div className="mb-3 flex items-center justify-between text-[10px] uppercase tracking-[0.14em]" style={{ color: 'rgba(230, 237, 243, 0.58)' }}>
+        <span>{activeFile.path}</span>
+        <span>{activeFile.language}</span>
+      </div>
+
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={activeFile.id}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.3, ease: easeSmooth }}
+          className="font-mono text-[11px] leading-6 sm:text-xs"
+        >
+          {lines.map((line, index) => (
+            <div key={`${activeFile.id}-line-${index}`} className="grid grid-cols-[26px_minmax(0,1fr)] gap-3">
+              <span className="select-none text-right" style={{ color: 'rgba(230, 237, 243, 0.32)' }}>
+                {index + 1}
+              </span>
+              <span className="truncate sm:whitespace-pre-wrap" style={{ color: index === 0 ? activeFile.accent : '#C9D3DE' }}>
+                {line}
+              </span>
+            </div>
+          ))}
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function SkillsMetaPanel({ activeFile }: { activeFile: FileWithTechnologies }) {
+  const technologies = activeFile.technologies.length ? activeFile.technologies : ['Core delivery', 'System ownership', 'Platform quality'];
+
+  return (
+    <aside className="bg-slate-950/80 p-4 sm:p-5">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={`${activeFile.id}-meta`}
+          initial={{ opacity: 0, x: 8 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -8 }}
+          transition={{ duration: 0.25, ease: easeSmooth }}
+        >
+          <p className="text-[10px] uppercase tracking-[0.18em]" style={{ color: activeFile.accent }}>
+            Active Module
+          </p>
+          <h3 className="mt-2 text-xl font-semibold" style={{ color: '#E6EDF3' }}>
+            {activeFile.name}
+          </h3>
+          <p className="mt-3 text-sm" style={{ color: 'rgba(230, 237, 243, 0.8)' }}>
+            {activeFile.summary}
+          </p>
+
+          <div className="mt-4 rounded-xl border border-white/10 bg-black/25 p-3">
+            <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: 'rgba(230, 237, 243, 0.6)' }}>
+              System Role
+            </p>
+            <p className="mt-2 text-sm" style={{ color: '#C9D3DE' }}>
+              {activeFile.role}
+            </p>
+          </div>
+
+          <div className="mt-4 rounded-xl border border-white/10 bg-black/25 p-3">
+            <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: 'rgba(230, 237, 243, 0.6)' }}>
+              Technologies
+            </p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {technologies.map((tech) => (
+                <span
+                  key={`${activeFile.id}-${tech}`}
+                  className="rounded-full border px-2.5 py-1 text-[10px] uppercase tracking-[0.08em]"
+                  style={{
+                    borderColor: `${activeFile.accent}66`,
+                    color: activeFile.accent,
+                    background: 'rgba(2, 6, 23, 0.65)',
+                  }}
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </AnimatePresence>
+    </aside>
+  );
+}
+
 export default function SkillsWorkspaceSection({ skills }: SkillsWorkspaceSectionProps) {
   const [selectedFileId, setSelectedFileId] = useState<FileId>('frontend');
   const [hoveredFileId, setHoveredFileId] = useState<FileId | null>(null);
@@ -113,7 +299,6 @@ export default function SkillsWorkspaceSection({ skills }: SkillsWorkspaceSectio
 
   const activeFileId = hoveredFileId ?? selectedFileId;
   const activeFile = files.find((file) => file.id === activeFileId) ?? files[0];
-  const lines = buildCodeLines(activeFile, activeFile.technologies);
 
   return (
     <section id="skills" className="relative w-full px-4 py-16 sm:py-20">
@@ -142,154 +327,19 @@ export default function SkillsWorkspaceSection({ skills }: SkillsWorkspaceSectio
             </p>
           </div>
 
-          <div className="flex gap-1 overflow-x-auto border-b border-white/10 px-2 py-2 sm:px-3">
-            {files.map((file) => {
-              const isActive = file.id === activeFileId;
-              const isSelected = file.id === selectedFileId;
-
-              return (
-                <button
-                  key={file.id}
-                  type="button"
-                  onMouseEnter={() => setHoveredFileId(file.id)}
-                  onMouseLeave={() => setHoveredFileId(null)}
-                  onFocus={() => setHoveredFileId(file.id)}
-                  onBlur={() => setHoveredFileId(null)}
-                  onClick={() => setSelectedFileId(file.id)}
-                  className="group flex shrink-0 items-center gap-2 rounded-md border px-3 py-2 text-left transition-colors duration-200"
-                  style={{
-                    borderColor: isActive ? `${file.accent}80` : 'rgba(255,255,255,0.12)',
-                    background: isActive ? 'rgba(15, 23, 42, 0.9)' : 'rgba(2, 6, 23, 0.55)',
-                  }}
-                  aria-pressed={isSelected}
-                >
-                  <span
-                    aria-hidden="true"
-                    className="text-sm font-black leading-none tracking-tight"
-                    style={{
-                      color: isActive ? '#3B82F6' : '#6366F1',
-                      fontFamily: 'var(--font-heading), var(--font-geist-sans), sans-serif',
-                    }}
-                  >
-                    A
-                  </span>
-                  <span className="text-[11px] font-medium sm:text-xs" style={{ color: isActive ? '#E6EDF3' : 'rgba(230, 237, 243, 0.72)' }}>
-                    {file.tabLabel}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+          <SkillsTabs
+            files={files}
+            activeFileId={activeFileId}
+            selectedFileId={selectedFileId}
+            onHover={setHoveredFileId}
+            onLeave={() => setHoveredFileId(null)}
+            onSelect={setSelectedFileId}
+          />
 
           <div className="grid lg:grid-cols-[220px_minmax(0,1fr)_320px]">
-            <aside className="border-b border-white/10 bg-slate-950/75 p-4 lg:border-b-0 lg:border-r">
-              <p className="text-[10px] uppercase tracking-[0.16em]" style={{ color: 'rgba(230, 237, 243, 0.62)' }}>
-                Explorer
-              </p>
-              <div className="mt-3 space-y-1.5">
-                {files.map((file) => {
-                  const isActive = file.id === activeFileId;
-                  return (
-                    <div
-                      key={`tree-${file.id}`}
-                      className="rounded-md border px-3 py-2 transition-all duration-200"
-                      style={{
-                        borderColor: isActive ? `${file.accent}66` : 'rgba(255,255,255,0.1)',
-                        background: isActive ? 'rgba(15, 23, 42, 0.62)' : 'rgba(2, 6, 23, 0.42)',
-                      }}
-                    >
-                      <p className="text-[11px] font-medium" style={{ color: isActive ? '#E6EDF3' : 'rgba(230, 237, 243, 0.76)' }}>
-                        {file.name}
-                      </p>
-                      <p className="mt-1 text-[10px]" style={{ color: 'rgba(230, 237, 243, 0.5)' }}>
-                        {file.path}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
-            </aside>
-
-            <div className="relative border-b border-white/10 bg-[#020617]/70 p-4 sm:p-5 lg:border-b-0 lg:border-r">
-              <div className="mb-3 flex items-center justify-between text-[10px] uppercase tracking-[0.14em]" style={{ color: 'rgba(230, 237, 243, 0.58)' }}>
-                <span>{activeFile.path}</span>
-                <span>{activeFile.language}</span>
-              </div>
-
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeFile.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.3, ease: easeSmooth }}
-                  className="font-mono text-[11px] leading-6 sm:text-xs"
-                >
-                  {lines.map((line, index) => (
-                    <div key={`${activeFile.id}-line-${index}`} className="grid grid-cols-[26px_minmax(0,1fr)] gap-3">
-                      <span className="select-none text-right" style={{ color: 'rgba(230, 237, 243, 0.32)' }}>
-                        {index + 1}
-                      </span>
-                      <span className="truncate sm:whitespace-pre-wrap" style={{ color: index === 0 ? activeFile.accent : '#C9D3DE' }}>
-                        {line}
-                      </span>
-                    </div>
-                  ))}
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-            <aside className="bg-slate-950/80 p-4 sm:p-5">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`${activeFile.id}-meta`}
-                  initial={{ opacity: 0, x: 8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -8 }}
-                  transition={{ duration: 0.25, ease: easeSmooth }}
-                >
-                  <p className="text-[10px] uppercase tracking-[0.18em]" style={{ color: activeFile.accent }}>
-                    Active Module
-                  </p>
-                  <h3 className="mt-2 text-xl font-semibold" style={{ color: '#E6EDF3' }}>
-                    {activeFile.name}
-                  </h3>
-                  <p className="mt-3 text-sm" style={{ color: 'rgba(230, 237, 243, 0.8)' }}>
-                    {activeFile.summary}
-                  </p>
-
-                  <div className="mt-4 rounded-xl border border-white/10 bg-black/25 p-3">
-                    <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: 'rgba(230, 237, 243, 0.6)' }}>
-                      System Role
-                    </p>
-                    <p className="mt-2 text-sm" style={{ color: '#C9D3DE' }}>
-                      {activeFile.role}
-                    </p>
-                  </div>
-
-                  <div className="mt-4 rounded-xl border border-white/10 bg-black/25 p-3">
-                    <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: 'rgba(230, 237, 243, 0.6)' }}>
-                      Technologies
-                    </p>
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      {(activeFile.technologies.length ? activeFile.technologies : ['Core delivery', 'System ownership', 'Platform quality']).map((tech) => (
-                        <span
-                          key={`${activeFile.id}-${tech}`}
-                          className="rounded-full border px-2.5 py-1 text-[10px] uppercase tracking-[0.08em]"
-                          style={{
-                            borderColor: `${activeFile.accent}66`,
-                            color: activeFile.accent,
-                            background: 'rgba(2, 6, 23, 0.65)',
-                          }}
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </aside>
+            <SkillsExplorer files={files} activeFileId={activeFileId} />
+            <SkillsCodePanel activeFile={activeFile} />
+            <SkillsMetaPanel activeFile={activeFile} />
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 px-4 py-2 sm:px-5">

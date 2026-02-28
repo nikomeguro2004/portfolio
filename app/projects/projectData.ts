@@ -1,0 +1,92 @@
+export type Project = {
+  title: string;
+  subtitle: string;
+  period: string;
+  status: 'In Progress' | 'Live' | 'Completed';
+  priority: 'flagship' | 'standard';
+  description: string;
+  highlights: string[];
+  techStack: string[];
+  link?: string;
+  orderKey: number;
+};
+
+export const projects = [
+  {
+    title: 'CuiSync',
+    subtitle: 'Restaurant Management Platform',
+    period: 'Nov 2025 – Present',
+    status: 'In Progress',
+    priority: 'flagship',
+    description:
+      'Real-time restaurant operations platform with role-based access, offline-tolerant workflows, and cross-device synchronization.',
+    highlights: [
+      'Multi-role access control with auditable operations',
+      'Real-time sync with local persistence fallback',
+      'Cross-platform Flutter & Next.js interfaces',
+    ],
+    techStack: ['Flutter', 'Next.js', 'SQLite', 'Supabase', 'TypeScript'],
+    orderKey: 202611,
+  },
+  {
+    title: 'SivaComics',
+    subtitle: 'Comic Publishing Platform',
+    period: 'Oct 2025 – Jan 2026',
+    status: 'Live',
+    priority: 'flagship',
+    description: 'Web-based comic publishing platform optimized for performance, SEO, and scalable content delivery.',
+    highlights: ['SSR with OpenGraph and JSON-LD metadata', 'AWS S3 + CloudFront asset delivery', 'Optimized rendering for media-heavy content'],
+    techStack: ['Next.js', 'React', 'Tailwind CSS', 'AWS S3', 'CloudFront'],
+    link: 'https://sivacomics.com',
+    orderKey: 202601,
+  },
+  {
+    title: 'EssayRaccoon',
+    subtitle: 'UPSC Essay Preparation',
+    period: 'Jan 2026 – Feb 2026',
+    status: 'Live',
+    priority: 'flagship',
+    description: 'Educational platform for UPSC aspirants with curated resources, video content, and subscription access.',
+    highlights: [
+      'Supabase-backed CMS with daily publishing',
+      'Razorpay subscription integration',
+      'Subdomain architecture for multi-tenant content',
+    ],
+    techStack: ['Next.js', 'Supabase', 'Vercel', 'Razorpay'],
+    link: 'https://essayraccoon.com',
+    orderKey: 202602,
+  },
+  {
+    title: 'WaterPlant Management',
+    subtitle: 'Monitoring & Analytics System',
+    period: 'Jun – Aug 2025',
+    status: 'Completed',
+    priority: 'standard',
+    description: 'Desktop application for operational monitoring, real-time dashboards, and automated report generation.',
+    highlights: ['Event-driven PyQt5 desktop interface', 'Sub-second refresh real-time dashboards', 'Automated PDF reports with Pandas ETL'],
+    techStack: ['Python', 'PyQt5', 'SQLite', 'Pandas', 'ReportLab'],
+    orderKey: 202508,
+  },
+  {
+    title: 'Site Risk Analyzer',
+    subtitle: 'Browser Security Extension',
+    period: 'Mar – Apr 2025',
+    status: 'Completed',
+    priority: 'standard',
+    description: 'Chrome extension for website security analysis using heuristic and ML-assisted classification.',
+    highlights: ['Real-time DOM and JavaScript analysis', 'Phishing detection with URL reputation checks', 'Explainable rule-backed risk scoring'],
+    techStack: ['JavaScript', 'Python', 'Chrome APIs', 'ML Classification'],
+    orderKey: 202504,
+  },
+  {
+    title: 'Support Chatbot',
+    subtitle: 'RAG-Powered Assistant',
+    period: 'Sep – Oct 2025',
+    status: 'Completed',
+    priority: 'standard',
+    description: 'Retrieval-augmented conversational AI for domain-specific queries from structured knowledge sources.',
+    highlights: ['Vector embeddings for semantic retrieval', 'Query expansion and context management', 'Optimized latency for interactive usage'],
+    techStack: ['Node.js', 'Express', 'Faiss', 'RAG', 'LLM APIs'],
+    orderKey: 202510,
+  },
+] satisfies Project[];
