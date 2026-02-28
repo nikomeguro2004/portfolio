@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { animate, stagger } from 'animejs';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useMemo, useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 interface Step {
   title: string;
@@ -15,235 +14,159 @@ interface NarrativeAxisSectionProps {
   steps: Step[];
 }
 
-type ProcessDetail = {
-  focus: string;
-  output: string;
-  signal: string;
-};
+const FALLBACK_STAGES: Step[] = [
+  {
+    title: 'Discover',
+    content: 'Define goals, scope, user journeys, and delivery constraints before implementation.',
+    highlight: 'Requirements and planning',
+    metric: { value: '01', label: 'Discovery' },
+  },
+  {
+    title: 'Design',
+    content: 'Select stack and architecture patterns for scalability and maintainability.',
+    highlight: 'Architecture and stack selection',
+    metric: { value: '02', label: 'Design' },
+  },
+  {
+    title: 'Ship',
+    content: 'Build and release production features with integration and quality controls.',
+    highlight: 'Implementation and release',
+    metric: { value: '03', label: 'Delivery' },
+  },
+  {
+    title: 'Evolve',
+    content: 'Iterate through telemetry, optimization, and reliability improvements.',
+    highlight: 'Optimization and scale',
+    metric: { value: '04', label: 'Optimization' },
+  },
+];
 
-const PROCESS_DETAILS: Record<string, ProcessDetail> = {
-  discover: {
-    focus: 'Clarify product intent, user needs, constraints, and delivery scope.',
-    output: 'Execution brief with decisions, priorities, and milestones.',
-    signal: 'Everyone aligns on what gets built and why.',
-  },
-  design: {
-    focus: 'Shape architecture, interfaces, and implementation sequence for maintainability.',
-    output: 'Technical blueprint with stack choices and contracts.',
-    signal: 'System design supports scale without unnecessary complexity.',
-  },
-  ship: {
-    focus: 'Implement features in tight loops with integration and reliability checks.',
-    output: 'Production-ready releases with measurable quality.',
-    signal: 'Features launch stably with low-friction handoff to users.',
-  },
-  evolve: {
-    focus: 'Use telemetry and feedback to improve performance and product outcomes.',
-    output: 'Continuous refinements across UX, code, and infrastructure.',
-    signal: 'User value and system reliability improve release over release.',
-  },
-};
+const STAGE_COLORS = ['#67E8F9', '#A78BFA', '#2DD4BF', '#818CF8'] as const;
 
-const STAGE_ACCENTS = ['#67E8F9', '#A78BFA', '#2DD4BF', '#818CF8'] as const;
-
-const smoothEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
+function clamp01(value: number) {
+  return Math.max(0, Math.min(1, value));
+}
 
 export default function NarrativeAxisSection({ steps }: NarrativeAxisSectionProps) {
-  const [active, setActive] = useState(0);
-  const rootRef = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const markersRef = useRef<Array<HTMLDivElement | null>>([]);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const stages = useMemo(() => (steps.length >= 4 ? steps.slice(0, 4) : FALLBACK_STAGES), [steps]);
 
-  const activeStep = steps[active] ?? steps[0];
-  const detail = PROCESS_DETAILS[activeStep.title.toLowerCase()] ?? PROCESS_DETAILS.discover;
-  const activeAccent = STAGE_ACCENTS[active] ?? STAGE_ACCENTS[0];
+  const { scrollYProgress } = useScroll({
+    target: wrapperRef,
+    offset: ['start start', 'end end'],
+  });
 
-  useEffect(() => {
-    if (!scrollRef.current) return;
+  const beamFill = useTransform(scrollYProgress, [0, 1], [0.02, 1]);
+  const bgShift = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const index = Number((entry.target as HTMLElement).dataset.index ?? 0);
-          setActive(index);
-        });
-      },
-      {
-        root: scrollRef.current,
-        threshold: 0.7,
-        rootMargin: '-18% 0px -18% 0px',
-      }
-    );
-
-    markersRef.current.forEach((marker) => {
-      if (marker) observer.observe(marker);
+  const stageIntensities = stages.map((_, index) => {
+    const mid = (index + 0.5) / 4;
+    return useTransform(scrollYProgress, (value) => {
+      const distance = Math.abs(value - mid);
+      return clamp01(1 - distance / 0.26);
     });
+  });
 
-    return () => observer.disconnect();
-  }, [steps.length]);
+  const stageOpacities = stageIntensities.map((intensity, index) =>
+    useTransform(intensity, (value) => {
+      if (index === 0) return 0.25 + value * 0.75;
+      if (index === stages.length - 1) return value * 0.9 + (value > 0.65 ? 0.1 : 0);
+      return value;
+    })
+  );
 
-  useEffect(() => {
-    if (!rootRef.current) return;
-
-    const verbs = rootRef.current.querySelectorAll('.axis-verb');
-    const dots = rootRef.current.querySelectorAll('.axis-dot');
-
-    animate(verbs, {
-      translateY: [10, 0],
-      opacity: [0.5, 1],
-      delay: stagger(40),
-      duration: 380,
-      ease: 'out(4)',
-    });
-
-    animate(dots, {
-      scale: [0.9, 1.08],
-      opacity: [0.7, 1],
-      delay: stagger(40),
-      duration: 360,
-      ease: 'inOut(4)',
-    });
-  }, [active]);
+  const stageScales = stageIntensities.map((intensity) => useTransform(intensity, [0, 1], [0.92, 1]));
+  const stageY = stageIntensities.map((intensity) => useTransform(intensity, [0, 1], [30, 0]));
 
   return (
-    <section className="relative w-full px-4 py-3 sm:py-4">
-      <motion.div
-        className="pointer-events-none absolute left-[10%] top-[14%] h-72 w-72 rounded-full blur-3xl"
-        animate={{
-          background: `radial-gradient(circle, ${activeAccent}35, transparent 70%)`,
-          scale: [1, 1.05, 1],
-        }}
-        transition={{ duration: 1.1, ease: smoothEase }}
-      />
+    <section className="relative w-full px-4 py-2 sm:py-3">
+      <div ref={wrapperRef} className="relative h-[300vh]">
+        <div className="sticky top-0 h-screen overflow-hidden">
+          <motion.div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background: useTransform(bgShift, (value) => {
+                const cyan = Math.round(22 + value * 18);
+                const violet = Math.round(28 + value * 30);
+                return `radial-gradient(circle at 30% 35%, rgba(103, 232, 249, ${0.09 + value * 0.08}), transparent 48%), radial-gradient(circle at 72% 64%, rgba(129, 140, 248, ${0.08 + value * 0.1}), transparent 52%), linear-gradient(160deg, rgb(2, 8, ${cyan}) 0%, rgb(4, 6, ${violet}) 100%)`;
+              }),
+            }}
+          />
 
-      <div
-        ref={scrollRef}
-        className="relative h-[86vh] overflow-y-auto rounded-[24px] [&::-webkit-scrollbar]:hidden"
-        style={{
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-        }}
-      >
-        <div ref={rootRef} className="container relative min-h-[180vh] pt-2">
-          <div className="mb-5 max-w-4xl">
-            <p className="text-xs uppercase tracking-[0.2em] text-cyan-300/80">Delivery Framework</p>
-            <h2 className="mt-3 text-3xl font-bold sm:text-5xl" style={{ color: '#E6EDF3' }}>
-              Simple Process. Clear Delivery.
-            </h2>
-            <p className="mt-4 text-sm sm:text-lg" style={{ color: 'var(--text-secondary)' }}>
-              Scroll this section through discover, design, ship, and evolve. After the section ends, normal page scrolling continues.
-            </p>
-          </div>
+          {stageOpacities.map((opacity, index) => (
+            <motion.div
+              key={`glow-${stages[index].title}`}
+              className="pointer-events-none absolute left-1/2 top-1/2 h-[48vh] w-[48vh] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
+              style={{
+                background: `radial-gradient(circle, ${STAGE_COLORS[index]}35, transparent 70%)`,
+                opacity: useTransform(opacity, [0, 1], [0, 0.95]),
+              }}
+            />
+          ))}
 
-          <div className="pointer-events-none absolute inset-x-0 top-0">
-            {steps.map((step, index) => (
-              <div
-                key={`marker-${step.title}`}
-                ref={(element) => {
-                  markersRef.current[index] = element;
-                }}
-                data-index={index}
-                className="h-[40vh]"
-                aria-hidden="true"
-              />
-            ))}
-          </div>
+          <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-white/10" />
+          <motion.div
+            className="absolute bottom-0 left-1/2 h-full w-px -translate-x-1/2"
+            style={{
+              scaleY: beamFill,
+              transformOrigin: 'bottom',
+              background: 'linear-gradient(180deg, rgba(103,232,249,0.1) 0%, rgba(103,232,249,0.9) 100%)',
+            }}
+          />
 
-          <div className="sticky top-[3vh] z-10">
-            <div className="grid gap-8 bg-black/15 p-4 backdrop-blur-sm sm:p-6 lg:grid-cols-[0.85fr_1.15fr]">
-            <div>
-              <p className="text-[11px] uppercase tracking-[0.16em]" style={{ color: activeAccent }}>
-                Framework Axis
-              </p>
+          <div className="relative z-10 flex h-full items-center justify-center px-6">
+            <div className="w-full max-w-5xl text-center">
+              <p className="mb-4 text-xs uppercase tracking-[0.24em] text-cyan-300/80">Delivery Framework</p>
 
-              <AnimatePresence mode="wait">
-                <motion.h3
-                  key={`headline-${activeStep.title}`}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.3, ease: smoothEase }}
-                  className="mt-3 text-4xl font-bold text-white sm:text-5xl"
-                >
-                  You can {activeStep.title.toLowerCase()}.
-                </motion.h3>
-              </AnimatePresence>
-
-              <div className="mt-7 space-y-2">
-                {steps.map((step, index) => (
-                  <motion.p
-                    key={step.title}
-                    className="axis-verb text-2xl font-semibold lowercase sm:text-3xl"
-                    animate={{
-                      opacity: index === active ? 1 : 0.42,
-                      x: index === active ? 0 : -5,
+              <div className="relative h-[28vh]">
+                {stages.map((stage, index) => (
+                  <motion.h2
+                    key={stage.title}
+                    className="absolute inset-0 flex items-center justify-center text-5xl font-black uppercase tracking-[0.18em] sm:text-7xl lg:text-8xl"
+                    style={{
+                      opacity: stageOpacities[index],
+                      scale: stageScales[index],
+                      y: stageY[index],
+                      color: STAGE_COLORS[index],
                     }}
-                    transition={{ duration: 0.25, ease: smoothEase }}
-                    style={{ color: index === active ? activeAccent : 'rgba(148,163,184,0.7)' }}
                   >
-                    {step.title.toLowerCase()}.
+                    {stage.title}
+                  </motion.h2>
+                ))}
+              </div>
+
+              <div className="relative mx-auto mt-2 h-[22vh] max-w-3xl">
+                {stages.map((stage, index) => (
+                  <motion.p
+                    key={`${stage.title}-desc`}
+                    className="absolute inset-0 text-base leading-relaxed sm:text-xl"
+                    style={{
+                      opacity: stageOpacities[index],
+                      y: useTransform(stageY[index], [30, 0], [18, 0]),
+                      color: 'rgba(230, 237, 243, 0.9)',
+                    }}
+                  >
+                    {stage.content}
                   </motion.p>
                 ))}
               </div>
 
-              <div className="mt-6 flex items-center gap-2.5">
-                {steps.map((step, index) => (
-                  <motion.span
-                    key={`dot-${step.title}`}
-                    className="axis-dot h-2.5 w-2.5 rounded-full"
-                    animate={{
-                      scale: index === active ? 1.2 : 1,
-                      opacity: index === active ? 1 : 0.45,
+              <div className="mt-6 flex items-center justify-center gap-4">
+                {stages.map((stage, index) => (
+                  <motion.div
+                    key={`${stage.title}-dot`}
+                    className="h-2.5 w-2.5 rounded-full"
+                    style={{
+                      background: STAGE_COLORS[index],
+                      opacity: useTransform(stageOpacities[index], [0, 1], [0.3, 1]),
+                      scale: useTransform(stageScales[index], [0.92, 1], [0.9, 1.2]),
                     }}
-                    transition={{ duration: 0.25, ease: smoothEase }}
-                    style={{ background: index === active ? activeAccent : 'rgba(148,163,184,0.6)' }}
                   />
                 ))}
               </div>
             </div>
-
-            <div>
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`panel-${activeStep.title}`}
-                  initial={{ opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.32, ease: smoothEase }}
-                >
-                  <p className="text-xs uppercase tracking-[0.16em]" style={{ color: activeAccent }}>
-                    {activeStep.highlight}
-                  </p>
-                  <h3 className="mt-3 text-4xl font-bold text-white sm:text-5xl">{activeStep.title}</h3>
-                  <p className="mt-4 text-base sm:text-lg" style={{ color: 'var(--text-secondary)' }}>
-                    {activeStep.content}
-                  </p>
-
-                  <div className="mt-7 grid gap-4 sm:grid-cols-3">
-                    <div className="bg-black/25 p-4">
-                      <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: 'var(--text-tertiary)' }}>Focus</p>
-                      <p className="mt-2 text-sm" style={{ color: '#C9D3DE' }}>{detail.focus}</p>
-                    </div>
-                    <div className="bg-black/25 p-4">
-                      <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: 'var(--text-tertiary)' }}>Output</p>
-                      <p className="mt-2 text-sm" style={{ color: '#C9D3DE' }}>{detail.output}</p>
-                    </div>
-                    <div className="bg-black/25 p-4">
-                      <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: 'var(--text-tertiary)' }}>Success Signal</p>
-                      <p className="mt-2 text-sm" style={{ color: '#C9D3DE' }}>{detail.signal}</p>
-                    </div>
-                  </div>
-
-                  <p className="mt-5 text-[11px] uppercase tracking-[0.16em]" style={{ color: activeAccent }}>
-                    Stage {activeStep.metric.value} · {activeStep.metric.label}
-                  </p>
-                </motion.div>
-              </AnimatePresence>
-            </div>
           </div>
         </div>
-      </div>
       </div>
     </section>
   );

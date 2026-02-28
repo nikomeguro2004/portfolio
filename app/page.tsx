@@ -34,7 +34,7 @@ function ViewportParallaxPanel({
   return (
     <section
       ref={sectionRef}
-      className={`relative flex snap-start items-start px-0 ${mode === 'screen' ? 'min-h-screen py-2 sm:py-3' : 'min-h-0 py-0'}`}
+      className={`relative flex items-start px-0 ${mode === 'screen' ? 'min-h-screen snap-start py-2 sm:py-3' : 'min-h-0 snap-none py-0'}`}
     >
       <motion.div
         className="pointer-events-none absolute right-[8%] top-[16%] h-56 w-56 rounded-full blur-3xl"
@@ -48,7 +48,7 @@ function ViewportParallaxPanel({
       />
 
       <motion.div
-        style={{ y, opacity, scale }}
+        style={mode === 'screen' ? { y, opacity, scale } : undefined}
         className="relative z-10 w-full"
         transition={{ duration: 0.35, ease: 'easeOut' }}
       >
@@ -290,7 +290,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="relative snap-y snap-mandatory" style={{ position: 'relative', zIndex: 10 }}>
+    <div className="relative snap-y snap-proximity" style={{ position: 'relative', zIndex: 10 }}>
       <div
         className="fixed pointer-events-none"
         style={{
