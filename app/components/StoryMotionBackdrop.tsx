@@ -1,142 +1,153 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { animate, createTimeline, stagger } from 'animejs';
+import { animate, stagger } from 'animejs';
 
 interface StoryMotionBackdropProps {
   emphasize?: boolean;
 }
 
+const NEAR_STARS = [
+  { x: 8, y: 14, size: 6 },
+  { x: 16, y: 28, size: 5 },
+  { x: 24, y: 10, size: 6 },
+  { x: 32, y: 34, size: 5 },
+  { x: 41, y: 22, size: 6 },
+  { x: 50, y: 12, size: 5 },
+  { x: 58, y: 30, size: 6 },
+  { x: 67, y: 16, size: 5 },
+  { x: 76, y: 26, size: 6 },
+  { x: 86, y: 18, size: 5 },
+  { x: 14, y: 56, size: 6 },
+  { x: 29, y: 62, size: 5 },
+  { x: 44, y: 68, size: 6 },
+  { x: 62, y: 58, size: 5 },
+  { x: 79, y: 64, size: 6 },
+];
+
+const FAR_STARS = [
+  { x: 5, y: 8, size: 3 },
+  { x: 11, y: 18, size: 3 },
+  { x: 18, y: 6, size: 2 },
+  { x: 23, y: 20, size: 2 },
+  { x: 29, y: 12, size: 3 },
+  { x: 35, y: 6, size: 2 },
+  { x: 40, y: 18, size: 2 },
+  { x: 46, y: 9, size: 3 },
+  { x: 53, y: 4, size: 2 },
+  { x: 58, y: 14, size: 3 },
+  { x: 64, y: 8, size: 2 },
+  { x: 70, y: 20, size: 2 },
+  { x: 76, y: 10, size: 3 },
+  { x: 82, y: 6, size: 2 },
+  { x: 88, y: 16, size: 3 },
+  { x: 94, y: 12, size: 2 },
+  { x: 7, y: 42, size: 2 },
+  { x: 15, y: 54, size: 3 },
+  { x: 22, y: 44, size: 2 },
+  { x: 31, y: 52, size: 2 },
+  { x: 39, y: 46, size: 3 },
+  { x: 47, y: 57, size: 2 },
+  { x: 55, y: 48, size: 2 },
+  { x: 63, y: 56, size: 3 },
+  { x: 72, y: 47, size: 2 },
+  { x: 81, y: 53, size: 2 },
+  { x: 90, y: 45, size: 3 },
+  { x: 96, y: 58, size: 2 },
+  { x: 12, y: 76, size: 2 },
+  { x: 24, y: 84, size: 3 },
+  { x: 36, y: 74, size: 2 },
+  { x: 49, y: 82, size: 2 },
+  { x: 61, y: 76, size: 3 },
+  { x: 73, y: 84, size: 2 },
+  { x: 85, y: 74, size: 2 },
+  { x: 93, y: 86, size: 3 },
+];
+
 export default function StoryMotionBackdrop({ emphasize = false }: StoryMotionBackdropProps) {
   const rootRef = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
-  const nodeLayerRef = useRef<HTMLDivElement>(null);
-  const farFieldRef = useRef<HTMLDivElement>(null);
-  const streamLayerRef = useRef<HTMLDivElement>(null);
-  const beamRef = useRef<HTMLDivElement>(null);
+  const nearStarRef = useRef<HTMLDivElement>(null);
+  const farStarRef = useRef<HTMLDivElement>(null);
+  const shootingRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!rootRef.current) return;
 
-    const arcs = rootRef.current.querySelectorAll('.story-arc');
-    const nodes = rootRef.current.querySelectorAll('.story-node');
-    const farNodes = rootRef.current.querySelectorAll('.story-far-node');
-    const streams = rootRef.current.querySelectorAll('.story-stream');
-    const codeRows = rootRef.current.querySelectorAll('.story-row');
-    const pulseEl = rootRef.current.querySelector('.story-pulse');
-    const coreEl = rootRef.current.querySelector('.story-core');
+    const nearStars = rootRef.current.querySelectorAll('.story-star-near');
+    const farStars = rootRef.current.querySelectorAll('.story-star-far');
+    const streaks = rootRef.current.querySelectorAll('.story-shooting-star');
 
-    const timeline = createTimeline({ defaults: { ease: 'inOutSine' } });
-
-    timeline
-      .add(arcs, {
-        rotate: (_target: unknown, index: number) => (index % 2 === 0 ? 360 : -360),
-        duration: (_target: unknown, index: number) => 16000 + index * 4200,
-        delay: stagger(260),
-        loop: true,
-      })
-      .add(codeRows, {
-        opacity: [0.2, 0.95],
-        translateX: ['-4%', '6%'],
-        duration: 2600,
-        direction: 'alternate',
-        loop: true,
-        delay: stagger(120),
-      }, 0);
-
-    animate(nodes, {
-      scale: [0.8, 1.35],
-      opacity: [0.3, 1],
-      duration: 2200,
+    animate(nearStars, {
+      scale: [0.96, 1.06],
+      opacity: [0.55, 1],
+      duration: 4600,
       loop: true,
       direction: 'alternate',
-      delay: stagger(90),
+      delay: stagger(120),
       ease: 'inOut(3)',
     });
 
-    animate(farNodes, {
-      translateY: ['-8%', '12%'],
-      opacity: [0.18, 0.55],
-      duration: 9000,
+    animate(farStars, {
+      translateX: ['-1%', '1%'],
+      opacity: [0.16, 0.38],
+      duration: 18000,
       loop: true,
       direction: 'alternate',
-      delay: stagger(80),
+      delay: stagger(70),
       ease: 'inOutSine',
     });
 
-    animate(streams, {
-      translateX: ['-112%', '126%'],
-      opacity: [0, 0.85, 0],
-      duration: 3200,
+    animate(streaks, {
+      translateX: [0, 34],
+      translateY: [0, 18],
+      opacity: [0, 0.7, 0],
+      duration: 2600,
       loop: true,
-      delay: stagger(360),
+      delay: stagger(460),
       ease: 'inOutSine',
     });
 
-    if (pulseEl) {
-      animate(pulseEl, {
-        scale: [0.85, 1.24],
-        opacity: [0.45, 0.08],
-        duration: 2000,
+    if (shootingRef.current) {
+      animate(shootingRef.current, {
+        opacity: [0.35, 0.85],
+        duration: 3400,
         loop: true,
-        ease: 'out(3)',
-      });
-    }
-
-    if (coreEl) {
-      animate(coreEl, {
-        rotate: 360,
-        duration: 18000,
-        loop: true,
-        ease: 'linear',
-      });
-    }
-
-    if (beamRef.current) {
-      animate(beamRef.current, {
-        translateX: ['-52%', '112%'],
-        duration: 3000,
-        loop: true,
+        direction: 'alternate',
         ease: 'inOutSine',
       });
     }
 
     const handlePointer = (event: MouseEvent) => {
-      if (!ringRef.current || !nodeLayerRef.current) return;
+      if (!nearStarRef.current) return;
       const mx = (event.clientX / window.innerWidth - 0.5) * 2;
       const my = (event.clientY / window.innerHeight - 0.5) * 2;
 
-      animate(ringRef.current, {
-        rotateX: my * 8,
-        rotateY: mx * -10,
-        duration: 520,
+      animate(nearStarRef.current, {
+        translateX: mx * 14,
+        translateY: my * 10,
+        duration: 700,
         ease: 'out(3)',
       });
 
-      animate(nodeLayerRef.current, {
-        translateX: mx * 24,
-        translateY: my * 18,
-        duration: 600,
-        ease: 'out(3)',
-      });
-
-      if (farFieldRef.current) {
-        animate(farFieldRef.current, {
-          translateX: mx * 12,
-          translateY: my * 10,
-          duration: 760,
+      if (farStarRef.current) {
+        animate(farStarRef.current, {
+          translateX: mx * 4,
+          translateY: my * 3,
+          duration: 820,
           ease: 'out(3)',
         });
       }
 
-      if (streamLayerRef.current) {
-        animate(streamLayerRef.current, {
-          translateX: mx * -10,
-          translateY: my * -8,
-          duration: 650,
-          ease: 'out(3)',
+      if (shootingRef.current) {
+        animate(shootingRef.current, {
+          translateX: event.clientX,
+          translateY: event.clientY,
+          rotate: mx * 10,
+          duration: 360,
+          ease: 'inOutSine',
         });
       }
+
     };
 
     const handleScroll = () => {
@@ -151,7 +162,6 @@ export default function StoryMotionBackdrop({ emphasize = false }: StoryMotionBa
     handleScroll();
 
     return () => {
-      timeline.pause();
       window.removeEventListener('mousemove', handlePointer);
       window.removeEventListener('scroll', handleScroll);
     };
@@ -164,69 +174,54 @@ export default function StoryMotionBackdrop({ emphasize = false }: StoryMotionBa
       style={{ zIndex: 0, opacity: emphasize ? 0.95 : 0.75 }}
       aria-hidden="true"
     >
-      <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 50% 35%, rgba(56, 189, 248, 0.18), transparent 52%)' }} />
-      <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 18% 82%, rgba(129, 140, 248, 0.12), transparent 42%)' }} />
-
-      <div
-        ref={ringRef}
-        className="absolute left-1/2 top-[40%] -translate-x-1/2 -translate-y-1/2"
-        style={{ width: emphasize ? 760 : 620, height: emphasize ? 760 : 620, transformStyle: 'preserve-3d' }}
-      >
-        <div className="story-arc absolute inset-0 rounded-full border border-cyan-400/25" />
-        <div className="story-arc absolute inset-[12%] rounded-full border border-sky-300/20" />
-        <div className="story-arc absolute inset-[24%] rounded-full border border-cyan-500/25" />
-        <div className="story-arc absolute inset-[34%] rounded-full border border-cyan-200/20" />
-        <div className="story-arc absolute inset-[42%] rounded-full border border-indigo-300/20" />
-
-        <div className="story-pulse absolute inset-[32%] rounded-full bg-cyan-400/20 blur-3xl" />
-        <div className="story-core absolute inset-[44%] rounded-full border border-cyan-300/35" />
-      </div>
-
-      <div ref={nodeLayerRef} className="absolute inset-0">
-        {Array.from({ length: emphasize ? 28 : 20 }).map((_, index) => (
+      <div ref={nearStarRef} className="absolute inset-0">
+        {NEAR_STARS.slice(0, emphasize ? NEAR_STARS.length : 10).map((star, index) => (
           <span
-            key={index}
-            className="story-node absolute h-1.5 w-1.5 rounded-full bg-cyan-300"
+            key={`near-${index}`}
+            className="story-star-near absolute bg-white"
             style={{
-              left: `${12 + (index * 4.2) % 76}%`,
-              top: `${8 + (index * 5.5) % 80}%`,
-              boxShadow: '0 0 14px rgba(56, 189, 248, 0.7)',
+              left: `${star.x}%`,
+              top: `${star.y}%`,
+              width: `${star.size}px`,
+              height: `${star.size}px`,
+              clipPath: 'polygon(50% 0%, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0% 50%, 38% 38%)',
+              boxShadow: '0 0 10px rgba(255, 255, 255, 0.65)',
             }}
           />
         ))}
       </div>
 
-      <div ref={farFieldRef} className="absolute inset-0">
-        {Array.from({ length: emphasize ? 54 : 36 }).map((_, index) => (
+      <div ref={farStarRef} className="absolute inset-0">
+        {FAR_STARS.slice(0, emphasize ? FAR_STARS.length : 22).map((star, index) => (
           <span
             key={`far-${index}`}
-            className="story-far-node absolute h-1 w-1 rounded-full bg-indigo-200/60"
+            className="story-star-far absolute rounded-full bg-slate-100"
             style={{
-              left: `${6 + (index * 5.1) % 90}%`,
-              top: `${4 + (index * 7.3) % 92}%`,
-              boxShadow: '0 0 10px rgba(129, 140, 248, 0.55)',
+              left: `${star.x}%`,
+              top: `${star.y}%`,
+              width: `${star.size}px`,
+              height: `${star.size}px`,
+              boxShadow: '0 0 8px rgba(226, 232, 240, 0.35)',
             }}
           />
         ))}
       </div>
 
-      <div ref={streamLayerRef} className="absolute inset-x-[4%] top-[20%] space-y-4">
-        {Array.from({ length: 6 }).map((_, index) => (
-          <div key={`stream-row-${index}`} className="relative h-1 overflow-hidden rounded-full bg-white/5">
-            <div className="story-stream absolute top-0 left-0 h-full w-22" style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(94, 234, 212, 0.9) 55%, transparent 100%)' }} />
-          </div>
+      <div ref={shootingRef} className="absolute left-0 top-0" style={{ transform: 'translate(50vw, 50vh)' }}>
+        {Array.from({ length: 3 }).map((_, index) => (
+          <span
+            key={`shooting-${index}`}
+            className="story-shooting-star absolute h-px w-20"
+            style={{
+              left: `${index * -10}px`,
+              top: `${index * 7}px`,
+              background: 'linear-gradient(90deg, rgba(255,255,255,0), rgba(230,237,243,0.95), rgba(0,229,255,0.2), rgba(255,255,255,0))',
+              filter: 'blur(0.2px)',
+            }}
+          />
         ))}
       </div>
 
-      <div className="absolute left-1/2 top-[44%] -translate-x-1/2 h-16 w-[72vw] max-w-225 overflow-hidden rounded-full border border-cyan-400/20 bg-cyan-500/5">
-        <div ref={beamRef} className="h-full w-24" style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(56, 189, 248, 0.75) 52%, transparent 100%)' }} />
-      </div>
-
-      <div className="absolute right-[6%] top-[12%] w-55 space-y-2 opacity-70">
-        {Array.from({ length: 8 }).map((_, index) => (
-          <div key={index} className="story-row h-1.5 rounded-full bg-cyan-300/25" style={{ width: `${88 - index * 9}%` }} />
-        ))}
-      </div>
     </div>
   );
 }

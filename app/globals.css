@@ -1,24 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0B0F14;
+  --background: #0A0A0F;
   --foreground: #E5E7EB;
-  --bg-secondary: #101827;
-  --bg-card: #121a2a;
+  --bg-secondary: #11141F;
+  --bg-card: #121623;
   --text-primary: #E5E7EB;
-  --text-secondary: #AAB6CC;
-  --text-tertiary: #77839A;
-  --accent: #5EEAD4;
-  --accent-secondary: #818CF8;
-  --accent-hover: #22D3EE;
-  --border: #223248;
+  --text-secondary: #B6BFCE;
+  --text-tertiary: #7E8AA3;
+  --accent: #00F0FF;
+  --accent-secondary: #9D4EDD;
+  --accent-hover: #50F6FF;
+  --border: #2A3148;
   --border-subtle: rgba(31, 41, 51, 0.5);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-body-alt);
   --font-mono: var(--font-geist-mono);
 }
 
@@ -31,11 +31,41 @@ html {
 }
 
 body {
-  background: linear-gradient(180deg, var(--background) 0%, #080A0E 100%);
+  background: linear-gradient(180deg, var(--background) 0%, #07080E 100%);
   color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-body-alt), var(--font-geist-sans), "Manrope", system-ui, sans-serif;
   overflow-x: hidden;
   min-height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+.section-title,
+.hero-title {
+  font-family: var(--font-heading), var(--font-heading-alt), "General Sans", var(--font-sans), system-ui, sans-serif;
+}
+
+h5,
+h6,
+.font-heading {
+  font-family: var(--font-heading), var(--font-heading-alt), var(--font-sans), system-ui, sans-serif;
+}
+
+a,
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+  color: inherit;
+}
+
+code,
+pre,
+.font-mono {
+  font-family: var(--font-geist-mono), "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 /* Custom Scrollbar */

@@ -21,7 +21,6 @@ export default function ServiceConstellation({ items, quote }: ServiceConstellat
   useEffect(() => {
     if (!rootRef.current) return;
     const cards = rootRef.current.querySelectorAll('.svc-matrix-card');
-    const rails = rootRef.current.querySelectorAll('.svc-matrix-rail');
 
     animate(cards, {
       translateY: [28, 0],
@@ -31,24 +30,14 @@ export default function ServiceConstellation({ items, quote }: ServiceConstellat
       ease: 'out(3)',
     });
 
-    animate(rails, {
-      scaleX: [0.3, 1],
-      opacity: [0.25, 1],
-      delay: stagger(90, { start: 220 }),
-      duration: 580,
-      ease: 'out(3)',
-    });
-
     animate(cards, {
       boxShadow: [
         '0 0 0 rgba(56, 189, 248, 0)',
-        '0 0 22px rgba(56, 189, 248, 0.12)',
+        '0 0 14px rgba(56, 189, 248, 0.1)',
       ],
       delay: stagger(80, { start: 320 }),
-      duration: 1300,
-      direction: 'alternate',
-      loop: true,
-      ease: 'inOut(3)',
+      duration: 500,
+      ease: 'out(3)',
     });
   }, []);
 
@@ -59,11 +48,11 @@ export default function ServiceConstellation({ items, quote }: ServiceConstellat
           <div>
             <h2 className="text-3xl font-bold mb-3">What I Do</h2>
             <p className="text-sm max-w-3xl" style={{ color: 'var(--text-secondary)' }}>
-              Capability domains mapped as an impact matrix, showing where each function contributes to real production delivery.
+              Core service areas focused on product delivery, platform reliability, and business impact.
             </p>
           </div>
           <div className="relative rounded-full border border-cyan-400/20 bg-cyan-500/5 px-4 py-2 text-xs uppercase tracking-[0.16em] text-cyan-300">
-            Impact Matrix
+            Service Areas
           </div>
         </div>
 
@@ -76,7 +65,15 @@ export default function ServiceConstellation({ items, quote }: ServiceConstellat
               glowColor="rgba(56, 189, 248, 0.3)"
             >
               <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(circle at 88% 12%, rgba(56, 189, 248, 0.15), transparent 40%)' }} />
-              <span className="absolute top-3 right-3 text-[10px] uppercase tracking-[0.12em] text-cyan-300/70">Node {String(index + 1).padStart(2, '0')}</span>
+              <div className="mb-3 flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-black/25 px-3 py-2">
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-rose-400" />
+                  <span className="h-2 w-2 rounded-full bg-amber-400" />
+                  <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                </div>
+                <span className="text-[10px] uppercase tracking-[0.12em] text-cyan-300/70">area {String(index + 1).padStart(2, '0')}</span>
+              </div>
+
               <h3 className="font-semibold mb-2 text-lg text-cyan-400">{item.title}</h3>
               <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>{item.desc}</p>
 
@@ -84,11 +81,6 @@ export default function ServiceConstellation({ items, quote }: ServiceConstellat
                 {item.chips.map((chip) => (
                   <span key={chip} className="skill-badge text-xs">{chip}</span>
                 ))}
-              </div>
-
-              <div className="space-y-2">
-                <div className="svc-matrix-rail h-1 rounded-full bg-cyan-300/65 origin-left" style={{ width: `${72 + index * 4}%` }} />
-                <div className="svc-matrix-rail h-1 rounded-full bg-indigo-300/55 origin-left" style={{ width: `${58 + index * 6}%` }} />
               </div>
             </MagneticCard>
           ))}

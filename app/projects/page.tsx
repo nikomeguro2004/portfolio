@@ -105,7 +105,6 @@ export default function ProjectsPage() {
   const headerRef = useRef<HTMLDivElement>(null);
   const projectsRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
-  const timelineProgressRef = useRef<HTMLDivElement>(null);
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
 
@@ -153,15 +152,6 @@ export default function ProjectsPage() {
       });
 
       setActiveProjectIndex(closestIndex);
-
-      if (timelineProgressRef.current) {
-        const progress = cards.length > 1 ? closestIndex / (cards.length - 1) : 1;
-        animate(timelineProgressRef.current, {
-          height: `${Math.max(8, progress * 100)}%`,
-          duration: 260,
-          ease: 'out(3)',
-        });
-      }
     };
 
     updateTimelineProgress();
@@ -200,13 +190,6 @@ export default function ProjectsPage() {
           filter: 'blur(72px)',
         }}
       />
-      <div className="fixed inset-0 pointer-events-none opacity-20" style={{
-        backgroundImage:
-          'linear-gradient(to right, rgba(94, 234, 212, 0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(129, 140, 248, 0.06) 1px, transparent 1px)',
-        backgroundSize: '58px 58px',
-        maskImage: 'radial-gradient(circle at 50% 30%, black 10%, transparent 78%)',
-      }} />
-
       <div className="pt-16 pb-24">
         <div className="container">
           <div ref={headerRef} className="mb-14">
@@ -222,7 +205,7 @@ export default function ProjectsPage() {
             </Link>
 
             <p className="projects-intro mb-3 text-xs uppercase tracking-[0.2em] opacity-0" style={{ color: 'var(--text-tertiary)' }}>
-              Project Mission Board · Latest to Oldest
+              Project Portfolio · Latest to Oldest
             </p>
 
             <h1 className="projects-intro mb-4 text-4xl font-bold tracking-tight opacity-0 md:text-6xl">
@@ -230,8 +213,20 @@ export default function ProjectsPage() {
             </h1>
 
             <p className="projects-intro max-w-3xl text-lg opacity-0" style={{ color: 'var(--text-secondary)' }}>
-              Production builds shown as mission chapters with scope, delivery intent, and system-level outcomes.
+              A selection of production projects with scope, implementation details, and delivery outcomes.
             </p>
+
+            <div className="projects-intro mt-5 rounded-xl border border-cyan-300/20 bg-slate-950/60 p-3 opacity-0">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-rose-400" />
+                  <span className="h-2 w-2 rounded-full bg-amber-400" />
+                  <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                  <span className="text-[11px] uppercase tracking-[0.14em] text-cyan-200/85">Projects Overview</span>
+                </div>
+                <span className="text-[10px] uppercase tracking-[0.12em] text-indigo-200/80">Portfolio</span>
+              </div>
+            </div>
 
             <div className="projects-intro mt-8 grid gap-3 opacity-0 sm:grid-cols-3">
               <div className="rounded-xl border border-cyan-400/20 bg-cyan-500/5 px-4 py-3">
@@ -256,16 +251,8 @@ export default function ProjectsPage() {
           <div className="grid items-start gap-7 lg:grid-cols-[230px_1fr]">
             <aside className="hidden lg:block sticky top-28">
               <div className="rounded-xl border border-white/10 bg-black/20 p-4 backdrop-blur-sm">
-                <p className="mb-4 text-xs uppercase tracking-[0.16em]" style={{ color: 'var(--text-tertiary)' }}>Mission Timeline</p>
-                <div className="relative pl-4">
-                  <div className="absolute left-0 top-0 h-full rounded-full bg-white/10 overflow-hidden" style={{ width: '2px' }}>
-                    <div
-                      ref={timelineProgressRef}
-                      className="w-full rounded-full bg-linear-to-b from-cyan-300 via-sky-400 to-indigo-400"
-                      style={{ height: '8%' }}
-                    />
-                  </div>
-                  <div className="space-y-3">
+                <p className="mb-4 text-xs uppercase tracking-[0.16em]" style={{ color: 'var(--text-tertiary)' }}>Project Navigator</p>
+                <div className="space-y-3">
                     {sortedProjects.map((project, index) => (
                       <button
                         key={project.title}
@@ -279,7 +266,6 @@ export default function ProjectsPage() {
                         <p className="text-sm">{project.title}</p>
                       </button>
                     ))}
-                  </div>
                 </div>
               </div>
             </aside>
@@ -316,18 +302,14 @@ export default function ProjectsPage() {
                     }} />
 
                     <div className="absolute right-3 top-3 rounded border border-white/10 bg-black/30 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-cyan-300">
-                      Mission {String(index + 1).padStart(2, '0')}
+                      Project {String(index + 1).padStart(2, '0')}
                     </div>
 
                     <div className="relative grid gap-6 lg:grid-cols-[140px_1fr]">
                       <div className="rounded-xl border border-cyan-300/20 bg-cyan-500/5 p-3">
-                        <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: 'var(--text-tertiary)' }}>Chapter</p>
+                        <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: 'var(--text-tertiary)' }}>Record</p>
                         <p className="mt-2 text-xl font-bold text-cyan-200">{String(index + 1).padStart(2, '0')}</p>
                         <p className="mt-2 text-xs" style={{ color: 'var(--text-tertiary)' }}>{project.period}</p>
-                        <div className="mt-3 space-y-1.5">
-                          <div className="h-1 rounded-full bg-cyan-300/70" style={{ width: `${76 + index * 3}%` }} />
-                          <div className="h-1 rounded-full bg-indigo-300/55" style={{ width: `${60 + index * 5}%` }} />
-                        </div>
                       </div>
 
                       <div className="flex-1">

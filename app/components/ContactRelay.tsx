@@ -30,7 +30,7 @@ export default function ContactRelay({ socials }: ContactRelayProps) {
                 {[
                   { label: 'Response window', value: 'Within 24 hours' },
                   { label: 'Current focus', value: 'Full-stack + AI product builds' },
-                  { label: 'Availability', value: 'Internship / contract / freelance' },
+                  { label: 'Availability', value: 'Internship / full-time opportunities' },
                   { label: 'Collaboration mode', value: 'Async-first, execution-driven' },
                 ].map((item) => (
                   <div key={item.label} className="rounded-lg border border-cyan-300/15 bg-black/20 p-3">

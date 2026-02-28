@@ -2,7 +2,6 @@
 
 import { useSyncExternalStore, useCallback, useState, createContext, useContext, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
-import { CustomCursor } from './MagneticEffects';
 import LoadingSequence from '@/app/components/LoadingSequence';
 import StoryMotionBackdrop from './StoryMotionBackdrop';
 
@@ -103,7 +102,6 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
     if (reducedMotion) return 'live';
     return 'loading';
   });
-  const [cursorVisible, setCursorVisible] = useState(() => phase === 'live');
 
   // Track scroll velocity for nav and scene coordination
   useEffect(() => {
@@ -128,10 +126,8 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
 
   const handleLoadingComplete = useCallback(() => {
     setPhase('revealing');
-    // Cursor appears as reward after scene stabilizes
     setTimeout(() => {
       setPhase('live');
-      setCursorVisible(true);
     }, 600);
   }, []);
 
@@ -169,9 +165,6 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
       
       {/* REDUCED MOTION: Static depth + color, no animation */}
       {showReducedScene && <SimplifiedSceneFallback />}
-      
-      {/* Custom cursor - appears after scene stabilizes */}
-      {mounted && !isTouchDevice && cursorVisible && <CustomCursor />}
       
       {/* Main content */}
       {children}

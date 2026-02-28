@@ -4,10 +4,10 @@ import { useEffect, useRef } from 'react';
 import { animate, stagger } from 'animejs';
 
 const MILESTONES = [
-  { step: '01', title: 'Problem Mapping', note: 'Find the constraint that matters' },
-  { step: '02', title: 'System Drafting', note: 'Design for speed and durability' },
-  { step: '03', title: 'Launch Execution', note: 'Ship with stable operations' },
-  { step: '04', title: 'Growth Tuning', note: 'Improve via real telemetry' },
+  { step: '01', title: 'Problem Mapping', note: 'Find the constraint that matters', command: 'scan --constraints --product-stage' },
+  { step: '02', title: 'System Drafting', note: 'Design for speed and durability', command: 'compose --stack-fit --delivery-path' },
+  { step: '03', title: 'Launch Execution', note: 'Ship with stable operations', command: 'deploy --qa-gates --observability' },
+  { step: '04', title: 'Growth Tuning', note: 'Improve via real telemetry', command: 'iterate --signals --impact' },
 ];
 
 export default function ProjectMilestoneDeck() {
@@ -17,8 +17,6 @@ export default function ProjectMilestoneDeck() {
     if (!rootRef.current) return;
 
     const cards = rootRef.current.querySelectorAll('.milestone-lane-card');
-    const rails = rootRef.current.querySelectorAll('.milestone-lane-rail');
-    const dots = rootRef.current.querySelectorAll('.milestone-lane-dot');
 
     animate(cards, {
       translateY: [22, 0],
@@ -28,41 +26,26 @@ export default function ProjectMilestoneDeck() {
       ease: 'out(3)',
     });
 
-    animate(rails, {
-      scaleX: [0.25, 1],
-      opacity: [0.3, 1],
-      delay: stagger(130, { start: 320 }),
-      duration: 680,
-      ease: 'out(4)',
-    });
-
-    animate(dots, {
-      scale: [0.7, 1.18],
-      opacity: [0.35, 1],
-      delay: stagger(100, { start: 400 }),
-      duration: 1400,
-      direction: 'alternate',
-      loop: true,
-      ease: 'inOut(3)',
-    });
   }, []);
 
   return (
     <div ref={rootRef} className="grid md:grid-cols-4 gap-3 mb-10">
       {MILESTONES.map((item) => (
-        <div key={item.step} className="milestone-lane-card rounded-xl border border-cyan-400/15 bg-slate-900/40 p-4 opacity-0">
-          <p className="text-xs font-semibold mb-2" style={{ color: 'var(--text-tertiary)' }}>
-            {item.step}
-          </p>
+        <div key={item.step} className="milestone-lane-card rounded-xl border border-cyan-400/15 bg-slate-950/60 p-4 opacity-0">
+          <div className="mb-3 flex items-center justify-between rounded-lg border border-white/10 bg-black/25 px-3 py-2">
+            <p className="text-xs font-semibold" style={{ color: 'var(--text-tertiary)' }}>
+              step {item.step}
+            </p>
+            <span className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-2 py-0.5 text-[10px] uppercase tracking-widest text-emerald-300">ready</span>
+          </div>
+
           <h3 className="text-sm font-semibold text-cyan-300 mb-2">{item.title}</h3>
           <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
             {item.note}
           </p>
-          <div className="milestone-lane-rail mt-3 h-0.5 origin-left rounded-full bg-linear-to-r from-cyan-300 to-sky-400" />
-          <div className="mt-3 flex gap-1.5">
-            {Array.from({ length: 4 }).map((_, index) => (
-              <span key={index} className="milestone-lane-dot h-1.5 w-1.5 rounded-full bg-cyan-300/85" />
-            ))}
+
+          <div className="mt-3 rounded-md border border-indigo-300/20 bg-indigo-500/8 px-3 py-2 font-mono text-[11px] text-indigo-200/90">
+            $ {item.command}
           </div>
         </div>
       ))}

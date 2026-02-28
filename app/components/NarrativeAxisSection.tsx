@@ -21,17 +21,17 @@ export default function NarrativeAxisSection({ steps }: NarrativeAxisSectionProp
   useEffect(() => {
     const timer = window.setInterval(() => {
       setActive((prev) => (prev + 1) % steps.length);
-    }, 2200);
+    }, 4600);
     return () => window.clearInterval(timer);
   }, [steps.length]);
 
   useEffect(() => {
     if (!rootRef.current) return;
-    const strips = rootRef.current.querySelectorAll('.axis-strip');
+    const widgets = rootRef.current.querySelectorAll('.axis-widget');
     const nodes = rootRef.current.querySelectorAll('.axis-node');
 
-    animate(strips, {
-      scaleX: [0.25, 1],
+    animate(widgets, {
+      translateY: [12, 0],
       opacity: [0.2, 1],
       duration: 420,
       delay: (_, i) => i * 80,
@@ -39,12 +39,10 @@ export default function NarrativeAxisSection({ steps }: NarrativeAxisSectionProp
     });
 
     animate(nodes, {
-      scale: [0.8, 1.2],
-      opacity: [0.3, 1],
+      scale: [0.96, 1.04],
+      opacity: [0.7, 1],
       delay: stagger(90),
-      duration: 1300,
-      direction: 'alternate',
-      loop: true,
+      duration: 560,
       ease: 'inOut(3)',
     });
   }, [active]);
@@ -53,15 +51,16 @@ export default function NarrativeAxisSection({ steps }: NarrativeAxisSectionProp
     <section className="relative py-12">
       <div className="container">
         <div className="mb-6 rounded-2xl border border-cyan-400/15 bg-slate-900/25 p-5">
-          <p className="text-xs uppercase tracking-[0.18em] text-cyan-300/80">Operation Lanes</p>
+          <p className="text-xs uppercase tracking-[0.18em] text-cyan-300/80">Delivery Framework</p>
           <p className="mt-3 text-sm max-w-3xl" style={{ color: 'var(--text-secondary)' }}>
-            Strategy-to-shipping flow rendered as a control lane where each phase has measurable handoff and engineering intent.
+            A structured workflow from planning to optimization, with clear checkpoints at each stage.
           </p>
         </div>
 
-        <div ref={rootRef} className="rounded-2xl border border-cyan-300/20 bg-slate-900/35 p-6">
+        <div ref={rootRef} className="rounded-2xl border border-cyan-300/20 bg-slate-950/60 p-6">
           <div className="grid lg:grid-cols-[1.05fr_1.2fr] gap-7 items-start">
-            <div className="space-y-2.5">
+            <div className="space-y-2.5 rounded-xl border border-white/10 bg-black/25 p-3">
+              <p className="text-[11px] uppercase tracking-[0.14em] text-cyan-200/80">Editor Tabs</p>
               {steps.map((step, index) => (
                 <button
                   key={step.title}
@@ -82,17 +81,22 @@ export default function NarrativeAxisSection({ steps }: NarrativeAxisSectionProp
               ))}
             </div>
 
-            <div>
+            <div className="rounded-xl border border-indigo-300/20 bg-indigo-500/5 p-4">
               <p className="text-xs uppercase tracking-[0.16em] text-cyan-300/80">{steps[active].highlight}</p>
               <h3 className="mt-2 text-2xl font-bold text-white">{steps[active].title}</h3>
               <p className="mt-3 text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
                 {steps[active].content}
               </p>
 
-              <div className="mt-5 space-y-2.5">
-                <div className="axis-strip h-1 rounded-full bg-cyan-300/70 origin-left" style={{ width: `${88 + active * 2}%` }} />
-                <div className="axis-strip h-1 rounded-full bg-sky-300/65 origin-left" style={{ width: `${68 + active * 6}%` }} />
-                <div className="axis-strip h-1 rounded-full bg-indigo-300/55 origin-left" style={{ width: `${56 + active * 7}%` }} />
+              <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                {steps.map((step, index) => (
+                  <div key={`${step.title}-widget`} className="axis-widget rounded-lg border border-cyan-300/15 bg-black/20 px-3 py-3 text-center opacity-70">
+                    <p className="text-[10px] uppercase tracking-[0.12em]" style={{ color: 'var(--text-tertiary)' }}>pass</p>
+                    <p className="mt-1 text-sm font-semibold" style={{ color: index === active ? 'rgb(103 232 249)' : 'var(--text-secondary)' }}>
+                      {step.metric.value}
+                    </p>
+                  </div>
+                ))}
               </div>
 
               <div className="mt-5 flex items-center gap-2.5">

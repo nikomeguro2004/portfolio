@@ -1,22 +1,40 @@
 import type { Metadata, Viewport } from "next";
-import { Sora, IBM_Plex_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Manrope, Sora, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "./components/ClientLayout";
 
-const soraSans = Sora({
+const interSans = Inter({
   variable: "--font-geist-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const ibmMono = IBM_Plex_Mono({
+const jetbrainsMono = JetBrains_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
 
+const manrope = Manrope({
+  variable: "--font-body-alt",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-heading",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+});
+
+const sora = Sora({
+  variable: "--font-heading-alt",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+});
+
 export const viewport: Viewport = {
-  themeColor: '#0B0F14',
+  themeColor: '#0A0A0F',
   width: 'device-width',
   initialScale: 1,
 };
@@ -95,10 +113,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${soraSans.variable} ${ibmMono.variable} antialiased`}
+        className={`${interSans.variable} ${manrope.variable} ${jetbrainsMono.variable} ${spaceGrotesk.variable} ${sora.variable} antialiased`}
       >
         <ClientLayout>
-          <div className="grid-bg" />
           <main className="relative z-10">{children}</main>
         </ClientLayout>
       </body>

@@ -6,8 +6,8 @@ import { MagneticButton } from './components/MagneticEffects';
 import HeroNarrativeCluster from './components/HeroNarrativeCluster';
 import NarrativeAxisSection from './components/NarrativeAxisSection';
 import ServiceConstellation from './components/ServiceConstellation';
-import ExperienceSpectrum from './components/ExperienceSpectrum';
-import TechStackGalaxy from './components/TechStackGalaxy';
+import ExperienceTV from './components/ExperienceTV';
+import GalaxyOrbitHybrid from './components/GalaxyOrbitHybrid';
 import ContactRelay from './components/ContactRelay';
 
 const skills = {
@@ -66,23 +66,6 @@ const skills = {
   ],
 };
 
-const experiences = [
-  {
-    company: 'Ambalsoft',
-    role: 'Full Stack AI Intern',
-    period: 'Sep – Oct 2025',
-    location: 'Chennai, India',
-    highlights: [
-      'Built Node.js conversational systems with RESTful microservices and MongoDB.',
-      'Fine-tuned domain-specific LLMs using Hugging Face transformers.',
-      'Architected local LLM inference with Ollama, containerized via Docker.',
-      'Developed analytics platform with Streamlit and FastAPI dashboards.',
-      'Implemented dashboard data pipelines and backend endpoints for analytics-heavy product modules.',
-      'Collaborated in rapid delivery cycles to ship stable features and improve production reliability.',
-    ],
-  },
-];
-
 const whatIDo = [
   {
     title: 'Product Engineering',
@@ -118,19 +101,6 @@ const whatIDo = [
 
 const guidingQuote = '“Building systems that work, not systems that impress.”';
 
-const pepulSpotlight = {
-  company: 'Pepul',
-  role: 'Full Stack Intern',
-  period: 'Feb 2026 – Present',
-  location: 'Startup Product Ecosystem',
-  highlights: [
-    'Built startup-specific websites on high-velocity weekly cycles, from landing pages to full product surfaces.',
-    'Worked across Next.js, React, Nuxt.js, Astro, and NestJS to match each product’s architecture and launch timeline.',
-    'Used Supabase for backend workflows and Sanity CMS for flexible, non-technical content operations.',
-    'Integrated end-to-end payment experiences with Razorpay and Stripe, including subscriptions and checkout flows.',
-  ],
-};
-
 const socials = [
   {
     href: 'https://github.com/nikomeguro2004',
@@ -152,33 +122,33 @@ const socials = [
 const storySteps = [
   {
     title: 'Discover',
-    content: 'Translate founder vision into scope, user journeys, and launch constraints for startup-focused builds.',
-    highlight: 'Discovery + startup framing',
-    metric: { value: '01', label: 'Context pass' },
+    content: 'Define goals, scope, user journeys, and delivery constraints before implementation.',
+    highlight: 'Requirements and planning',
+    metric: { value: '01', label: 'Discovery' },
     weight: 1,
     animationType: 'slide' as const,
   },
   {
     title: 'Design',
-    content: 'Pick the right stack per product (Next.js, React, Nuxt.js, Astro, NestJS) and shape a scalable architecture.',
-    highlight: 'Stack-fit system design',
-    metric: { value: '02', label: 'Architecture pass' },
+    content: 'Select an appropriate stack and define scalable architecture for maintainability and growth.',
+    highlight: 'Architecture and stack selection',
+    metric: { value: '02', label: 'Design' },
     weight: 1.2,
     animationType: 'scale' as const,
   },
   {
     title: 'Ship',
-    content: 'Deliver production-ready experiences quickly with CMS workflows, backend integrations, and clean QA cycles.',
-    highlight: 'Fast launch quality',
-    metric: { value: '03', label: 'Delivery pass' },
+    content: 'Implement and release production-ready features with testing, integrations, and quality controls.',
+    highlight: 'Implementation and release',
+    metric: { value: '03', label: 'Delivery' },
     weight: 1.2,
     animationType: 'snap' as const,
   },
   {
     title: 'Evolve',
-    content: 'Scale with analytics, payment reliability, and iterative UX improvements after release.',
-    highlight: 'Post-launch optimization',
-    metric: { value: '04', label: 'Scale pass' },
+    content: 'Improve performance and reliability through analytics, monitoring, and iterative updates.',
+    highlight: 'Optimization and scale',
+    metric: { value: '04', label: 'Optimization' },
     weight: 1,
     animationType: 'fade' as const,
   },
@@ -295,7 +265,7 @@ export default function Home() {
           <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-8 items-center">
             <div className="max-w-3xl">
               <p className="hero-subtitle text-xs uppercase tracking-[0.2em] mb-4 opacity-0" style={{ color: 'var(--text-tertiary)' }}>
-                Full-Stack Intern · Startup Systems Builder
+                Full-Stack Engineer · AI Developer
               </p>
               <h1 className="hero-name text-5xl md:text-7xl font-bold mb-6 tracking-tight opacity-0">
                 <span className="text-gradient">S Adityan</span>
@@ -306,7 +276,7 @@ export default function Home() {
               </p>
 
               <p className="hero-subtitle text-sm md:text-base mb-5 opacity-0" style={{ color: 'var(--text-tertiary)' }}>
-                Building startup-ready products with modern frontend systems, scalable backends, and motion-rich digital experiences.
+                Building production-ready applications with modern frontend systems, scalable backends, and reliable delivery practices.
               </p>
 
               <div className="mb-6 w-full max-w-2xl">
@@ -339,14 +309,23 @@ export default function Home() {
             </div>
 
             <div className="anime-reveal space-y-4">
-              <div className="rounded-2xl border border-cyan-400/15 bg-slate-900/35 p-5">
-                <p className="text-xs uppercase tracking-[0.16em] text-cyan-300/80">Launch Pattern</p>
+              <div className="rounded-2xl border border-cyan-400/15 bg-slate-950/70 p-5">
+                <div className="mb-3 flex items-center justify-between rounded-lg border border-white/10 bg-black/25 px-3 py-2">
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-rose-400" />
+                    <span className="h-2 w-2 rounded-full bg-amber-400" />
+                    <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                  </div>
+                  <p className="text-[10px] uppercase tracking-[0.14em] text-cyan-200/80">Project Overview</p>
+                </div>
+                <p className="text-xs uppercase tracking-[0.16em] text-cyan-300/80">Delivery Process</p>
                 <p className="mt-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
-                  Discover → Design → Ship → Scale with product-speed cycles and measurable outcomes.
+                  Discover → Design → Build → Improve using clear milestones and measurable outcomes.
                 </p>
               </div>
+
               <div className="rounded-2xl border border-indigo-400/15 bg-indigo-500/5 p-5">
-                <p className="text-xs uppercase tracking-[0.16em] text-indigo-300/80">Product Outcome</p>
+                <p className="text-xs uppercase tracking-[0.16em] text-indigo-300/80">System Dashboard</p>
                 <div className="mt-3 grid grid-cols-2 gap-3">
                   {[
                     { label: 'Build rhythm', value: 'Weekly' },
@@ -370,9 +349,9 @@ export default function Home() {
 
       <ServiceConstellation items={whatIDo} quote={guidingQuote} />
 
-      <ExperienceSpectrum items={experiences} spotlight={pepulSpotlight} />
+      <ExperienceTV />
 
-      <TechStackGalaxy skills={skills} />
+      <GalaxyOrbitHybrid skills={skills} />
 
       <ContactRelay socials={socials} />
     </div>
