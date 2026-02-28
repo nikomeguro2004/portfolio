@@ -14,9 +14,11 @@ import ContactRelay from './components/ContactRelay';
 function ViewportParallaxPanel({
   children,
   glow,
+  mode = 'screen',
 }: {
   children: React.ReactNode;
   glow: 'cyan' | 'violet';
+  mode?: 'screen' | 'content';
 }) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -30,7 +32,10 @@ function ViewportParallaxPanel({
   const glowY = useTransform(scrollYProgress, [0, 1], [-18, 28]);
 
   return (
-    <section ref={sectionRef} className="relative flex min-h-screen snap-start items-center px-0 py-6 sm:py-8">
+    <section
+      ref={sectionRef}
+      className={`relative flex snap-start items-start px-0 ${mode === 'screen' ? 'min-h-screen py-2 sm:py-3' : 'min-h-0 py-0'}`}
+    >
       <motion.div
         className="pointer-events-none absolute right-[8%] top-[16%] h-56 w-56 rounded-full blur-3xl"
         style={{
@@ -98,14 +103,6 @@ const skills = {
     'CI/CD Pipelines',
     'Vercel Deployments',
     'Monitoring & Logs',
-  ],
-  'Payments & Product Ops': [
-    'Stripe',
-    'Razorpay',
-    'Subscription Flows',
-    'Checkout UX',
-    'A/B Experiments',
-    'Analytics Instrumentation',
   ],
 };
 
@@ -405,11 +402,11 @@ export default function Home() {
         </section>
       </ViewportParallaxPanel>
 
-      <ViewportParallaxPanel glow="violet">
+      <ViewportParallaxPanel glow="violet" mode="content">
         <NarrativeAxisSection steps={storySteps} />
       </ViewportParallaxPanel>
 
-      <ViewportParallaxPanel glow="cyan">
+      <ViewportParallaxPanel glow="cyan" mode="content">
         <ServiceConstellation items={whatIDo} quote={guidingQuote} />
       </ViewportParallaxPanel>
 

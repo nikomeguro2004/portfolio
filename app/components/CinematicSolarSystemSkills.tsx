@@ -7,7 +7,7 @@ interface CinematicSolarSystemSkillsProps {
   skills: Record<string, string[]>;
 }
 
-type FileId = 'frontend' | 'backend' | 'ai' | 'cloud' | 'data' | 'payments';
+type FileId = 'frontend' | 'backend' | 'ai' | 'cloud' | 'data';
 
 type FileConfig = {
   id: FileId;
@@ -69,16 +69,6 @@ const FILES: FileConfig[] = [
     summary: 'Structured persistence decisions for product correctness and scale.',
     role: 'Owns schema consistency, access patterns, and storage tradeoffs.',
     accent: '#00E5FF',
-    language: 'ts',
-  },
-  {
-    id: 'payments',
-    name: 'payments.ops.ts',
-    path: 'src/biz/payments.ops.ts',
-    sourceKey: 'Payments & Product Ops',
-    summary: 'Monetization and analytics mechanics tied directly to product growth.',
-    role: 'Owns checkout safety, subscription behavior, and experiment hooks.',
-    accent: '#7B61FF',
     language: 'ts',
   },
 ];
