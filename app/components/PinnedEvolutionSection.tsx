@@ -74,7 +74,7 @@ export default function PinnedEvolutionSection({ steps }: PinnedEvolutionSection
 
   return (
     <section className="relative w-full px-4 py-2 sm:py-3">
-      <div ref={wrapperRef} className="relative h-[340vh]">
+      <div ref={wrapperRef} className="relative h-[260vh] sm:h-[300vh] lg:h-[340vh]">
         <div className="sticky top-0 h-screen overflow-hidden">
           <div className="relative z-10 flex h-full items-center justify-center px-6">
             <div className="w-full max-w-5xl text-center">
@@ -87,7 +87,7 @@ export default function PinnedEvolutionSection({ steps }: PinnedEvolutionSection
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: -20, scale: 0.98 }}
                   transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                  className="text-5xl font-black uppercase tracking-[0.18em] sm:text-7xl lg:text-8xl"
+                  className="text-5xl font-black uppercase tracking-[0.12em] sm:tracking-[0.18em] sm:text-7xl lg:text-8xl"
                   style={{ color: activeColor }}
                 >
                   {activeStage.title}

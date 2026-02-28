@@ -6,7 +6,7 @@ import AppLoadingSequence from '@/app/components/AppLoadingSequence';
 import ImmersiveStarfieldBackdrop from './ImmersiveStarfieldBackdrop';
 
 // EXPERIENCE CONTEXT: Global narrative state
-type ExperiencePhase = 'loading' | 'revealing' | 'live';
+type ExperiencePhase = 'loading' | 'live';
 
 interface ExperienceContextType {
   phase: ExperiencePhase;
@@ -125,10 +125,7 @@ export default function AppClientLayout({ children }: AppClientLayoutProps) {
   }, []);
 
   const handleLoadingComplete = useCallback(() => {
-    setPhase('revealing');
-    setTimeout(() => {
-      setPhase('live');
-    }, 600);
+    setPhase('live');
   }, []);
 
   // Sync phase for edge cases (mounted check)

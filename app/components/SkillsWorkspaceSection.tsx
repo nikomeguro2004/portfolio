@@ -196,8 +196,8 @@ function SkillsCodePanel({ activeFile }: { activeFile: FileWithTechnologies }) {
 
   return (
     <div className="relative border-b border-white/10 bg-[#020617]/70 p-4 sm:p-5 lg:border-b-0 lg:border-r">
-      <div className="mb-3 flex items-center justify-between text-[10px] uppercase tracking-[0.14em]" style={{ color: 'rgba(230, 237, 243, 0.58)' }}>
-        <span>{activeFile.path}</span>
+      <div className="mb-3 flex items-center justify-between gap-3 text-[10px] uppercase tracking-[0.14em]" style={{ color: 'rgba(230, 237, 243, 0.58)' }}>
+        <span className="min-w-0 flex-1 truncate">{activeFile.path}</span>
         <span>{activeFile.language}</span>
       </div>
 
@@ -215,7 +215,7 @@ function SkillsCodePanel({ activeFile }: { activeFile: FileWithTechnologies }) {
               <span className="select-none text-right" style={{ color: 'rgba(230, 237, 243, 0.32)' }}>
                 {index + 1}
               </span>
-              <span className="truncate sm:whitespace-pre-wrap" style={{ color: index === 0 ? activeFile.accent : '#C9D3DE' }}>
+              <span className="wrap-break-word whitespace-pre-wrap" style={{ color: index === 0 ? activeFile.accent : '#C9D3DE' }}>
                 {line}
               </span>
             </div>

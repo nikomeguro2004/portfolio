@@ -77,9 +77,11 @@ function ProjectsHeader({
 function ProjectNavigator({
   sortedProjects,
   activeProjectIndex,
+  onSelectProject,
 }: {
   sortedProjects: Project[];
   activeProjectIndex: number;
+  onSelectProject: (index: number) => void;
 }) {
   return (
     <aside className="hidden self-start lg:sticky lg:top-28 lg:block">
@@ -90,9 +92,9 @@ function ProjectNavigator({
             <button
               key={project.title}
               className="block text-left transition-colors"
+              onClick={() => onSelectProject(index)}
               style={{
                 color: index <= activeProjectIndex ? 'var(--text-primary)' : 'var(--text-tertiary)',
-                pointerEvents: 'none',
               }}
             >
               <p className="text-xs font-semibold uppercase tracking-[0.12em]">{project.period.split('–')[0].trim()}</p>
@@ -276,6 +278,14 @@ export default function ProjectsPage() {
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
 
+  const handleNavigatorSelect = (index: number) => {
+    if (!projectsRef.current) return;
+    const cards = Array.from(projectsRef.current.children) as HTMLElement[];
+    const card = cards[index];
+    if (!card) return;
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
   useEffect(() => {
     if (headerRef.current) {
       animate(headerRef.current.querySelectorAll('.projects-intro'), {
@@ -372,7 +382,11 @@ export default function ProjectsPage() {
           </div>
 
           <div className="grid items-start gap-7 lg:grid-cols-[230px_1fr]">
-            <ProjectNavigator sortedProjects={sortedProjects} activeProjectIndex={activeProjectIndex} />
+            <ProjectNavigator
+              sortedProjects={sortedProjects}
+              activeProjectIndex={activeProjectIndex}
+              onSelectProject={handleNavigatorSelect}
+            />
 
             <div ref={projectsRef} className="space-y-7">
               {sortedProjects.map((project, index) => {

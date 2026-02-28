@@ -215,7 +215,7 @@ export default function ExperienceBroadcastSection() {
 
           <div
             ref={screenRef}
-            className="relative mt-6 min-h-140 overflow-hidden border p-4 md:p-6"
+            className="relative mt-6 min-h-140 overflow-hidden border p-4 pb-14 md:p-6 md:pb-16"
             style={{
               borderColor: 'rgba(157, 78, 221, 0.28)',
               background: 'radial-gradient(120% 140% at 50% 15%, rgba(18, 40, 58, 0.58), #0F1722 56%)',
