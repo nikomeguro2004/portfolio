@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from '@vercel/analytics/next';
 import { Sora, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "./components/ClientLayout";
@@ -101,6 +103,7 @@ export default function RootLayout({
           <div className="grid-bg" />
           <main className="relative z-10">{children}</main>
         </ClientLayout>
+        <Analytics />
       </body>
     </html>
   );
