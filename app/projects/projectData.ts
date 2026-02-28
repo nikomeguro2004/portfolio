@@ -13,6 +13,23 @@ export type Project = {
 
 export const projects = [
   {
+    title: 'Triangle Field Sandbox',
+    subtitle: 'Matter.js Physics Laboratory',
+    period: 'Mar 2026',
+    status: 'Live',
+    priority: 'flagship',
+    description:
+      'Interaction-first physics sandbox focused on collision quality, controlled triangle fragmentation, and stable high-load performance.',
+    highlights: [
+      'Adaptive physics/render budgeting to keep frame pacing stable under heavy collision load',
+      'Energy-based collision response with glow/particle feedback and rate-limited triangle fracturing',
+      'Mobile-aware optimization with coarse-pointer DPR caps, visibility pause/resume, and deterministic debris cleanup',
+    ],
+    techStack: ['Next.js', 'TypeScript', 'Matter.js', 'HTML5 Canvas 2D', 'Physics Simulation'],
+    link: 'https://matter-lab.vercel.app/',
+    orderKey: 202603,
+  },
+  {
     title: 'CuiSync',
     subtitle: 'Restaurant Management Platform',
     period: 'Nov 2025 – Present',

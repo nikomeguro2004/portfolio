@@ -19,6 +19,8 @@ const skills = {
     'Tailwind CSS',
     'Framer Motion',
     'Anime.js',
+    'Matter.js',
+    'Canvas 2D',
     'Astro',
     'Nuxt.js',
   ],
@@ -298,7 +300,7 @@ export default function Home() {
 
               <div ref={statsRef} className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-xl">
                 {[
-                  { value: '6+', label: 'Projects' },
+                  { value: '7+', label: 'Projects' },
                   { value: '25+', label: 'Technologies' },
                   { value: '14', label: 'Certifications' },
                 ].map((stat) => (
