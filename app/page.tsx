@@ -7,7 +7,7 @@ import HeroNarrativeCluster from './components/HeroNarrativeCluster';
 import NarrativeAxisSection from './components/NarrativeAxisSection';
 import ServiceConstellation from './components/ServiceConstellation';
 import ExperienceTV from './components/ExperienceTV';
-import GalaxyOrbitHybrid from './components/GalaxyOrbitHybrid';
+import SolarSystemSkills from './components/SolarSystemSkills';
 import ContactRelay from './components/ContactRelay';
 
 const skills = {
@@ -351,7 +351,7 @@ export default function Home() {
 
       <ExperienceTV />
 
-      <GalaxyOrbitHybrid skills={skills} />
+      <SolarSystemSkills skills={skills} />
 
       <ContactRelay socials={socials} />
     </div>
