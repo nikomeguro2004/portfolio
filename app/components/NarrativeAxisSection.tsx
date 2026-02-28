@@ -1,7 +1,7 @@
 'use client';
 
-import { useMemo, useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useMemo, useRef, useState } from 'react';
+import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring, useTransform } from 'framer-motion';
 
 interface Step {
   title: string;
@@ -43,8 +43,8 @@ const FALLBACK_STAGES: Step[] = [
 
 const STAGE_COLORS = ['#67E8F9', '#A78BFA', '#2DD4BF', '#818CF8'] as const;
 
-function clamp01(value: number) {
-  return Math.max(0, Math.min(1, value));
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
 }
 
 export default function NarrativeAxisSection({ steps }: NarrativeAxisSectionProps) {
@@ -56,114 +56,93 @@ export default function NarrativeAxisSection({ steps }: NarrativeAxisSectionProp
     offset: ['start start', 'end end'],
   });
 
-  const beamFill = useTransform(scrollYProgress, [0, 1], [0.02, 1]);
-  const bgShift = useTransform(scrollYProgress, [0, 1], [0, 1]);
-
-  const stageIntensities = stages.map((_, index) => {
-    const mid = (index + 0.5) / 4;
-    return useTransform(scrollYProgress, (value) => {
-      const distance = Math.abs(value - mid);
-      return clamp01(1 - distance / 0.26);
-    });
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 70,
+    damping: 26,
+    mass: 0.7,
   });
 
-  const stageOpacities = stageIntensities.map((intensity, index) =>
-    useTransform(intensity, (value) => {
-      if (index === 0) return 0.25 + value * 0.75;
-      if (index === stages.length - 1) return value * 0.9 + (value > 0.65 ? 0.1 : 0);
-      return value;
-    })
-  );
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const stageScales = stageIntensities.map((intensity) => useTransform(intensity, [0, 1], [0.92, 1]));
-  const stageY = stageIntensities.map((intensity) => useTransform(intensity, [0, 1], [30, 0]));
+  useMotionValueEvent(smoothProgress, 'change', (value) => {
+    const next = clamp(Math.floor(value * stages.length), 0, stages.length - 1);
+    setActiveIndex((prev) => (prev === next ? prev : next));
+  });
+
+  const beamFill = useTransform(smoothProgress, [0, 1], [0.02, 1]);
+  const beamGlow = useTransform(smoothProgress, [0, 1], [0.35, 1]);
+
+  const activeStage = stages[activeIndex] ?? stages[0];
+  const activeColor = STAGE_COLORS[activeIndex] ?? STAGE_COLORS[0];
 
   return (
     <section className="relative w-full px-4 py-2 sm:py-3">
-      <div ref={wrapperRef} className="relative h-[300vh]">
+      <div ref={wrapperRef} className="relative h-[340vh]">
         <div className="sticky top-0 h-screen overflow-hidden">
-          <motion.div
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background: useTransform(bgShift, (value) => {
-                const cyan = Math.round(22 + value * 18);
-                const violet = Math.round(28 + value * 30);
-                return `radial-gradient(circle at 30% 35%, rgba(103, 232, 249, ${0.09 + value * 0.08}), transparent 48%), radial-gradient(circle at 72% 64%, rgba(129, 140, 248, ${0.08 + value * 0.1}), transparent 52%), linear-gradient(160deg, rgb(2, 8, ${cyan}) 0%, rgb(4, 6, ${violet}) 100%)`;
-              }),
-            }}
-          />
-
-          {stageOpacities.map((opacity, index) => (
-            <motion.div
-              key={`glow-${stages[index].title}`}
-              className="pointer-events-none absolute left-1/2 top-1/2 h-[48vh] w-[48vh] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
-              style={{
-                background: `radial-gradient(circle, ${STAGE_COLORS[index]}35, transparent 70%)`,
-                opacity: useTransform(opacity, [0, 1], [0, 0.95]),
-              }}
-            />
-          ))}
-
           <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-white/10" />
           <motion.div
             className="absolute bottom-0 left-1/2 h-full w-px -translate-x-1/2"
             style={{
               scaleY: beamFill,
+              opacity: beamGlow,
               transformOrigin: 'bottom',
-              background: 'linear-gradient(180deg, rgba(103,232,249,0.1) 0%, rgba(103,232,249,0.9) 100%)',
+              background: 'linear-gradient(180deg, rgba(103,232,249,0.06) 0%, rgba(103,232,249,0.9) 100%)',
             }}
           />
 
           <div className="relative z-10 flex h-full items-center justify-center px-6">
             <div className="w-full max-w-5xl text-center">
-              <p className="mb-4 text-xs uppercase tracking-[0.24em] text-cyan-300/80">Delivery Framework</p>
+              <p className="mb-4 text-xs uppercase tracking-[0.24em] text-cyan-300/75">Delivery Framework</p>
 
-              <div className="relative h-[28vh]">
-                {stages.map((stage, index) => (
-                  <motion.h2
-                    key={stage.title}
-                    className="absolute inset-0 flex items-center justify-center text-5xl font-black uppercase tracking-[0.18em] sm:text-7xl lg:text-8xl"
-                    style={{
-                      opacity: stageOpacities[index],
-                      scale: stageScales[index],
-                      y: stageY[index],
-                      color: STAGE_COLORS[index],
-                    }}
-                  >
-                    {stage.title}
-                  </motion.h2>
-                ))}
+              <AnimatePresence mode="wait">
+                <motion.h2
+                  key={`title-${activeStage.title}`}
+                  initial={{ opacity: 0, y: 30, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -20, scale: 0.98 }}
+                  transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                  className="text-5xl font-black uppercase tracking-[0.18em] sm:text-7xl lg:text-8xl"
+                  style={{ color: activeColor }}
+                >
+                  {activeStage.title}
+                </motion.h2>
+              </AnimatePresence>
+
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={`content-${activeStage.title}`}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  className="mx-auto mt-6 max-w-3xl text-base leading-relaxed sm:text-xl"
+                  style={{ color: 'rgba(230, 237, 243, 0.9)' }}
+                >
+                  {activeStage.content}
+                </motion.p>
+              </AnimatePresence>
+
+              <div className="mt-8 flex items-center justify-center gap-4">
+                {stages.map((stage, index) => {
+                  const isActive = index === activeIndex;
+                  return (
+                    <motion.div
+                      key={`${stage.title}-dot`}
+                      className="h-2.5 w-2.5 rounded-full"
+                      animate={{
+                        opacity: isActive ? 1 : 0.35,
+                        scale: isActive ? 1.2 : 0.9,
+                        backgroundColor: isActive ? STAGE_COLORS[index] : 'rgba(148, 163, 184, 0.6)',
+                      }}
+                      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    />
+                  );
+                })}
               </div>
 
-              <div className="relative mx-auto mt-2 h-[22vh] max-w-3xl">
-                {stages.map((stage, index) => (
-                  <motion.p
-                    key={`${stage.title}-desc`}
-                    className="absolute inset-0 text-base leading-relaxed sm:text-xl"
-                    style={{
-                      opacity: stageOpacities[index],
-                      y: useTransform(stageY[index], [30, 0], [18, 0]),
-                      color: 'rgba(230, 237, 243, 0.9)',
-                    }}
-                  >
-                    {stage.content}
-                  </motion.p>
-                ))}
-              </div>
-
-              <div className="mt-6 flex items-center justify-center gap-4">
-                {stages.map((stage, index) => (
-                  <motion.div
-                    key={`${stage.title}-dot`}
-                    className="h-2.5 w-2.5 rounded-full"
-                    style={{
-                      background: STAGE_COLORS[index],
-                      opacity: useTransform(stageOpacities[index], [0, 1], [0.3, 1]),
-                      scale: useTransform(stageScales[index], [0.92, 1], [0.9, 1.2]),
-                    }}
-                  />
-                ))}
-              </div>
+              <p className="mt-5 text-[11px] uppercase tracking-[0.16em]" style={{ color: activeColor }}>
+                Stage {activeStage.metric.value} · {activeStage.metric.label}
+              </p>
             </div>
           </div>
         </div>
