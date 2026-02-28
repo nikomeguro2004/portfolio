@@ -8,33 +8,65 @@ import NarrativeAxisSection from './components/NarrativeAxisSection';
 import ServiceConstellation from './components/ServiceConstellation';
 import ExperienceSpectrum from './components/ExperienceSpectrum';
 import TechStackGalaxy from './components/TechStackGalaxy';
-import CertificationNebula from './components/CertificationNebula';
 import ContactRelay from './components/ContactRelay';
 
 const skills = {
-  Frontend: ['React.js', 'Next.js', 'TypeScript', 'Tailwind CSS'],
-  Backend: ['Node.js', 'FastAPI', 'Python', 'RESTful APIs'],
-  Data: ['PostgreSQL', 'MongoDB', 'Query Optimization'],
-  'AI & ML': ['TensorFlow', 'LLM Fine-Tuning', 'RAG Systems'],
-  Cloud: ['AWS', 'Docker', 'Kubernetes', 'CI/CD'],
-  Security: ['Web Security', 'SSL/HTTPS', 'Browser Extensions'],
+  'Frontend Systems': [
+    'React',
+    'Next.js (App Router)',
+    'TypeScript',
+    'Tailwind CSS',
+    'Framer Motion',
+    'Anime.js',
+    'Astro',
+    'Nuxt.js',
+  ],
+  'Backend & APIs': [
+    'Node.js',
+    'NestJS',
+    'FastAPI',
+    'Express',
+    'Python',
+    'REST APIs',
+    'Auth & RBAC',
+    'Webhook Integrations',
+  ],
+  'Data & Storage': [
+    'PostgreSQL',
+    'MongoDB',
+    'Supabase',
+    'Sanity CMS',
+    'Redis Basics',
+    'Schema Design',
+    'Query Optimization',
+  ],
+  'AI Engineering': [
+    'LLM Integrations',
+    'RAG Workflows',
+    'Prompt Engineering',
+    'Hugging Face',
+    'Ollama',
+    'Inference Pipelines',
+  ],
+  'Cloud & Delivery': [
+    'AWS',
+    'Docker',
+    'Kubernetes Basics',
+    'CI/CD Pipelines',
+    'Vercel Deployments',
+    'Monitoring & Logs',
+  ],
+  'Payments & Product Ops': [
+    'Stripe',
+    'Razorpay',
+    'Subscription Flows',
+    'Checkout UX',
+    'A/B Experiments',
+    'Analytics Instrumentation',
+  ],
 };
 
 const experiences = [
-  {
-    company: 'Pepul',
-    role: 'Full Stack Intern',
-    period: '2025 – Present',
-    location: 'Startup Product Ecosystem',
-    highlights: [
-      'Built startup-specific websites on high-velocity weekly cycles, from landing pages to full product surfaces.',
-      'Worked across Next.js, React, Nuxt.js, Astro, and NestJS to match each product’s architecture and launch timeline.',
-      'Used Supabase for backend workflows and Sanity CMS for flexible, non-technical content operations.',
-      'Shipped interaction-heavy interfaces with Three.js, Anime.js, Framer Motion, and GSAP based on UX needs.',
-      'Integrated end-to-end payment experiences with Razorpay and Stripe, including subscriptions and checkout flows.',
-      'Partnered with founders to convert rough startup ideas into production-ready, measurable web products.',
-    ],
-  },
   {
     company: 'Ambalsoft',
     role: 'Full Stack AI Intern',
@@ -49,26 +81,6 @@ const experiences = [
       'Collaborated in rapid delivery cycles to ship stable features and improve production reliability.',
     ],
   },
-];
-
-const priorityCertifications = [
-  'React Essentials',
-  'Node.js Essentials',
-  'AWS Essentials',
-  'Data Science Fundamentals',
-  'Python DS & Algorithms',
-  'Prompt Engineering',
-];
-
-const additionalCertifications = [
-  'NLP in Python',
-  'AI Workflow Enterprise',
-  'Web3 Design & Security',
-  'UI/UX with Figma',
-  'Dart Mastery',
-  'Playwright Bootcamp',
-  'Arduino Bootcamp',
-  'Bootstrap, JS, React, CSS',
 ];
 
 const whatIDo = [
@@ -106,16 +118,16 @@ const whatIDo = [
 
 const guidingQuote = '“Building systems that work, not systems that impress.”';
 
-const ambalsoftSpotlight = {
-  company: 'Ambalsoft',
-  role: 'Full Stack AI Intern',
-  period: 'Sep – Oct 2025',
-  location: 'Chennai, India',
+const pepulSpotlight = {
+  company: 'Pepul',
+  role: 'Full Stack Intern',
+  period: 'Feb 2026 – Present',
+  location: 'Startup Product Ecosystem',
   highlights: [
-    'Built Node.js conversational systems with RESTful microservices and MongoDB',
-    'Fine-tuned domain-specific LLMs using Hugging Face transformers',
-    'Architected local LLM inference with Ollama, containerized via Docker',
-    'Developed analytics platform with Streamlit and FastAPI dashboards',
+    'Built startup-specific websites on high-velocity weekly cycles, from landing pages to full product surfaces.',
+    'Worked across Next.js, React, Nuxt.js, Astro, and NestJS to match each product’s architecture and launch timeline.',
+    'Used Supabase for backend workflows and Sanity CMS for flexible, non-technical content operations.',
+    'Integrated end-to-end payment experiences with Razorpay and Stripe, including subscriptions and checkout flows.',
   ],
 };
 
@@ -358,11 +370,9 @@ export default function Home() {
 
       <ServiceConstellation items={whatIDo} quote={guidingQuote} />
 
-      <ExperienceSpectrum items={experiences} spotlight={ambalsoftSpotlight} />
+      <ExperienceSpectrum items={experiences} spotlight={pepulSpotlight} />
 
       <TechStackGalaxy skills={skills} />
-
-      <CertificationNebula priority={priorityCertifications} additional={additionalCertifications} />
 
       <ContactRelay socials={socials} />
     </div>

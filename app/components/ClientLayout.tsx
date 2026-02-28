@@ -63,22 +63,6 @@ function usePrefersReducedMotion(): boolean {
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }
 
-// FIRST-VISIT EXPERIENCE: Skip loader on subsequent visits
-function useFirstVisit(): boolean {
-  // Initialize state directly from sessionStorage to avoid effect setState
-  const [isFirstVisit] = useState(() => {
-    if (typeof window === 'undefined') return true;
-    const hasVisited = sessionStorage.getItem('portfolio-visited');
-    if (!hasVisited) {
-      sessionStorage.setItem('portfolio-visited', 'true');
-      return true;
-    }
-    return false;
-  });
-  
-  return isFirstVisit;
-}
-
 // SIMPLIFIED SCENE FOR TOUCH: Fewer particles, no scroll coupling
 function SimplifiedSceneFallback() {
   return (
@@ -109,18 +93,15 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const isTouchDevice = useIsTouchDevice();
   const mounted = useMounted();
   const prefersReducedMotion = usePrefersReducedMotion();
-  const isFirstVisit = useFirstVisit();
   const [scrollVelocity, setScrollVelocity] = useState(0);
   const lastScrollRef = useRef(0);
   
-  // Initialize phase based on conditions to avoid effect setState
+  // Always show loader on full reload unless reduced motion is enabled
   const [phase, setPhase] = useState<ExperiencePhase>(() => {
     if (typeof window === 'undefined') return 'live'; // Default to live for SSR
-    // Skip loader only for reduced motion preference
     const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
     if (reducedMotion) return 'live';
-    const hasVisited = sessionStorage.getItem('portfolio-visited');
-    return hasVisited ? 'live' : 'loading';
+    return 'loading';
   });
   const [cursorVisible, setCursorVisible] = useState(() => phase === 'live');
 
@@ -147,7 +128,6 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
 
   const handleLoadingComplete = useCallback(() => {
     setPhase('revealing');
-    sessionStorage.setItem('portfolio-visited', 'true');
     // Cursor appears as reward after scene stabilizes
     setTimeout(() => {
       setPhase('live');
@@ -171,12 +151,12 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   const showSimplifiedScene = mounted && isTouchDevice && !prefersReducedMotion;
   const showReducedScene = mounted && prefersReducedMotion;
 
-  // Show loading only for first visit and not reduced motion
-  const shouldShowLoader = mounted && effectivePhase === 'loading' && !prefersReducedMotion && isFirstVisit;
+  // Show loading on every full reload (except reduced motion users)
+  const shouldShowLoader = mounted && effectivePhase === 'loading' && !prefersReducedMotion;
 
   return (
     <ExperienceContext.Provider value={contextValue}>
-      {/* Loading sequence - first visit only */}
+      {/* Loading sequence - every full reload */}
       {shouldShowLoader && (
         <LoadingSequence onComplete={handleLoadingComplete} minDuration={2800} />
       )}

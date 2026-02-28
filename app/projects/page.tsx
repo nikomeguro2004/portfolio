@@ -104,18 +104,18 @@ export default function ProjectsPage() {
   const sortedProjects = useMemo(() => [...projects].sort((a, b) => b.orderKey - a.orderKey), []);
   const headerRef = useRef<HTMLDivElement>(null);
   const projectsRef = useRef<HTMLDivElement>(null);
-  const ambientGlowRef = useRef<HTMLDivElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
   const timelineProgressRef = useRef<HTMLDivElement>(null);
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
 
   useEffect(() => {
     if (headerRef.current) {
-      animate(headerRef.current.querySelectorAll('.atlas-intro'), {
-        translateY: [40, 0],
+      animate(headerRef.current.querySelectorAll('.projects-intro'), {
+        translateY: [30, 0],
         opacity: [0, 1],
         delay: stagger(80, { start: 120 }),
-        duration: 680,
+        duration: 620,
         ease: 'out(3)',
       });
     }
@@ -124,7 +124,7 @@ export default function ProjectsPage() {
       animate(projectsRef.current.children, {
         translateY: [24, 0],
         opacity: [0, 1],
-        scale: [0.97, 1],
+        scale: [0.985, 1],
         delay: stagger(90, { start: 260 }),
         duration: 580,
         ease: 'out(3)',
@@ -175,56 +175,36 @@ export default function ProjectsPage() {
   }, [sortedProjects.length]);
 
   useEffect(() => {
-    if (!ambientGlowRef.current) return;
-
-    animate(ambientGlowRef.current, {
-      translateX: [-24, 32],
-      translateY: [24, -12],
-      duration: 11000,
+    if (!backdropRef.current) return;
+    animate(backdropRef.current, {
+      translateX: [-40, 50],
+      translateY: [20, -18],
+      duration: 10000,
       direction: 'alternate',
       loop: true,
       ease: 'inOutSine',
     });
-
-    const updateIntensity = () => {
-      if (!ambientGlowRef.current || !projectsRef.current) return;
-      const rect = projectsRef.current.getBoundingClientRect();
-      const viewport = window.innerHeight;
-      const visibleStart = Math.max(0, viewport - rect.top);
-      const visibleProgress = Math.min(Math.max(visibleStart / (viewport + rect.height), 0), 1);
-      const intensity = 0.08 + visibleProgress * 0.12;
-      ambientGlowRef.current.style.background = `radial-gradient(circle, rgba(56, 189, 248, ${intensity}) 0%, transparent 70%)`;
-    };
-
-    updateIntensity();
-    window.addEventListener('scroll', updateIntensity, { passive: true });
-    window.addEventListener('resize', updateIntensity);
-
-    return () => {
-      window.removeEventListener('scroll', updateIntensity);
-      window.removeEventListener('resize', updateIntensity);
-    };
   }, []);
 
   return (
     <div className="min-h-screen relative overflow-hidden">
       <div
-        ref={ambientGlowRef}
+        ref={backdropRef}
         className="fixed pointer-events-none transition-all duration-500"
         style={{
-          width: '540px',
-          height: '540px',
-          background: 'radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, transparent 70%)',
-          top: '120px',
-          left: '-140px',
-          filter: 'blur(62px)',
+          width: '620px',
+          height: '620px',
+          background: 'radial-gradient(circle, rgba(56, 189, 248, 0.14) 0%, transparent 70%)',
+          top: '60px',
+          left: '-180px',
+          filter: 'blur(72px)',
         }}
       />
       <div className="fixed inset-0 pointer-events-none opacity-20" style={{
         backgroundImage:
           'linear-gradient(to right, rgba(94, 234, 212, 0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(129, 140, 248, 0.06) 1px, transparent 1px)',
-        backgroundSize: '52px 52px',
-        maskImage: 'radial-gradient(circle at 50% 40%, black 10%, transparent 78%)',
+        backgroundSize: '58px 58px',
+        maskImage: 'radial-gradient(circle at 50% 30%, black 10%, transparent 78%)',
       }} />
 
       <div className="pt-16 pb-24">
@@ -232,7 +212,7 @@ export default function ProjectsPage() {
           <div ref={headerRef} className="mb-14">
             <Link
               href="/"
-              className="atlas-intro inline-flex items-center gap-2 text-sm mb-8 transition-colors hover:text-cyan-400 group opacity-0"
+              className="projects-intro group mb-8 inline-flex items-center gap-2 text-sm opacity-0 transition-colors hover:text-cyan-400"
               style={{ color: 'var(--text-tertiary)' }}
             >
               <svg className="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -241,19 +221,19 @@ export default function ProjectsPage() {
               Back to Home
             </Link>
 
-            <p className="atlas-intro text-xs uppercase tracking-[0.2em] mb-3 opacity-0" style={{ color: 'var(--text-tertiary)' }}>
-              Project Atlas · Latest to Oldest
+            <p className="projects-intro mb-3 text-xs uppercase tracking-[0.2em] opacity-0" style={{ color: 'var(--text-tertiary)' }}>
+              Project Mission Board · Latest to Oldest
             </p>
 
-            <h1 className="atlas-intro text-4xl md:text-6xl font-bold mb-4 tracking-tight opacity-0">
+            <h1 className="projects-intro mb-4 text-4xl font-bold tracking-tight opacity-0 md:text-6xl">
               <span className="text-gradient">Projects</span>
             </h1>
 
-            <p className="atlas-intro text-lg max-w-3xl opacity-0" style={{ color: 'var(--text-secondary)' }}>
-              A timeline of production systems, ranked by recency. Each chapter captures what was built, why it mattered, and how it scales.
+            <p className="projects-intro max-w-3xl text-lg opacity-0" style={{ color: 'var(--text-secondary)' }}>
+              Production builds shown as mission chapters with scope, delivery intent, and system-level outcomes.
             </p>
 
-            <div className="atlas-intro mt-8 grid gap-3 sm:grid-cols-3 opacity-0">
+            <div className="projects-intro mt-8 grid gap-3 opacity-0 sm:grid-cols-3">
               <div className="rounded-xl border border-cyan-400/20 bg-cyan-500/5 px-4 py-3">
                 <p className="text-xs uppercase tracking-[0.16em]" style={{ color: 'var(--text-tertiary)' }}>Total Projects</p>
                 <p className="mt-2 text-2xl font-bold text-white">{sortedProjects.length}</p>
@@ -273,12 +253,12 @@ export default function ProjectsPage() {
             <ProjectMilestoneDeck />
           </div>
 
-          <div className="grid lg:grid-cols-[220px_1fr] gap-7 items-start">
+          <div className="grid items-start gap-7 lg:grid-cols-[230px_1fr]">
             <aside className="hidden lg:block sticky top-28">
               <div className="rounded-xl border border-white/10 bg-black/20 p-4 backdrop-blur-sm">
-                <p className="text-xs uppercase tracking-[0.16em] mb-4" style={{ color: 'var(--text-tertiary)' }}>Timeline</p>
+                <p className="mb-4 text-xs uppercase tracking-[0.16em]" style={{ color: 'var(--text-tertiary)' }}>Mission Timeline</p>
                 <div className="relative pl-4">
-                  <div className="absolute left-0 top-0 h-full w-[2px] rounded-full bg-white/10 overflow-hidden">
+                  <div className="absolute left-0 top-0 h-full rounded-full bg-white/10 overflow-hidden" style={{ width: '2px' }}>
                     <div
                       ref={timelineProgressRef}
                       className="w-full rounded-full bg-linear-to-b from-cyan-300 via-sky-400 to-indigo-400"
@@ -335,11 +315,21 @@ export default function ProjectsPage() {
                         : 'radial-gradient(circle at 88% 16%, rgba(56, 189, 248, 0.08), transparent 40%)',
                     }} />
 
-                    <div className="absolute top-3 right-3 text-[10px] font-semibold uppercase tracking-[0.14em] px-2 py-1 rounded bg-black/30 border border-white/10 text-cyan-300">
-                      Chapter {String(index + 1).padStart(2, '0')}
+                    <div className="absolute right-3 top-3 rounded border border-white/10 bg-black/30 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-cyan-300">
+                      Mission {String(index + 1).padStart(2, '0')}
                     </div>
 
-                    <div className="relative flex flex-col lg:flex-row lg:gap-8">
+                    <div className="relative grid gap-6 lg:grid-cols-[140px_1fr]">
+                      <div className="rounded-xl border border-cyan-300/20 bg-cyan-500/5 p-3">
+                        <p className="text-[10px] uppercase tracking-[0.14em]" style={{ color: 'var(--text-tertiary)' }}>Chapter</p>
+                        <p className="mt-2 text-xl font-bold text-cyan-200">{String(index + 1).padStart(2, '0')}</p>
+                        <p className="mt-2 text-xs" style={{ color: 'var(--text-tertiary)' }}>{project.period}</p>
+                        <div className="mt-3 space-y-1.5">
+                          <div className="h-1 rounded-full bg-cyan-300/70" style={{ width: `${76 + index * 3}%` }} />
+                          <div className="h-1 rounded-full bg-indigo-300/55" style={{ width: `${60 + index * 5}%` }} />
+                        </div>
+                      </div>
+
                       <div className="flex-1">
                         <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
                           <div>
@@ -374,9 +364,7 @@ export default function ProjectsPage() {
                             >
                               {project.status}
                             </span>
-                            <span className="text-xs" style={{ color: 'var(--text-tertiary)' }}>
-                              {project.period}
-                            </span>
+                            <span className="text-xs" style={{ color: 'var(--text-tertiary)' }}>{project.priority}</span>
                           </div>
                         </div>
 
@@ -394,7 +382,7 @@ export default function ProjectsPage() {
                           </motion.p>
                         </AnimatePresence>
 
-                        <ul className="space-y-2 mb-5">
+                        <ul className="mb-5 space-y-2">
                           {project.highlights.map((item, itemIndex) => (
                             <li key={itemIndex} className="flex gap-2 text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
                               <span className="text-cyan-400 font-bold">→</span>

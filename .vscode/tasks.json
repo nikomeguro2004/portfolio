@@ -9,6 +9,24 @@
 				"install"
 			],
 			"isBackground": false
+		},
+		{
+			"label": "Build Next app",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build"
+			]
+		},
+		{
+			"label": "Clean and build",
+			"type": "shell",
+			"command": "cmd",
+			"args": [
+				"/c",
+				"if exist .next rmdir /s /q .next && npm run build"
+			]
 		}
 	]
 }
