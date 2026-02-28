@@ -175,7 +175,7 @@ export default function ExperienceBroadcastSection() {
   }, [activeChannel, isTuning, switchChannel]);
 
   return (
-    <section id="experience" className="py-16" style={{ background: 'var(--background)' }}>
+    <section id="experience" className="py-16">
       <div ref={rootRef} className="container">
         <div className="mb-6">
           <h2 className="text-3xl font-bold" style={{ color: 'var(--text-primary)' }}>Experience</h2>
@@ -188,7 +188,6 @@ export default function ExperienceBroadcastSection() {
           className="relative overflow-hidden rounded-xl border p-3 md:p-4"
           style={{
             borderColor: 'rgba(157, 78, 221, 0.4)',
-            background: 'linear-gradient(180deg, rgba(30, 23, 44, 0.98) 0%, rgba(16, 13, 24, 0.98) 100%)',
             boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.05), inset 0 -8px 18px rgba(0,0,0,0.45), 0 22px 48px rgba(0,0,0,0.5)',
           }}
         >

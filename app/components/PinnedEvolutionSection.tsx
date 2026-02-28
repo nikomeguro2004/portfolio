@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useRef, useState } from 'react';
-import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring, useTransform } from 'framer-motion';
+import { AnimatePresence, motion, useMotionValueEvent, useScroll, useSpring } from 'framer-motion';
 
 interface Step {
   title: string;
@@ -69,9 +69,6 @@ export default function PinnedEvolutionSection({ steps }: PinnedEvolutionSection
     setActiveIndex((prev) => (prev === next ? prev : next));
   });
 
-  const beamFill = useTransform(smoothProgress, [0, 1], [0.02, 1]);
-  const beamGlow = useTransform(smoothProgress, [0, 1], [0.35, 1]);
-
   const activeStage = stages[activeIndex] ?? stages[0];
   const activeColor = STAGE_COLORS[activeIndex] ?? STAGE_COLORS[0];
 
@@ -79,17 +76,6 @@ export default function PinnedEvolutionSection({ steps }: PinnedEvolutionSection
     <section className="relative w-full px-4 py-2 sm:py-3">
       <div ref={wrapperRef} className="relative h-[340vh]">
         <div className="sticky top-0 h-screen overflow-hidden">
-          <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-white/10" />
-          <motion.div
-            className="absolute bottom-0 left-1/2 h-full w-px -translate-x-1/2"
-            style={{
-              scaleY: beamFill,
-              opacity: beamGlow,
-              transformOrigin: 'bottom',
-              background: 'linear-gradient(180deg, rgba(103,232,249,0.06) 0%, rgba(103,232,249,0.9) 100%)',
-            }}
-          />
-
           <div className="relative z-10 flex h-full items-center justify-center px-6">
             <div className="w-full max-w-5xl text-center">
               <p className="mb-4 text-xs uppercase tracking-[0.24em] text-cyan-300/75">Delivery Framework</p>

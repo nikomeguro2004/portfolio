@@ -86,7 +86,7 @@ export default function ServicesSection({ items, quote }: ServicesSectionProps) 
           ))}
         </div>
 
-        <div className="mt-8 max-w-3xl rounded-2xl border border-indigo-400/15 bg-indigo-500/5 px-5 py-4">
+        <div className="mt-8 max-w-3xl">
           <p className="text-sm italic" style={{ color: 'var(--text-secondary)' }}>{quote}</p>
         </div>
       </div>

@@ -3,7 +3,7 @@
 import { useSyncExternalStore, useCallback, useState, createContext, useContext, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import AppLoadingSequence from '@/app/components/AppLoadingSequence';
-import StoryBackdrop from './StoryBackdrop';
+import ImmersiveStarfieldBackdrop from './ImmersiveStarfieldBackdrop';
 
 // EXPERIENCE CONTEXT: Global narrative state
 type ExperiencePhase = 'loading' | 'revealing' | 'live';
@@ -143,7 +143,7 @@ export default function AppClientLayout({ children }: AppClientLayoutProps) {
   };
 
   // Determine if backdrop should show
-  const showStoryBackdrop = mounted && !isTouchDevice && !prefersReducedMotion;
+  const showStarfieldBackdrop = mounted && !isTouchDevice && !prefersReducedMotion;
   const showSimplifiedScene = mounted && isTouchDevice && !prefersReducedMotion;
   const showReducedScene = mounted && prefersReducedMotion;
 
@@ -157,8 +157,8 @@ export default function AppClientLayout({ children }: AppClientLayoutProps) {
         <AppLoadingSequence onComplete={handleLoadingComplete} minDuration={2800} />
       )}
       
-      {/* Story-first Anime.js backdrop (desktop) */}
-      {showStoryBackdrop && <StoryBackdrop emphasize={pathname === '/'} />}
+      {/* Minimal immersive starfield backdrop (desktop) */}
+      {showStarfieldBackdrop && <ImmersiveStarfieldBackdrop />}
       
       {/* TOUCH DEVICE: Simplified atmosphere instead of nothing */}
       {showSimplifiedScene && <SimplifiedSceneFallback />}
