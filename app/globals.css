@@ -3,15 +3,15 @@
 :root {
   --background: #0B0F14;
   --foreground: #E5E7EB;
-  --bg-secondary: #111827;
-  --bg-card: #111827;
+  --bg-secondary: #101827;
+  --bg-card: #121a2a;
   --text-primary: #E5E7EB;
-  --text-secondary: #9CA3AF;
-  --text-tertiary: #6B7280;
-  --accent: #38BDF8;
-  --accent-secondary: #22D3EE;
-  --accent-hover: #0EA5E9;
-  --border: #1F2933;
+  --text-secondary: #AAB6CC;
+  --text-tertiary: #77839A;
+  --accent: #5EEAD4;
+  --accent-secondary: #818CF8;
+  --accent-hover: #22D3EE;
+  --border: #223248;
   --border-subtle: rgba(31, 41, 51, 0.5);
 }
 
@@ -438,6 +438,7 @@ body {
 section {
   position: relative;
   z-index: 10;
+  scroll-margin-top: 88px;
 }
 
 /* Ensure content is above Three.js canvas */
@@ -451,4 +452,115 @@ main {
   transform: translateZ(0);
   will-change: transform;
   backface-visibility: hidden;
+}
+
+@keyframes loader-aurora {
+  0% {
+    transform: rotate(0deg) scale(1);
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.08);
+    filter: hue-rotate(25deg);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+    filter: hue-rotate(0deg);
+  }
+}
+
+@keyframes loader-grid-drift {
+  0% { background-position: 0 0, 0 0; }
+  100% { background-position: 80px 40px, 40px 80px; }
+}
+
+@keyframes progress-sheen {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 220% 0%; }
+}
+
+@keyframes narrative-breathe {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+
+.loader-chamber {
+  background:
+    radial-gradient(circle at 20% 15%, rgba(94, 234, 212, 0.12), transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(129, 140, 248, 0.14), transparent 50%),
+    var(--background);
+}
+
+.loader-grid {
+  background-image:
+    linear-gradient(to right, rgba(129, 140, 248, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(94, 234, 212, 0.06) 1px, transparent 1px);
+  background-size: 42px 42px;
+  animation: loader-grid-drift 12s linear infinite;
+  opacity: 0.3;
+}
+
+.loader-aura {
+  background: radial-gradient(circle, rgba(94, 234, 212, 0.22) 0%, rgba(129, 140, 248, 0.08) 55%, transparent 72%);
+  filter: blur(40px);
+  animation: loader-aurora 6s ease-in-out infinite;
+}
+
+.loader-progress {
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent-secondary) 45%, var(--accent) 90%);
+  background-size: 220% 100%;
+  animation: progress-sheen 1.6s linear infinite;
+}
+
+.narrative-step {
+  animation: narrative-breathe 4.8s ease-in-out infinite;
+}
+
+.narrative-visual-shell {
+  position: sticky;
+}
+
+@keyframes studio-grid-drift {
+  0% {
+    background-position: 0 0, 0 0;
+  }
+  100% {
+    background-position: 44px 44px, 22px 22px;
+  }
+}
+
+@keyframes studio-dot-ping {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.28);
+  }
+}
+
+.studio-shell::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 18% 16%, rgba(94, 234, 212, 0.2), transparent 46%);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.studio-grid {
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(94, 234, 212, 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(129, 140, 248, 0.08) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(circle at center, black 30%, transparent 100%);
+  animation: studio-grid-drift 10s linear infinite;
+  opacity: 0.34;
+}
+
+.studio-dot-ping {
+  animation: studio-dot-ping 1.8s ease-in-out infinite;
 }

@@ -2,11 +2,7 @@
 
 import { useEffect, useRef, useState, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SystemCore } from './SystemCore';
-
-gsap.registerPlugin(ScrollTrigger);
 
 export function Scene() {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -55,20 +51,21 @@ export function Scene() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [isMobile]);
   
-  // Scroll tracking with GSAP ScrollTrigger
+  // Scroll tracking
   useEffect(() => {
-    const scrollTrigger = ScrollTrigger.create({
-      trigger: document.body,
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: 0.5,
-      onUpdate: (self) => {
-        setScrollProgress(self.progress);
-      },
-    });
-    
+    const updateProgress = () => {
+      const maxScrollable = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+      const progress = Math.min(Math.max(window.scrollY / maxScrollable, 0), 1);
+      setScrollProgress(progress);
+    };
+
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress);
+
     return () => {
-      scrollTrigger.kill();
+      window.removeEventListener('scroll', updateProgress);
+      window.removeEventListener('resize', updateProgress);
     };
   }, []);
   

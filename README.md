@@ -1,7 +1,7 @@
 # S Adityan — Portfolio
 
 > **High-performance portfolio** showcasing full-stack engineering and AI development expertise.  
-> Built with **Next.js 15**, **Three.js**, and **GSAP** for immersive 3D scroll-driven experiences.
+> Built with **Next.js 16**, **Three.js**, and **Anime.js** for immersive 3D + cinematic 2D scroll-driven experiences.
 
 [![Next.js](https://img.shields.io/badge/Next.js-15.1-black?logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19-blue?logo=react)](https://react.dev/)
@@ -84,7 +84,7 @@
 - **Flutter** (cross-platform mobile development)
 - Component-driven UI systems
 - SSR & SSG, performance optimization, SEO
-- Motion & interaction design (GSAP, Framer Motion)
+- Motion & interaction design (Anime.js, Framer Motion)
 
 ### Backend & API Engineering
 - **Node.js**, **FastAPI**, **Python**
@@ -390,7 +390,7 @@ npx tsc --noEmit
 | **Framework** | Next.js 15.1 (App Router) |
 | **UI Library** | React 19 |
 | **Styling** | Tailwind CSS 3 |
-| **Animation** | GSAP, ScrollTrigger |
+| **Animation** | Anime.js |
 | **3D Graphics** | Three.js, @react-three/fiber, @react-three/drei |
 | **Language** | TypeScript 5.x |
 | **Development** | ESLint, PostCSS |
@@ -401,7 +401,7 @@ npx tsc --noEmit
 - 🎯 **Interactive 3D Visualization** - Custom Three.js planet system
 - 📱 **Fully Responsive** - Optimized for desktop, tablet, and mobile
 - ⚡ **Performance Optimized** - Lazy loading, code splitting, efficient rendering
-- 🎨 **Magnetic Interactions** - GSAP-powered magnetic buttons and cards
+- 🎨 **Magnetic Interactions** - Anime.js-powered magnetic buttons and cards
 - 🌐 **SEO Ready** - Comprehensive meta tags, sitemap, and semantic HTML
 - ♿ **Accessible** - Keyboard navigation, reduced motion support
 - 🔒 **Type Safe** - Built with TypeScript for reliability

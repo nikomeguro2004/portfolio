@@ -1,11 +1,10 @@
 'use client';
 
-import { useSyncExternalStore, useCallback, useState, lazy, Suspense, createContext, useContext, useEffect, useRef } from 'react';
+import { useSyncExternalStore, useCallback, useState, createContext, useContext, useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import { CustomCursor } from './MagneticEffects';
-import LoadingSequence from './LoadingSequence';
-
-// Lazy load the Three.js scene for better initial load
-const Scene = lazy(() => import('./three/Scene'));
+import LoadingSequence from '@/app/components/LoadingSequence';
+import StoryMotionBackdrop from './StoryMotionBackdrop';
 
 // EXPERIENCE CONTEXT: Global narrative state
 type ExperiencePhase = 'loading' | 'revealing' | 'live';
@@ -34,7 +33,7 @@ function useIsTouchDevice(): boolean {
   const getSnapshot = useCallback(() => {
     if (typeof window === 'undefined') return false;
     // Only consider it a "touch device" if it's a small screen mobile
-    // Many laptops have touch but should still show Three.js
+    // Many laptops have touch but should still show full backdrop effects
     const isMobile = window.innerWidth < 768;
     const hasTouchOnly = ('ontouchstart' in window || navigator.maxTouchPoints > 0) && !window.matchMedia('(pointer: fine)').matches;
     return isMobile && hasTouchOnly;
@@ -80,28 +79,6 @@ function useFirstVisit(): boolean {
   return isFirstVisit;
 }
 
-// SUSPENSE FALLBACK: Visual placeholder instead of null
-function SceneFallback() {
-  return (
-    <div 
-      className="fixed inset-0 pointer-events-none"
-      style={{ 
-        zIndex: 0,
-        background: 'radial-gradient(ellipse at center, rgba(56, 189, 248, 0.05) 0%, transparent 60%)'
-      }}
-    >
-      {/* Soft noise placeholder */}
-      <div 
-        className="absolute inset-0 opacity-30"
-        style={{
-          background: `repeating-conic-gradient(from 0deg, transparent 0deg 90deg, rgba(56, 189, 248, 0.02) 90deg 180deg)`,
-          animation: 'pulse 4s ease-in-out infinite',
-        }}
-      />
-    </div>
-  );
-}
-
 // SIMPLIFIED SCENE FOR TOUCH: Fewer particles, no scroll coupling
 function SimplifiedSceneFallback() {
   return (
@@ -128,11 +105,11 @@ interface ClientLayoutProps {
 }
 
 export default function ClientLayout({ children }: ClientLayoutProps) {
+  const pathname = usePathname();
   const isTouchDevice = useIsTouchDevice();
   const mounted = useMounted();
   const prefersReducedMotion = usePrefersReducedMotion();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const _isFirstVisit = useFirstVisit(); // Keep for session tracking side effect
+  const isFirstVisit = useFirstVisit();
   const [scrollVelocity, setScrollVelocity] = useState(0);
   const lastScrollRef = useRef(0);
   
@@ -142,7 +119,8 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
     // Skip loader only for reduced motion preference
     const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
     if (reducedMotion) return 'live';
-    return 'loading'; // Always show loading on page load/reload
+    const hasVisited = sessionStorage.getItem('portfolio-visited');
+    return hasVisited ? 'live' : 'loading';
   });
   const [cursorVisible, setCursorVisible] = useState(() => phase === 'live');
 
@@ -169,8 +147,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
 
   const handleLoadingComplete = useCallback(() => {
     setPhase('revealing');
-    // Mark as visited once loading completes
-    sessionStorage.setItem('portfolio-visited-once', 'true');
+    sessionStorage.setItem('portfolio-visited', 'true');
     // Cursor appears as reward after scene stabilizes
     setTimeout(() => {
       setPhase('live');
@@ -189,32 +166,23 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
     scrollVelocity,
   };
 
-  // Determine if scene should show - ALWAYS show after loading on desktop
-  const showFullScene = mounted && !isTouchDevice && !prefersReducedMotion;
+  // Determine if backdrop should show
+  const showStoryBackdrop = mounted && !isTouchDevice && !prefersReducedMotion;
   const showSimplifiedScene = mounted && isTouchDevice && !prefersReducedMotion;
   const showReducedScene = mounted && prefersReducedMotion;
 
-  // Debug logging
-  useEffect(() => {
-    console.log('ClientLayout state:', { mounted, isTouchDevice, prefersReducedMotion, showFullScene, showSimplifiedScene, showReducedScene, effectivePhase });
-  }, [mounted, isTouchDevice, prefersReducedMotion, showFullScene, showSimplifiedScene, showReducedScene, effectivePhase]);
-
   // Show loading only for first visit and not reduced motion
-  const shouldShowLoader = mounted && effectivePhase === 'loading' && !prefersReducedMotion;
+  const shouldShowLoader = mounted && effectivePhase === 'loading' && !prefersReducedMotion && isFirstVisit;
 
   return (
     <ExperienceContext.Provider value={contextValue}>
       {/* Loading sequence - first visit only */}
       {shouldShowLoader && (
-        <LoadingSequence onComplete={handleLoadingComplete} minDuration={1200} />
+        <LoadingSequence onComplete={handleLoadingComplete} minDuration={2800} />
       )}
       
-      {/* Three.js background scene (desktop) - ALWAYS render when not loading */}
-      {showFullScene && (
-        <Suspense fallback={<SceneFallback />}>
-          <Scene />
-        </Suspense>
-      )}
+      {/* Story-first Anime.js backdrop (desktop) */}
+      {showStoryBackdrop && <StoryMotionBackdrop emphasize={pathname === '/'} />}
       
       {/* TOUCH DEVICE: Simplified atmosphere instead of nothing */}
       {showSimplifiedScene && <SimplifiedSceneFallback />}

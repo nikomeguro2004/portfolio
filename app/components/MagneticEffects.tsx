@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
+import { animate } from 'animejs';
 
 // Simplified magnetic hook - returns ref for compatibility
 export function useMagnetic() {
@@ -36,11 +36,11 @@ export function MagneticButton({
     if (!button) return;
 
     const handleMouseEnter = () => {
-      gsap.to(button, { y: -2, duration: 0.3, ease: 'power2.out' });
+      animate(button, { translateY: -2, duration: 260, ease: 'out(3)' });
     };
 
     const handleMouseLeave = () => {
-      gsap.to(button, { y: 0, duration: 0.3, ease: 'power2.out' });
+      animate(button, { translateY: 0, duration: 280, ease: 'out(3)' });
     };
 
     button.addEventListener('mouseenter', handleMouseEnter);
@@ -106,21 +106,20 @@ export function MagneticCard({
       const rotateX = (mouseY / (rect.height / 2)) * -rotationStrength;
       const rotateY = (mouseX / (rect.width / 2)) * rotationStrength;
 
-      gsap.to(card, {
+      animate(card, {
         rotateX,
         rotateY,
-        duration: 0.4,
-        ease: 'power2.out',
-        transformPerspective: 1000,
+        duration: 320,
+        ease: 'out(3)',
       });
     };
 
     const handleMouseLeave = () => {
-      gsap.to(card, {
+      animate(card, {
         rotateX: 0,
         rotateY: 0,
-        duration: 0.4,
-        ease: 'power2.out',
+        duration: 360,
+        ease: 'out(4)',
       });
     };
 

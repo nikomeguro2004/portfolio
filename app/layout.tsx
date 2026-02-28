@@ -1,16 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Sora, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "./components/ClientLayout";
 
-const geistSans = Geist({
+const soraSans = Sora({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
-const geistMono = Geist_Mono({
+const ibmMono = IBM_Plex_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const viewport: Viewport = {
@@ -93,7 +95,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${soraSans.variable} ${ibmMono.variable} antialiased`}
       >
         <ClientLayout>
           <div className="grid-bg" />

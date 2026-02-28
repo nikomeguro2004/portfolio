@@ -3,11 +3,8 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { gsap } from 'gsap';
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+import { animate, stagger } from 'animejs';
 import { useExperience } from './ClientLayout';
-
-gsap.registerPlugin(ScrollToPlugin);
 
 export default function Navigation() {
   const navRef = useRef<HTMLElement>(null);
@@ -25,11 +22,14 @@ export default function Navigation() {
   // 1. INTENTIONAL LOCK-IN ENTRANCE: Nav anchors the page with subtle scale
   useEffect(() => {
     if (navRef.current) {
-      gsap.fromTo(
-        navRef.current,
-        { y: -60, scaleY: 0.9, opacity: 0 },
-        { y: 0, scaleY: 1, opacity: 1, duration: 0.9, ease: 'expo.out', delay: 0.3 }
-      );
+      animate(navRef.current, {
+        translateY: [-60, 0],
+        scaleY: [0.9, 1],
+        opacity: [0, 1],
+        duration: 860,
+        ease: 'out(4)',
+        delay: 280,
+      });
     }
   }, []);
 
@@ -79,7 +79,7 @@ export default function Navigation() {
   // 8. NAV REACTS TO SCROLL VELOCITY: Subtle parallax drift
   const navDrift = isNavVisible ? scrollVelocity * 2 : 0;
 
-  // 7. GSAP SCROLL-TO for premium designed-smooth scrolling
+  // 7. Smooth section jump for premium navigation flow
   const scrollToSection = useCallback((id: string) => {
     setIsMobileMenuOpen(false);
     if (pathname !== '/') {
@@ -89,45 +89,22 @@ export default function Navigation() {
     const element = document.getElementById(id);
     if (element) {
       const offsetTop = element.offsetTop - 80;
-      gsap.to(window, {
-        duration: 1.2,
-        scrollTo: { y: offsetTop, autoKill: true },
-        ease: 'expo.inOut',
-      });
+      window.scrollTo({ top: offsetTop, behavior: 'smooth' });
     }
   }, [pathname]);
 
   // 5. LOGO HOVER: Layered motion - icon shifts, text lags behind
   const handleLogoEnter = () => {
     if (logoIconRef.current && logoTextRef.current) {
-      gsap.to(logoIconRef.current, { 
-        rotate: 8, 
-        scale: 1.08,
-        duration: 0.3, 
-        ease: 'power2.out' 
-      });
-      gsap.to(logoTextRef.current, { 
-        x: 4, 
-        duration: 0.4, 
-        ease: 'power2.out',
-        delay: 0.05 
-      });
+      animate(logoIconRef.current, { rotate: 8, scale: 1.08, duration: 260, ease: 'out(3)' });
+      animate(logoTextRef.current, { translateX: 4, duration: 320, ease: 'out(3)', delay: 40 });
     }
   };
 
   const handleLogoLeave = () => {
     if (logoIconRef.current && logoTextRef.current) {
-      gsap.to(logoIconRef.current, { 
-        rotate: 0, 
-        scale: 1,
-        duration: 0.4, 
-        ease: 'elastic.out(1, 0.5)' 
-      });
-      gsap.to(logoTextRef.current, { 
-        x: 0, 
-        duration: 0.3, 
-        ease: 'power2.out' 
-      });
+      animate(logoIconRef.current, { rotate: 0, scale: 1, duration: 360, ease: 'out(4)' });
+      animate(logoTextRef.current, { translateX: 0, duration: 260, ease: 'out(3)' });
     }
   };
 
@@ -136,20 +113,10 @@ export default function Navigation() {
     const target = e.currentTarget;
     const underline = target.querySelector('.link-underline') as HTMLElement;
     
-    gsap.to(target, {
-      y: -2,
-      color: 'var(--text-primary)',
-      duration: 0.2,
-      ease: 'power2.out',
-    });
+    animate(target, { translateY: -2, color: 'var(--text-primary)', duration: 180, ease: 'out(3)' });
     
     if (underline) {
-      gsap.to(underline, {
-        scaleX: 1,
-        opacity: 1,
-        duration: 0.3,
-        ease: 'power3.out',
-      });
+      animate(underline, { scaleX: 1, opacity: 1, duration: 240, ease: 'out(3)' });
     }
   };
 
@@ -158,20 +125,15 @@ export default function Navigation() {
     const underline = target.querySelector('.link-underline') as HTMLElement;
     const isActive = target.getAttribute('data-active') === 'true';
     
-    gsap.to(target, {
-      y: 0,
+    animate(target, {
+      translateY: 0,
       color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
-      duration: 0.3,
-      ease: 'power2.out',
+      duration: 240,
+      ease: 'out(3)',
     });
     
     if (underline && !isActive) {
-      gsap.to(underline, {
-        scaleX: 0,
-        opacity: 0,
-        duration: 0.2,
-        ease: 'power2.in',
-      });
+      animate(underline, { scaleX: 0, opacity: 0, duration: 180, ease: 'in(3)' });
     }
   };
 
@@ -181,13 +143,10 @@ export default function Navigation() {
     const underline = target.querySelector('.link-underline') as HTMLElement;
     
     if (underline) {
-      gsap.to(underline, {
-        scaleX: 1.2,
-        duration: 0.05,
-        ease: 'none',
-        onComplete: () => {
-          gsap.to(underline, { scaleX: 1, duration: 0.2 });
-        }
+      animate(underline, {
+        scaleX: [1, 1.2, 1],
+        duration: 240,
+        ease: 'out(4)',
       });
     }
   };
@@ -196,17 +155,14 @@ export default function Navigation() {
   useEffect(() => {
     if (mobileMenuRef.current && isMobileMenuOpen) {
       const items = mobileMenuRef.current.querySelectorAll('.mobile-nav-item');
-      gsap.fromTo(items,
-        { y: 20, opacity: 0, x: -10 },
-        { 
-          y: 0, 
-          opacity: 1, 
-          x: 0,
-          stagger: 0.08, 
-          duration: 0.4, 
-          ease: 'power3.out' 
-        }
-      );
+      animate(items, {
+        translateY: [20, 0],
+        translateX: [-10, 0],
+        opacity: [0, 1],
+        delay: stagger(80),
+        duration: 360,
+        ease: 'out(3)',
+      });
     }
   }, [isMobileMenuOpen]);
 
