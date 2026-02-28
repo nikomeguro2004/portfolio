@@ -69,6 +69,8 @@ export default function StoryMotionBackdrop({ emphasize = false }: StoryMotionBa
   const nearStarRef = useRef<HTMLDivElement>(null);
   const farStarRef = useRef<HTMLDivElement>(null);
   const shootingRef = useRef<HTMLDivElement>(null);
+  const shootingXRef = useRef(0);
+  const shootingYRef = useRef(0);
   const shootingIdleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
@@ -110,6 +112,8 @@ export default function StoryMotionBackdrop({ emphasize = false }: StoryMotionBa
 
     if (shootingRef.current) {
       shootingRef.current.style.opacity = '0';
+      shootingRef.current.style.left = '50vw';
+      shootingRef.current.style.top = '50vh';
     }
 
     const handlePointer = (event: MouseEvent) => {
@@ -134,11 +138,14 @@ export default function StoryMotionBackdrop({ emphasize = false }: StoryMotionBa
       }
 
       if (shootingRef.current) {
+        shootingXRef.current = event.clientX;
+        shootingYRef.current = event.clientY;
+        shootingRef.current.style.left = `${shootingXRef.current}px`;
+        shootingRef.current.style.top = `${shootingYRef.current}px`;
+
         animate(shootingRef.current, {
-          translateX: event.clientX,
-          translateY: event.clientY,
           rotate: mx * 10,
-          duration: 360,
+          duration: 260,
           ease: 'inOutSine',
         });
 
@@ -173,22 +180,12 @@ export default function StoryMotionBackdrop({ emphasize = false }: StoryMotionBa
       });
     };
 
-    const handleScroll = () => {
-      if (!rootRef.current) return;
-      const maxScrollable = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
-      const progress = Math.min(Math.max(window.scrollY / maxScrollable, 0), 1);
-      rootRef.current.style.opacity = `${emphasize ? 0.95 - progress * 0.35 : 0.75 - progress * 0.25}`;
-    };
-
     window.addEventListener('mousemove', handlePointer);
     window.addEventListener('mouseleave', handlePointerLeave);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
 
     return () => {
       window.removeEventListener('mousemove', handlePointer);
       window.removeEventListener('mouseleave', handlePointerLeave);
-      window.removeEventListener('scroll', handleScroll);
       if (shootingIdleTimerRef.current) {
         clearTimeout(shootingIdleTimerRef.current);
       }
@@ -199,7 +196,7 @@ export default function StoryMotionBackdrop({ emphasize = false }: StoryMotionBa
     <div
       ref={rootRef}
       className="fixed inset-0 pointer-events-none overflow-hidden"
-      style={{ zIndex: 0, opacity: emphasize ? 0.95 : 0.75 }}
+      style={{ zIndex: 1, opacity: emphasize ? 0.95 : 0.8 }}
       aria-hidden="true"
     >
       <div ref={nearStarRef} className="absolute inset-0">
@@ -235,7 +232,7 @@ export default function StoryMotionBackdrop({ emphasize = false }: StoryMotionBa
         ))}
       </div>
 
-      <div ref={shootingRef} className="absolute left-0 top-0" style={{ transform: 'translate(50vw, 50vh)', opacity: 0 }}>
+      <div ref={shootingRef} className="absolute" style={{ left: '50vw', top: '50vh', opacity: 0 }}>
         {Array.from({ length: 3 }).map((_, index) => (
           <span
             key={`shooting-${index}`}

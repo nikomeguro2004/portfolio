@@ -2,13 +2,56 @@
 
 import { useEffect, useRef } from 'react';
 import { animate, stagger } from 'animejs';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { MagneticButton } from './components/MagneticEffects';
 import HeroNarrativeCluster from './components/HeroNarrativeCluster';
 import NarrativeAxisSection from './components/NarrativeAxisSection';
 import ServiceConstellation from './components/ServiceConstellation';
 import ExperienceTV from './components/ExperienceTV';
-import SolarSystemSkills from './components/SolarSystemSkills';
+import CinematicSolarSystemSkills from './components/CinematicSolarSystemSkills';
 import ContactRelay from './components/ContactRelay';
+
+function ViewportParallaxPanel({
+  children,
+  glow,
+}: {
+  children: React.ReactNode;
+  glow: 'cyan' | 'violet';
+}) {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 0.5, 1], [72, 0, -72]);
+  const opacity = useTransform(scrollYProgress, [0, 0.18, 0.82, 1], [0.42, 1, 1, 0.42]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.965, 1, 0.965]);
+  const glowY = useTransform(scrollYProgress, [0, 1], [-18, 28]);
+
+  return (
+    <section ref={sectionRef} className="relative flex min-h-screen snap-start items-center px-0 py-6 sm:py-8">
+      <motion.div
+        className="pointer-events-none absolute right-[8%] top-[16%] h-56 w-56 rounded-full blur-3xl"
+        style={{
+          background:
+            glow === 'cyan'
+              ? 'radial-gradient(circle, rgba(0,229,255,0.26), transparent 70%)'
+              : 'radial-gradient(circle, rgba(123,97,255,0.28), transparent 70%)',
+          y: glowY,
+        }}
+      />
+
+      <motion.div
+        style={{ y, opacity, scale }}
+        className="relative z-10 w-full"
+        transition={{ duration: 0.35, ease: 'easeOut' }}
+      >
+        {children}
+      </motion.div>
+    </section>
+  );
+}
 
 const skills = {
   'Frontend Systems': [
@@ -158,6 +201,10 @@ export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll();
+  const globalOrbY = useTransform(scrollYProgress, [0, 1], [-60, 120]);
+  const globalOrbX = useTransform(scrollYProgress, [0, 1], [0, -90]);
+  const globalOrbOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.22, 0.32, 0.2]);
 
   useEffect(() => {
     if (!heroRef.current) return;
@@ -246,7 +293,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="relative" style={{ position: 'relative', zIndex: 10 }}>
+    <div className="relative snap-y snap-mandatory" style={{ position: 'relative', zIndex: 10 }}>
       <div
         className="fixed pointer-events-none"
         style={{
@@ -260,100 +307,123 @@ export default function Home() {
         aria-hidden="true"
       />
 
-      <section ref={heroRef} className="min-h-screen flex items-center pt-12 pb-12">
-        <div className="container">
-          <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-8 items-center">
-            <div className="max-w-3xl">
-              <p className="hero-subtitle text-xs uppercase tracking-[0.2em] mb-4 opacity-0" style={{ color: 'var(--text-tertiary)' }}>
-                Full-Stack Engineer · AI Developer
-              </p>
-              <h1 className="hero-name text-5xl md:text-7xl font-bold mb-6 tracking-tight opacity-0">
-                <span className="text-gradient">S Adityan</span>
-              </h1>
+      <motion.div
+        className="fixed pointer-events-none left-[8%] top-[40%] h-[340px] w-[340px] rounded-full blur-3xl"
+        style={{
+          background: 'radial-gradient(circle, rgba(123,97,255,0.2), transparent 72%)',
+          y: globalOrbY,
+          x: globalOrbX,
+          opacity: globalOrbOpacity,
+        }}
+        aria-hidden="true"
+      />
 
-              <p className="hero-subtitle text-xl md:text-2xl mb-4 leading-relaxed opacity-0" style={{ color: 'var(--text-secondary)' }}>
-                Full-Stack Engineer & AI Developer crafting scalable systems and intelligent applications.
-              </p>
-
-              <p className="hero-subtitle text-sm md:text-base mb-5 opacity-0" style={{ color: 'var(--text-tertiary)' }}>
-                Building production-ready applications with modern frontend systems, scalable backends, and reliable delivery practices.
-              </p>
-
-              <div className="mb-6 w-full max-w-2xl">
-                <HeroNarrativeCluster />
-              </div>
-
-              <div ref={ctaRef} className="flex flex-wrap gap-4 mb-10">
-                <MagneticButton href="/projects" className="btn-primary" strength={0.15}>
-                  View Work
-                </MagneticButton>
-                <MagneticButton href="#contact" className="btn-secondary" strength={0.15}>
-                  Get in Touch
-                </MagneticButton>
-              </div>
-
-              <div ref={statsRef} className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-xl">
-                {[
-                  { value: '6+', label: 'Projects' },
-                  { value: '25+', label: 'Technologies' },
-                  { value: '14', label: 'Certifications' },
-                ].map((stat) => (
-                  <div key={stat.label} className="rounded-xl border border-cyan-400/10 bg-slate-900/30 px-4 py-3 opacity-0">
-                    <div className="text-2xl font-bold text-gradient">{stat.value}</div>
-                    <div className="text-xs mt-1 uppercase tracking-[0.14em]" style={{ color: 'var(--text-tertiary)' }}>
-                      {stat.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="anime-reveal space-y-4">
-              <div className="rounded-2xl border border-cyan-400/15 bg-slate-950/70 p-5">
-                <div className="mb-3 flex items-center justify-between rounded-lg border border-white/10 bg-black/25 px-3 py-2">
-                  <div className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-rose-400" />
-                    <span className="h-2 w-2 rounded-full bg-amber-400" />
-                    <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                  </div>
-                  <p className="text-[10px] uppercase tracking-[0.14em] text-cyan-200/80">Project Overview</p>
-                </div>
-                <p className="text-xs uppercase tracking-[0.16em] text-cyan-300/80">Delivery Process</p>
-                <p className="mt-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
-                  Discover → Design → Build → Improve using clear milestones and measurable outcomes.
+      <ViewportParallaxPanel glow="cyan">
+        <section ref={heroRef} className="flex min-h-[90vh] items-center pt-12 pb-12 sm:min-h-[92vh]">
+          <div className="container">
+            <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-8 items-center">
+              <div className="max-w-3xl">
+                <p className="hero-subtitle text-xs uppercase tracking-[0.2em] mb-4 opacity-0" style={{ color: 'var(--text-tertiary)' }}>
+                  Full-Stack Engineer · AI Developer
                 </p>
-              </div>
+                <h1 className="hero-name text-5xl md:text-7xl font-bold mb-6 tracking-tight opacity-0">
+                  <span className="text-gradient">S Adityan</span>
+                </h1>
 
-              <div className="rounded-2xl border border-indigo-400/15 bg-indigo-500/5 p-5">
-                <p className="text-xs uppercase tracking-[0.16em] text-indigo-300/80">System Dashboard</p>
-                <div className="mt-3 grid grid-cols-2 gap-3">
+                <p className="hero-subtitle text-xl md:text-2xl mb-4 leading-relaxed opacity-0" style={{ color: 'var(--text-secondary)' }}>
+                  Full-Stack Engineer & AI Developer crafting scalable systems and intelligent applications.
+                </p>
+
+                <p className="hero-subtitle text-sm md:text-base mb-5 opacity-0" style={{ color: 'var(--text-tertiary)' }}>
+                  Building production-ready applications with modern frontend systems, scalable backends, and reliable delivery practices.
+                </p>
+
+                <div className="mb-6 w-full max-w-2xl">
+                  <HeroNarrativeCluster />
+                </div>
+
+                <div ref={ctaRef} className="flex flex-wrap gap-4 mb-10">
+                  <MagneticButton href="/projects" className="btn-primary" strength={0.15}>
+                    View Work
+                  </MagneticButton>
+                  <MagneticButton href="#contact" className="btn-secondary" strength={0.15}>
+                    Get in Touch
+                  </MagneticButton>
+                </div>
+
+                <div ref={statsRef} className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-xl">
                   {[
-                    { label: 'Build rhythm', value: 'Weekly' },
-                    { label: 'Delivery mode', value: 'Ship-first' },
-                    { label: 'Scope', value: 'Startup web' },
-                    { label: 'Focus', value: 'Growth + scale' },
-                  ].map((item) => (
-                    <div key={item.label} className="rounded-lg border border-indigo-300/20 bg-black/20 p-3">
-                      <p className="text-[10px] uppercase tracking-[0.12em]" style={{ color: 'var(--text-tertiary)' }}>{item.label}</p>
-                      <p className="mt-1 text-sm font-semibold text-indigo-200">{item.value}</p>
+                    { value: '6+', label: 'Projects' },
+                    { value: '25+', label: 'Technologies' },
+                    { value: '14', label: 'Certifications' },
+                  ].map((stat) => (
+                    <div key={stat.label} className="rounded-xl border border-cyan-400/10 bg-slate-900/30 px-4 py-3 opacity-0">
+                      <div className="text-2xl font-bold text-gradient">{stat.value}</div>
+                      <div className="text-xs mt-1 uppercase tracking-[0.14em]" style={{ color: 'var(--text-tertiary)' }}>
+                        {stat.label}
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
+
+              <div className="anime-reveal space-y-4">
+                <div className="rounded-2xl border border-cyan-400/15 bg-slate-950/70 p-5">
+                  <div className="mb-3 flex items-center justify-between rounded-lg border border-white/10 bg-black/25 px-3 py-2">
+                    <div className="flex items-center gap-2">
+                      <span className="h-2 w-2 rounded-full bg-rose-400" />
+                      <span className="h-2 w-2 rounded-full bg-amber-400" />
+                      <span className="h-2 w-2 rounded-full bg-emerald-400" />
+                    </div>
+                    <p className="text-[10px] uppercase tracking-[0.14em] text-cyan-200/80">Project Overview</p>
+                  </div>
+                  <p className="text-xs uppercase tracking-[0.16em] text-cyan-300/80">Delivery Process</p>
+                  <p className="mt-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                    Discover → Design → Build → Improve using clear milestones and measurable outcomes.
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-indigo-400/15 bg-indigo-500/5 p-5">
+                  <p className="text-xs uppercase tracking-[0.16em] text-indigo-300/80">System Dashboard</p>
+                  <div className="mt-3 grid grid-cols-2 gap-3">
+                    {[
+                      { label: 'Build rhythm', value: 'Weekly' },
+                      { label: 'Delivery mode', value: 'Ship-first' },
+                      { label: 'Scope', value: 'Startup web' },
+                      { label: 'Focus', value: 'Growth + scale' },
+                    ].map((item) => (
+                      <div key={item.label} className="rounded-lg border border-indigo-300/20 bg-black/20 p-3">
+                        <p className="text-[10px] uppercase tracking-[0.12em]" style={{ color: 'var(--text-tertiary)' }}>{item.label}</p>
+                        <p className="mt-1 text-sm font-semibold text-indigo-200">{item.value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </ViewportParallaxPanel>
 
-      <NarrativeAxisSection steps={storySteps} />
+      <ViewportParallaxPanel glow="violet">
+        <NarrativeAxisSection steps={storySteps} />
+      </ViewportParallaxPanel>
 
-      <ServiceConstellation items={whatIDo} quote={guidingQuote} />
+      <ViewportParallaxPanel glow="cyan">
+        <ServiceConstellation items={whatIDo} quote={guidingQuote} />
+      </ViewportParallaxPanel>
 
-      <ExperienceTV />
+      <ViewportParallaxPanel glow="violet">
+        <ExperienceTV />
+      </ViewportParallaxPanel>
 
-      <SolarSystemSkills skills={skills} />
+      <ViewportParallaxPanel glow="cyan">
+        <CinematicSolarSystemSkills skills={skills} />
+      </ViewportParallaxPanel>
 
-      <ContactRelay socials={socials} />
+      <ViewportParallaxPanel glow="violet">
+        <ContactRelay socials={socials} />
+      </ViewportParallaxPanel>
     </div>
   );
 }
