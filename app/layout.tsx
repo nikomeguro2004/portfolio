@@ -97,7 +97,7 @@ export const metadata: Metadata = {
     description: 'Full-Stack Engineer specializing in AI systems, cloud architecture, and scalable web applications.',
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: '/favicon.svg',
   },
   manifest: '/site.webmanifest',
   alternates: {
