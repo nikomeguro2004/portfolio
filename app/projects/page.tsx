@@ -6,6 +6,7 @@ import { animate, stagger } from 'animejs';
 import { AnimatePresence, motion } from 'framer-motion';
 import { MagneticButton, MagneticCard } from '../components/MagneticInteractions';
 import ProjectsMilestoneDeck from '../components/ProjectsMilestoneDeck';
+import FloatingSectionNavbar from '../components/FloatingSectionNavbar';
 import { projects, type Project } from './projectData';
 
 function ProjectsHeader({
@@ -84,8 +85,8 @@ function ProjectNavigator({
   onSelectProject: (index: number) => void;
 }) {
   return (
-    <aside className="hidden self-start lg:sticky lg:top-28 lg:block">
-      <div className="rounded-xl border border-white/10 bg-black/20 p-4 backdrop-blur-sm">
+    <aside className="hidden self-start lg:block lg:fixed lg:top-28 lg:left-[max(1.5rem,calc((100vw-1200px)/2+1.5rem))] lg:z-50 lg:w-57.5 lg:max-h-[calc(100vh-8rem)]">
+      <div className="rounded-xl border border-white/10 bg-black/20 p-4 backdrop-blur-sm lg:h-full lg:overflow-y-auto">
         <p className="mb-4 text-xs uppercase tracking-[0.16em]" style={{ color: 'var(--text-tertiary)' }}>Project Navigator</p>
         <div className="space-y-3">
           {sortedProjects.map((project, index) => (
@@ -356,6 +357,8 @@ export default function ProjectsPage() {
 
   return (
     <div className="relative min-h-screen overflow-x-hidden">
+      <FloatingSectionNavbar />
+
       <div
         ref={backdropRef}
         className="fixed pointer-events-none transition-all duration-500"
