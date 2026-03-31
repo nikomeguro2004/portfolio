@@ -13,6 +13,23 @@ export type Project = {
 
 export const projects = [
   {
+    title: 'Cursor Interaction Surface',
+    subtitle: 'Shader-Driven Interaction Instrument',
+    period: 'Mar 2026',
+    status: 'Live',
+    priority: 'flagship',
+    description:
+      'Fullscreen cursor-reactive visual surface powered by GPU simulation, where motion injects force and pigment into a living fluid-like field.',
+    highlights: [
+      'Ping-pong render target simulation with persistent temporal memory across frames',
+      'Cursor velocity and activity drive force, energy, and pigment deposition in real time',
+      'Three-pass pipeline for field simulation, color advection/diffusion, and final lit displacement rendering',
+    ],
+    techStack: ['Next.js 16', 'React 19', 'Three.js', 'GLSL', 'TypeScript'],
+    link: 'https://liquid-ui-kappa.vercel.app/',
+    orderKey: 202604,
+  },
+  {
     title: 'Triangle Field Sandbox',
     subtitle: 'Matter.js Physics Laboratory',
     period: 'Mar 2026',
