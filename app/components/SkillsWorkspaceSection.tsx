@@ -88,6 +88,34 @@ const easeSmooth: [number, number, number, number] = [0.22, 1, 0.36, 1];
 function buildCodeLines(file: FileConfig, technologies: string[]) {
   const list = technologies.length ? technologies : ['System foundations', 'Execution strategy', 'Production delivery'];
 
+  if (file.language === 'py') {
+    return [
+      `# ${file.summary}`,
+      `${file.id}_stack = {`,
+      `    'path': '${file.path}',`,
+      `    'language': '${file.language}',`,
+      "    'technologies': [",
+      ...list.map((item) => `        '${item}',`),
+      '    ],',
+      `    'role': '${file.role}',`,
+      "    'quality_gate': 'production-ready',",
+      '}',
+    ];
+  }
+
+  if (file.language === 'yml') {
+    return [
+      `# ${file.summary}`,
+      `${file.id}_stack:`,
+      `  path: "${file.path}"`,
+      `  language: ${file.language}`,
+      '  technologies:',
+      ...list.map((item) => `    - ${item}`),
+      `  role: "${file.role}"`,
+      '  quality_gate: production-ready',
+    ];
+  }
+
   return [
     `// ${file.summary}`,
     `export const ${file.id}Stack = {`,
@@ -105,89 +133,49 @@ function buildCodeLines(file: FileConfig, technologies: string[]) {
 function SkillsTabs({
   files,
   activeFileId,
-  selectedFileId,
-  onHover,
-  onLeave,
-  onSelect,
+  onActivate,
 }: {
   files: FileWithTechnologies[];
   activeFileId: FileId;
-  selectedFileId: FileId;
-  onHover: (fileId: FileId) => void;
-  onLeave: () => void;
-  onSelect: (fileId: FileId) => void;
+  onActivate: (fileId: FileId) => void;
 }) {
   return (
     <div className="flex gap-1 overflow-x-auto border-b border-white/10 px-2 py-2 sm:px-3">
       {files.map((file) => {
         const isActive = file.id === activeFileId;
-        const isSelected = file.id === selectedFileId;
 
         return (
           <button
             key={file.id}
             type="button"
-            onMouseEnter={() => onHover(file.id)}
-            onMouseLeave={onLeave}
-            onFocus={() => onHover(file.id)}
-            onBlur={onLeave}
-            onClick={() => onSelect(file.id)}
+            onMouseEnter={() => onActivate(file.id)}
+            onFocus={() => onActivate(file.id)}
+            onClick={() => onActivate(file.id)}
             className="group flex shrink-0 items-center gap-2 rounded-md border px-3 py-2 text-left transition-colors duration-200"
             style={{
               borderColor: isActive ? `${file.accent}80` : 'rgba(255,255,255,0.12)',
               background: isActive ? 'rgba(15, 23, 42, 0.9)' : 'rgba(2, 6, 23, 0.55)',
             }}
-            aria-pressed={isSelected}
+            aria-pressed={isActive}
           >
             <span
               aria-hidden="true"
-              className="text-sm font-black leading-none tracking-tight"
+              className="rounded border px-1.5 py-0.5 text-[10px] font-semibold uppercase leading-none tracking-[0.08em]"
               style={{
-                color: isActive ? '#3B82F6' : '#6366F1',
-                fontFamily: 'var(--font-heading), var(--font-geist-sans), sans-serif',
+                color: isActive ? '#E6EDF3' : 'rgba(230, 237, 243, 0.74)',
+                borderColor: isActive ? `${file.accent}88` : 'rgba(255,255,255,0.18)',
+                background: isActive ? `${file.accent}22` : 'rgba(15, 23, 42, 0.68)',
               }}
             >
-              A
+              {file.language}
             </span>
             <span className="text-[11px] font-medium sm:text-xs" style={{ color: isActive ? '#E6EDF3' : 'rgba(230, 237, 243, 0.72)' }}>
-              {file.tabLabel}
+              {file.name}
             </span>
           </button>
         );
       })}
     </div>
-  );
-}
-
-function SkillsExplorer({ files, activeFileId }: { files: FileWithTechnologies[]; activeFileId: FileId }) {
-  return (
-    <aside className="border-b border-white/10 bg-slate-950/75 p-4 lg:border-b-0 lg:border-r">
-      <p className="text-[10px] uppercase tracking-[0.16em]" style={{ color: 'rgba(230, 237, 243, 0.62)' }}>
-        Explorer
-      </p>
-      <div className="mt-3 space-y-1.5">
-        {files.map((file) => {
-          const isActive = file.id === activeFileId;
-          return (
-            <div
-              key={`tree-${file.id}`}
-              className="rounded-md border px-3 py-2 transition-all duration-200"
-              style={{
-                borderColor: isActive ? `${file.accent}66` : 'rgba(255,255,255,0.1)',
-                background: isActive ? 'rgba(15, 23, 42, 0.62)' : 'rgba(2, 6, 23, 0.42)',
-              }}
-            >
-              <p className="text-[11px] font-medium" style={{ color: isActive ? '#E6EDF3' : 'rgba(230, 237, 243, 0.76)' }}>
-                {file.name}
-              </p>
-              <p className="mt-1 text-[10px]" style={{ color: 'rgba(230, 237, 243, 0.5)' }}>
-                {file.path}
-              </p>
-            </div>
-          );
-        })}
-      </div>
-    </aside>
   );
 }
 
@@ -286,7 +274,6 @@ function SkillsMetaPanel({ activeFile }: { activeFile: FileWithTechnologies }) {
 
 export default function SkillsWorkspaceSection({ skills }: SkillsWorkspaceSectionProps) {
   const [selectedFileId, setSelectedFileId] = useState<FileId>('frontend');
-  const [hoveredFileId, setHoveredFileId] = useState<FileId | null>(null);
 
   const files = useMemo(
     () =>
@@ -297,7 +284,7 @@ export default function SkillsWorkspaceSection({ skills }: SkillsWorkspaceSectio
     [skills]
   );
 
-  const activeFileId = hoveredFileId ?? selectedFileId;
+  const activeFileId = selectedFileId;
   const activeFile = files.find((file) => file.id === activeFileId) ?? files[0];
 
   return (
@@ -311,7 +298,7 @@ export default function SkillsWorkspaceSection({ skills }: SkillsWorkspaceSectio
             IDE Architecture View
           </h2>
           <p className="mt-3 text-sm sm:text-base" style={{ color: 'rgba(230, 237, 243, 0.78)' }}>
-            A code-editor style technical map where each file represents a core capability. Hover tabs to preview modules and inspect the stack like a live workspace.
+            A code-editor style technical map where each file represents a core capability. Hover or click any file tab to switch modules and inspect the stack like a live workspace.
           </p>
         </div>
 
@@ -330,21 +317,17 @@ export default function SkillsWorkspaceSection({ skills }: SkillsWorkspaceSectio
           <SkillsTabs
             files={files}
             activeFileId={activeFileId}
-            selectedFileId={selectedFileId}
-            onHover={setHoveredFileId}
-            onLeave={() => setHoveredFileId(null)}
-            onSelect={setSelectedFileId}
+            onActivate={setSelectedFileId}
           />
 
-          <div className="grid lg:grid-cols-[220px_minmax(0,1fr)_320px]">
-            <SkillsExplorer files={files} activeFileId={activeFileId} />
+          <div className="grid lg:grid-cols-[minmax(0,1fr)_320px]">
             <SkillsCodePanel activeFile={activeFile} />
             <SkillsMetaPanel activeFile={activeFile} />
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 px-4 py-2 sm:px-5">
             <p className="text-[10px] uppercase tracking-[0.16em]" style={{ color: 'rgba(230, 237, 243, 0.54)' }}>
-              Hover tabs to preview · Click to pin active file
+              Hover or click tabs to switch active file
             </p>
             <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.14em]" style={{ color: 'rgba(230, 237, 243, 0.62)' }}>
               <span className="h-2 w-2 rounded-full" style={{ background: activeFile.accent }} />
