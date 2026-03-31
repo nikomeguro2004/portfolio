@@ -71,20 +71,33 @@ function ProjectsHeader({
 }
 
 function ProjectNavigator({
-  sortedProjects,
+  visibleProjects,
   activeProjectIndex,
+  progressRatio,
   onSelectProject,
 }: {
-  sortedProjects: Project[];
+  visibleProjects: Project[];
   activeProjectIndex: number;
+  progressRatio: number;
   onSelectProject: (index: number) => void;
 }) {
   return (
-    <aside className="hidden self-start md:block">
-      <div className="rounded-xl border border-white/10 bg-black/20 p-4 backdrop-blur-sm md:sticky md:top-28 md:max-h-[calc(100vh-8rem)] md:overflow-y-auto">
-        <p className="mb-4 text-xs uppercase tracking-[0.16em]" style={{ color: 'var(--text-tertiary)' }}>Project Navigator</p>
+    <aside className="hidden self-start md:sticky md:top-28 md:block md:h-fit">
+      <div className="rounded-xl border border-white/10 bg-black/20 p-4 backdrop-blur-sm md:max-h-[calc(100vh-8rem)] md:overflow-y-auto">
+        <p className="mb-2 text-xs uppercase tracking-[0.16em]" style={{ color: 'var(--text-tertiary)' }}>Project Navigator</p>
+        <div className="mb-4">
+          <div className="mb-2 h-1.5 rounded-full bg-white/10">
+            <div
+              className="h-full rounded-full bg-linear-to-r from-cyan-300 to-indigo-300 transition-all duration-300"
+              style={{ width: `${Math.max(progressRatio * 100, 5)}%` }}
+            />
+          </div>
+          <p className="text-[11px] uppercase tracking-[0.12em] text-cyan-200/80">
+            {Math.min(activeProjectIndex + 1, visibleProjects.length)} / {visibleProjects.length}
+          </p>
+        </div>
         <div className="space-y-3">
-          {sortedProjects.map((project, index) => (
+          {visibleProjects.map((project, index) => (
             <button
               key={project.title}
               className="block text-left transition-colors"
@@ -245,8 +258,11 @@ export default function ProjectsPage() {
   const headerRef = useRef<HTMLDivElement>(null);
   const projectsRef = useRef<HTMLDivElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
+  const backdropRefSecondary = useRef<HTMLDivElement>(null);
   const [hoveredProject, setHoveredProject] = useState<string | null>(null);
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
+  const visibleProjects = sortedProjects;
+  const resolvedActiveProjectIndex = Math.min(activeProjectIndex, Math.max(visibleProjects.length - 1, 0));
 
   const handleNavigatorSelect = (index: number) => {
     if (!projectsRef.current) return;
@@ -310,7 +326,7 @@ export default function ProjectsPage() {
       window.removeEventListener('scroll', updateTimelineProgress);
       window.removeEventListener('resize', updateTimelineProgress);
     };
-  }, [sortedProjects.length]);
+  }, [visibleProjects.length]);
 
   useEffect(() => {
     if (!backdropRef.current) return;
@@ -324,9 +340,28 @@ export default function ProjectsPage() {
     });
   }, []);
 
+  useEffect(() => {
+    if (!backdropRefSecondary.current) return;
+    animate(backdropRefSecondary.current, {
+      translateX: [30, -42],
+      translateY: [-24, 32],
+      duration: 12000,
+      direction: 'alternate',
+      loop: true,
+      ease: 'inOutSine',
+    });
+  }, []);
+
   return (
-    <div className="relative min-h-screen overflow-x-hidden">
+    <div className="relative min-h-screen overflow-x-clip">
       <FloatingSectionNavbar />
+
+      <div className="pointer-events-none fixed inset-0 opacity-35" style={{
+        backgroundImage:
+          'linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(129, 140, 248, 0.05) 1px, transparent 1px)',
+        backgroundSize: '72px 72px',
+        maskImage: 'radial-gradient(ellipse at center, black 30%, transparent 85%)',
+      }} />
 
       <div
         ref={backdropRef}
@@ -340,6 +375,20 @@ export default function ProjectsPage() {
           filter: 'blur(72px)',
         }}
       />
+
+      <div
+        ref={backdropRefSecondary}
+        className="fixed pointer-events-none transition-all duration-500"
+        style={{
+          width: '540px',
+          height: '540px',
+          background: 'radial-gradient(circle, rgba(129, 140, 248, 0.16) 0%, transparent 70%)',
+          top: '34%',
+          right: '-190px',
+          filter: 'blur(78px)',
+        }}
+      />
+
       <div className="pt-16 pb-24">
         <div className="container">
           <ProjectsHeader
@@ -354,20 +403,30 @@ export default function ProjectsPage() {
 
           <div className="grid items-start gap-7 md:grid-cols-[230px_minmax(0,1fr)]">
             <ProjectNavigator
-              sortedProjects={sortedProjects}
-              activeProjectIndex={activeProjectIndex}
+              visibleProjects={visibleProjects}
+              activeProjectIndex={resolvedActiveProjectIndex}
+              progressRatio={visibleProjects.length ? (resolvedActiveProjectIndex + 1) / visibleProjects.length : 0}
               onSelectProject={handleNavigatorSelect}
             />
 
             <div ref={projectsRef} className="space-y-7">
-              {sortedProjects.map((project, index) => {
+              {!visibleProjects.length && (
+                <div className="rounded-2xl border border-white/10 bg-slate-950/55 p-8 text-center">
+                  <p className="text-lg font-semibold text-white">No projects available</p>
+                  <p className="mt-2 text-sm" style={{ color: 'var(--text-tertiary)' }}>
+                    Add project data to begin rendering the timeline.
+                  </p>
+                </div>
+              )}
+
+              {visibleProjects.map((project, index) => {
                 return (
                   <ProjectTimelineCard
                     key={project.title}
                     project={project}
                     index={index}
                     isHovered={hoveredProject === project.title}
-                    cardActive={index === activeProjectIndex}
+                    cardActive={index === resolvedActiveProjectIndex}
                     onHover={setHoveredProject}
                     onLeave={() => setHoveredProject(null)}
                   />

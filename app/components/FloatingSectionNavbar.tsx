@@ -105,7 +105,7 @@ export default function FloatingSectionNavbar() {
       }`}
       aria-label="Section navigation"
     >
-      <div className="flex max-w-[calc(100vw-1rem)] items-center gap-1.5 overflow-x-auto rounded-full border border-cyan-400/25 bg-slate-950/45 p-1.5 backdrop-blur-md">
+      <div className="flex max-w-[calc(100vw-1rem)] items-center gap-1.5 overflow-x-auto rounded-full border border-cyan-300/30 bg-[linear-gradient(120deg,rgba(15,23,42,0.86),rgba(15,23,42,0.62))] p-1.5 shadow-[0_10px_36px_rgba(0,0,0,0.35)] backdrop-blur-xl">
         {sectionLinks.map((link) => {
           const isActive = activeHref === link.hash;
 
@@ -117,11 +117,14 @@ export default function FloatingSectionNavbar() {
               aria-current={isActive ? 'page' : undefined}
               className={`shrink-0 rounded-full px-3 py-2 text-[11px] font-medium uppercase tracking-[0.12em] transition-colors ${
                 isActive
-                  ? 'bg-white/12 text-cyan-300'
+                  ? 'bg-white/14 text-cyan-200'
                   : 'text-slate-200/85 hover:bg-white/10 hover:text-cyan-300'
               }`}
             >
-              {link.label}
+              <span className="inline-flex items-center gap-1.5">
+                {isActive && <span className="h-1.5 w-1.5 rounded-full bg-cyan-300 shadow-[0_0_12px_rgba(103,232,249,0.85)]" />}
+                {link.label}
+              </span>
             </a>
           );
         })}
@@ -131,7 +134,7 @@ export default function FloatingSectionNavbar() {
           onClick={() => setActiveHref('/projects')}
           className={`ml-1 inline-flex h-9 shrink-0 items-center rounded-full border px-4 text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors ${
             activeHref === '/projects'
-              ? 'border-cyan-300/55 bg-white/12 text-cyan-300'
+              ? 'border-cyan-300/55 bg-cyan-400/12 text-cyan-200'
               : 'border-cyan-300/35 bg-transparent text-cyan-300 hover:bg-cyan-400/10'
           }`}
           aria-label="Go to projects"

@@ -31,7 +31,7 @@ export default function ProjectsMilestoneDeck() {
   return (
     <div ref={rootRef} className="grid md:grid-cols-4 gap-3 mb-10">
       {MILESTONES.map((item) => (
-        <div key={item.step} className="milestone-lane-card rounded-xl border border-cyan-400/15 bg-slate-950/60 p-4 opacity-0">
+        <div key={item.step} className="milestone-lane-card group rounded-xl border border-cyan-400/15 bg-[linear-gradient(160deg,rgba(15,23,42,0.7),rgba(2,6,23,0.7))] p-4 opacity-0 transition-all duration-300 hover:-translate-y-1 hover:border-cyan-300/35">
           <div className="mb-3 flex items-center justify-between rounded-lg border border-white/10 bg-black/25 px-3 py-2">
             <p className="text-xs font-semibold" style={{ color: 'var(--text-tertiary)' }}>
               step {item.step}
@@ -39,12 +39,12 @@ export default function ProjectsMilestoneDeck() {
             <span className="rounded-full border border-emerald-400/30 bg-emerald-500/10 px-2 py-0.5 text-[10px] uppercase tracking-widest text-emerald-300">ready</span>
           </div>
 
-          <h3 className="text-sm font-semibold text-cyan-300 mb-2">{item.title}</h3>
+          <h3 className="text-sm font-semibold text-cyan-300 mb-2 group-hover:text-cyan-200 transition-colors">{item.title}</h3>
           <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
             {item.note}
           </p>
 
-          <div className="mt-3 rounded-md border border-indigo-300/20 bg-indigo-500/8 px-3 py-2 font-mono text-[11px] text-indigo-200/90">
+          <div className="mt-3 rounded-md border border-indigo-300/20 bg-indigo-500/8 px-3 py-2 font-mono text-[11px] text-indigo-200/90 group-hover:border-indigo-300/35 group-hover:bg-indigo-500/14 transition-colors">
             $ {item.command}
           </div>
         </div>
