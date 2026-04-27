@@ -182,7 +182,7 @@ Stack: JavaScript, Python, Chrome APIs, ML Classification
 14. NLP in Python
 
 ## Portfolio Stack
-
+ 
 - Next.js App Router and React
 - TypeScript with ESLint
 - Tailwind CSS and PostCSS
