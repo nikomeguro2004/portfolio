@@ -188,7 +188,7 @@ Stack: JavaScript, Python, Chrome APIs, ML Classification
 - Tailwind CSS and PostCSS
 - Framer Motion and Anime.js
 - Vercel deployment workflow
-
+ 
 ## Local Development
 
 ```bash
