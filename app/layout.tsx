@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono, Manrope, Sora, Space_Grotesk } from "next/font/google";
+import { Inter, JetBrains_Mono, Manrope, Sora, Space_Grotesk, Geist } from "next/font/google";
 import "./globals.css";
 import AppClientLayout from "./components/AppClientLayout";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const interSans = Inter({
   variable: "--font-geist-sans",
@@ -111,7 +114,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={cn("font-sans", geist.variable)}>
       <body
         className={`${interSans.variable} ${manrope.variable} ${jetbrainsMono.variable} ${spaceGrotesk.variable} ${sora.variable} antialiased`}
       >
