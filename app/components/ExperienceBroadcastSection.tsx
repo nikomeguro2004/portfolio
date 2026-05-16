@@ -5,7 +5,7 @@ import { animate, stagger } from 'animejs';
 import { AnimatePresence, motion } from 'framer-motion';
 
 type ExperienceChannel = {
-  id: '01' | '02' | '03';
+  id: '01' | '02' | '03' | '04';
   company: string;
   role: string;
   location: string;
@@ -93,6 +93,27 @@ const CHANNELS: ExperienceChannel[] = [
     ticker: 'Multi-stack deployment active • Startup velocity high • CMS workflows optimized • Live production environment •',
     onAir: true,
     activeRole: true,
+  },
+  {
+    id: '04',
+    company: 'Shivante Technologies',
+    role: 'Frontend Lead Developer',
+    location: 'Remote',
+    periodLabel: 'Recent',
+    bullets: [
+      'Lead frontend development for a CA web application as part of a 2-person development team.',
+      'Developed and integrated several backend APIs to support the core application functionality.',
+      'Integrated modern UI libraries like Aceternity UI and 21st.dev to enhance user experience and UI aesthetics.',
+      'Collaborated closely to design and implement responsive, high-performance web interfaces and improve overall UI structure.',
+    ],
+    signalStrength: 8,
+    metrics: [
+      'UI MODERNIZATION ACTIVE',
+      'CA APP DEVELOPMENT',
+      'BACKEND API INTEGRATION',
+      'FRONTEND LEAD',
+    ],
+    ticker: 'UI modernization active • CA app development • Backend API integration • Frontend lead •',
   },
 ];
 

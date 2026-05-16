@@ -26,12 +26,11 @@ export default function FloatingSectionNavbar() {
     [onProjectsPage]
   );
 
-  const [activeHref, setActiveHref] = useState('#home');
+  const [activeHref, setActiveHref] = useState(onProjectsPage ? '/projects' : '#home');
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     if (onProjectsPage) {
-      setActiveHref('/projects');
       return;
     }
 

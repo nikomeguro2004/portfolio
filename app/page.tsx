@@ -10,6 +10,7 @@ import ExperienceBroadcastSection from './components/ExperienceBroadcastSection'
 import SkillsWorkspaceSection from './components/SkillsWorkspaceSection';
 import ContactSection from './components/ContactSection';
 import FloatingSectionNavbar from './components/FloatingSectionNavbar';
+import { TextRevealCard } from '@/components/ui/text-reveal-card';
 
 const skills = {
   'Frontend Systems': [
@@ -273,9 +274,14 @@ export default function Home() {
               <p className="hero-subtitle text-xs uppercase tracking-[0.2em] mb-4 opacity-0" style={{ color: 'var(--text-tertiary)' }}>
                 Full-Stack Engineer · AI Developer
               </p>
-              <h1 className="hero-name text-5xl md:text-7xl font-bold mb-6 tracking-tight opacity-0">
-                <span className="text-gradient">S Adityan</span>
-              </h1>
+              <div className="hero-name opacity-0 mb-6">
+                <TextRevealCard
+                  text="S Adityan"
+                  revealText="Frontend Lead"
+                  className="bg-transparent border-0 p-0 m-0 w-full"
+                >
+                </TextRevealCard>
+              </div>
 
               <p className="hero-subtitle text-xl md:text-2xl mb-4 leading-relaxed opacity-0" style={{ color: 'var(--text-secondary)' }}>
                 Full-Stack Engineer & AI Developer crafting scalable systems and intelligent applications.
