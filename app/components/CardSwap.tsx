@@ -96,9 +96,9 @@ const CardSwap = ({
       : { ease: 'power1.inOut',          durDrop: 0.8, durMove: 0.8, durReturn: 0.8, promoteOverlap: 0.45, returnDelay: 0.2  };
 
   const childArr = useMemo(() => Children.toArray(children), [children]);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const refs = useMemo(
     () => childArr.map(() => React.createRef<HTMLDivElement | null>()),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [childArr.length]
   ) as React.RefObject<HTMLDivElement | null>[];
 

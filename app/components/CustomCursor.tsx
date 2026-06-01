@@ -33,12 +33,12 @@ export default function CustomCursor() {
       cy += (ty - cy) * 0.1;
 
       // Lagged diamond — translate so its CENTER is at cursor
-      outer.style.transform = hovered
+      outer!.style.transform = hovered
         ? `translate(${cx - 23}px, ${cy - 23}px) rotate(0deg)`
         : `translate(${cx - 13}px, ${cy - 13}px) rotate(45deg)`;
 
       // Exact crosshair — 14×14 centered on cursor
-      cross.style.transform = `translate(${tx - 7}px, ${ty - 7}px)`;
+      cross!.style.transform = `translate(${tx - 7}px, ${ty - 7}px)`;
 
       raf = requestAnimationFrame(loop);
     }
@@ -50,19 +50,19 @@ export default function CustomCursor() {
         (el as HTMLElement).dataset.cursorBound = '1';
         el.addEventListener('mouseenter', () => {
           hovered = true;
-          outer.style.width        = '46px';
-          outer.style.height       = '46px';
-          outer.style.borderRadius = '50%';
-          outer.style.background   = 'rgba(255,79,26,0.07)';
-          outer.style.borderColor  = 'rgba(255,79,26,0.5)';
+          outer!.style.width        = '46px';
+          outer!.style.height       = '46px';
+          outer!.style.borderRadius = '50%';
+          outer!.style.background   = 'rgba(255,79,26,0.07)';
+          outer!.style.borderColor  = 'rgba(255,79,26,0.5)';
         });
         el.addEventListener('mouseleave', () => {
           hovered = false;
-          outer.style.width        = '26px';
-          outer.style.height       = '26px';
-          outer.style.borderRadius = '3px';
-          outer.style.background   = 'transparent';
-          outer.style.borderColor  = '#FF4F1A';
+          outer!.style.width        = '26px';
+          outer!.style.height       = '26px';
+          outer!.style.borderRadius = '3px';
+          outer!.style.background   = 'transparent';
+          outer!.style.borderColor  = '#FF4F1A';
         });
       });
     };
@@ -77,7 +77,6 @@ export default function CustomCursor() {
       document.removeEventListener('mouseenter', onEnter);
       observer.disconnect();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

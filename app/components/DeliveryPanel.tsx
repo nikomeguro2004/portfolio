@@ -67,8 +67,14 @@ export default function DeliveryPanel() {
   }, []);
 
   useEffect(() => {
-    startCycle();
-    return clearTimers;
+    let mounted = true;
+    if (mounted) {
+      setTimeout(() => startCycle(), 0);
+    }
+    return () => {
+      mounted = false;
+      clearTimers();
+    };
   }, [startCycle]);
 
   // Spotlight mouse tracking
