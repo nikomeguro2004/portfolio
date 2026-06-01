@@ -44,38 +44,46 @@ export default function CustomCursor() {
     }
     raf = requestAnimationFrame(loop);
 
-    const bindHover = () => {
-      document.querySelectorAll('a, button, [data-cursor], input, textarea, select').forEach(el => {
-        if ((el as HTMLElement).dataset.cursorBound) return;
-        (el as HTMLElement).dataset.cursorBound = '1';
-        el.addEventListener('mouseenter', () => {
+    const onMouseOverDelegated = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target && target.closest) {
+        const el = target.closest('a, button, [data-cursor], input, textarea, select');
+        if (el) {
           hovered = true;
           outer!.style.width        = '46px';
           outer!.style.height       = '46px';
           outer!.style.borderRadius = '50%';
           outer!.style.background   = 'rgba(255,79,26,0.07)';
           outer!.style.borderColor  = 'rgba(255,79,26,0.5)';
-        });
-        el.addEventListener('mouseleave', () => {
+        }
+      }
+    };
+
+    const onMouseOutDelegated = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target && target.closest) {
+        const el = target.closest('a, button, [data-cursor], input, textarea, select');
+        if (el && !el.contains(e.relatedTarget as Node)) {
           hovered = false;
           outer!.style.width        = '26px';
           outer!.style.height       = '26px';
           outer!.style.borderRadius = '3px';
           outer!.style.background   = 'transparent';
           outer!.style.borderColor  = '#FF4F1A';
-        });
-      });
+        }
+      }
     };
-    bindHover();
-    const observer = new MutationObserver(bindHover);
-    observer.observe(document.body, { childList: true, subtree: true });
+
+    document.addEventListener('mouseover', onMouseOverDelegated);
+    document.addEventListener('mouseout', onMouseOutDelegated);
 
     return () => {
       cancelAnimationFrame(raf);
       document.removeEventListener('mousemove', onMove);
       document.removeEventListener('mouseleave', onLeave);
       document.removeEventListener('mouseenter', onEnter);
-      observer.disconnect();
+      document.removeEventListener('mouseover', onMouseOverDelegated);
+      document.removeEventListener('mouseout', onMouseOutDelegated);
     };
   }, []);
 

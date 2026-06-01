@@ -1,7 +1,7 @@
 'use client';
 
-import { Suspense, lazy, useState } from 'react';
-import { motion } from 'framer-motion';
+import { Suspense, lazy, useState, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 
 const Spline = lazy(() => import('@splinetool/react-spline'));
 
@@ -9,9 +9,15 @@ const SCENE_URL = 'https://prod.spline.design/PyzDhpQ9E5f1E3MT/scene.splinecode'
 
 export default function DualModeSection() {
   const [active, setActive] = useState<'design' | 'develop' | null>(null);
+  const containerRef = useRef<HTMLElement>(null);
+  
+  // Only load the heavy WebGL Spline scene when we scroll within 800px of it.
+  // This frees up massive resources for the top of the page.
+  const isNear = useInView(containerRef, { once: true, margin: "800px" });
 
   return (
     <section
+      ref={containerRef}
       style={{
         position: 'relative',
         background: '#080C18',
@@ -29,34 +35,36 @@ export default function DualModeSection() {
           zIndex: 0,
         }}
       >
-        <Suspense
-          fallback={
-            <div
-              style={{
-                width: '100%',
-                height: '100%',
-                background: '#080C18',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <span
+        {isNear && (
+          <Suspense
+            fallback={
+              <div
                 style={{
-                  fontFamily: 'var(--font-geist-mono), monospace',
-                  fontSize: '9px',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.3em',
-                  color: 'rgba(255,79,26,0.4)',
+                  width: '100%',
+                  height: '100%',
+                  background: '#080C18',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
-                Loading…
-              </span>
-            </div>
-          }
-        >
-          <Spline scene={SCENE_URL} style={{ width: '100%', height: '100%' }} />
-        </Suspense>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-geist-mono), monospace',
+                    fontSize: '9px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.3em',
+                    color: 'rgba(255,79,26,0.4)',
+                  }}
+                >
+                  Initializing WebGL...
+                </span>
+              </div>
+            }
+          >
+            <Spline scene={SCENE_URL} style={{ width: '100%', height: '100%' }} />
+          </Suspense>
+        )}
       </div>
 
       {/* ── Side vignettes to keep text readable ───────────────────── */}

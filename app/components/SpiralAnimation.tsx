@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { gsap } from 'gsap';
 
 class Vector2D {
   constructor(public x: number, public y: number) {}
@@ -71,13 +70,12 @@ class Star {
     const camZ = ctrl.getCamZ();
     const vx = (this.z - camZ) * screenX / ctrl.viewZoom;
     const vy = (this.z - camZ) * screenY / ctrl.viewZoom;
-    const sz = dp < 0.6 ? 1.0 + dp * 0.2 : ctrl.lerp(1.2, this.finalScale, (dp - 0.6) / 0.4);
-    ctrl.showProjectedDot(new Vector3D(vx, vy, this.z), 8.5 * this.strokeWeightFactor * sz);
+    ctrl.showProjectedDot(new Vector3D(vx, vy, this.z));
   }
 }
 
 class AnimationController {
-  private timeline: gsap.core.Timeline;
+  private rafId = 0;
   time = 0;
   private ctx: CanvasRenderingContext2D;
   private w: number;
@@ -93,7 +91,6 @@ class AnimationController {
     this.ctx = ctx;
     this.w = w;
     this.h = h;
-    this.timeline = gsap.timeline({ repeat: -1 });
     this.initStars();
     this.setupTimeline();
   }
@@ -102,12 +99,21 @@ class AnimationController {
     const orig = Math.random;
     let seed = 1234;
     Math.random = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
-    for (let i = 0; i < 5000; i++) this.stars.push(new Star(this._cameraZ, this.cameraTravelDistance));
+    for (let i = 0; i < 2000; i++) this.stars.push(new Star(this._cameraZ, this.cameraTravelDistance));
     Math.random = orig;
   }
 
   private setupTimeline() {
-    this.timeline.to(this, { time: 1, duration: 15, ease: 'none', onUpdate: () => this.render() });
+    let start = 0;
+    const duration = 15000;
+    const loop = (timestamp: number) => {
+      if (!start) start = timestamp;
+      const elapsed = timestamp - start;
+      this.time = (elapsed % duration) / duration;
+      this.render();
+      this.rafId = requestAnimationFrame(loop);
+    };
+    this.rafId = requestAnimationFrame(loop);
   }
 
   getCamZ() {
@@ -132,17 +138,14 @@ class AnimationController {
     return new Vector2D(r*Math.cos(theta), r*Math.sin(theta));
   }
 
-  showProjectedDot(pos: Vector3D, sizeFactor: number) {
+  showProjectedDot(pos: Vector3D) {
     const camZ = this.getCamZ();
     if (pos.z > camZ) {
       const d = pos.z - camZ;
       const x = this.viewZoom * pos.x / d;
       const y = this.viewZoom * pos.y / d;
-      const sw = 400 * sizeFactor / d;
-      this.ctx.lineWidth = sw;
-      this.ctx.beginPath();
-      this.ctx.arc(x, y, 0.5, 0, Math.PI*2);
-      this.ctx.fill();
+      // Using fillRect is orders of magnitude faster than drawing an arc
+      this.ctx.fillRect(x - 0.75, y - 0.75, 1.5, 1.5);
     }
   }
 
@@ -172,7 +175,7 @@ class AnimationController {
     }
   }
 
-  destroy() { this.timeline.kill(); }
+  destroy() { cancelAnimationFrame(this.rafId); }
 }
 
 export function SpiralAnimation() {

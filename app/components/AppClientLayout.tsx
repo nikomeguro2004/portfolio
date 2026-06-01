@@ -1,6 +1,6 @@
 'use client';
 
-import { useSyncExternalStore, useCallback, useState, createContext, useContext, useEffect, useRef } from 'react';
+import { useSyncExternalStore, useCallback, useState, createContext, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import SpiralLoadingScreen from './SpiralLoadingScreen';
@@ -15,7 +15,6 @@ interface ExperienceContextType {
   setPhase: (phase: ExperiencePhase) => void;
   prefersReducedMotion: boolean;
   isTouch: boolean;
-  scrollVelocity: number;
 }
 
 const ExperienceContext = createContext<ExperienceContextType>({
@@ -23,7 +22,6 @@ const ExperienceContext = createContext<ExperienceContextType>({
   setPhase: () => {},
   prefersReducedMotion: false,
   isTouch: false,
-  scrollVelocity: 0,
 });
 
 export const useExperience = () => useContext(ExperienceContext);
@@ -74,8 +72,6 @@ export default function AppClientLayout({ children }: AppClientLayoutProps) {
   const isTouchDevice = useIsTouchDevice();
   const mounted = useMounted();
   const prefersReducedMotion = usePrefersReducedMotion();
-  const [scrollVelocity, setScrollVelocity] = useState(0);
-  const lastScrollRef = useRef(0);
   
   const [phase, setPhase] = useState<ExperiencePhase>(() => {
     if (typeof window === 'undefined') return 'live';
@@ -84,26 +80,7 @@ export default function AppClientLayout({ children }: AppClientLayoutProps) {
     return 'loading';
   });
 
-  // Track scroll velocity for nav and scene coordination
-  useEffect(() => {
-    let velocityTimeout: ReturnType<typeof setTimeout>;
-    
-    const handleScroll = () => {
-      const currentScroll = window.scrollY;
-      const velocity = (currentScroll - lastScrollRef.current) / 100;
-      lastScrollRef.current = currentScroll;
-      setScrollVelocity(velocity);
-      
-      clearTimeout(velocityTimeout);
-      velocityTimeout = setTimeout(() => setScrollVelocity(0), 150);
-    };
-    
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      clearTimeout(velocityTimeout);
-    };
-  }, []);
+  // Scroll velocity tracking removed for performance
 
   const handleEnter = useCallback(() => {
     setPhase('live');
@@ -117,7 +94,6 @@ export default function AppClientLayout({ children }: AppClientLayoutProps) {
     setPhase,
     prefersReducedMotion,
     isTouch: isTouchDevice,
-    scrollVelocity,
   };
 
   // Starfield removed — using CSS dot grid background instead

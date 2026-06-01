@@ -105,20 +105,42 @@ function useTilt(ref: React.RefObject<HTMLDivElement | null>) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    let rect: DOMRect | null = null;
+    let rafId = 0;
+
+    const onEnter = () => {
+      rect = el.getBoundingClientRect();
+      el.style.transition = 'none';
+    };
+
     const onMove = (e: MouseEvent) => {
-      const r = el.getBoundingClientRect();
-      const x = ((e.clientX - r.left) / r.width - 0.5) * 10;
-      const y = ((e.clientY - r.top) / r.height - 0.5) * -10;
-      el.style.transform = `perspective(900px) rotateY(${x}deg) rotateX(${y}deg)`;
+      if (!rect) return;
+      const x = ((e.clientX - rect.left) / rect.width - 0.5) * 10;
+      const y = ((e.clientY - rect.top) / rect.height - 0.5) * -10;
+      
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        el.style.transform = `perspective(900px) rotateY(${x}deg) rotateX(${y}deg)`;
+      });
     };
+
     const onLeave = () => {
+      cancelAnimationFrame(rafId);
+      rect = null;
       el.style.transition = 'transform 0.6s cubic-bezier(0.16,1,0.3,1)';
-      el.style.transform = '';
-      setTimeout(() => (el.style.transition = ''), 600);
+      el.style.transform = 'perspective(900px) rotateY(0deg) rotateX(0deg)';
+      setTimeout(() => { if (!rect && el) el.style.transition = ''; }, 600);
     };
+
+    el.addEventListener('mouseenter', onEnter);
     el.addEventListener('mousemove', onMove);
     el.addEventListener('mouseleave', onLeave);
-    return () => { el.removeEventListener('mousemove', onMove); el.removeEventListener('mouseleave', onLeave); };
+    return () => { 
+      el.removeEventListener('mouseenter', onEnter);
+      el.removeEventListener('mousemove', onMove);
+      el.removeEventListener('mouseleave', onLeave);
+      cancelAnimationFrame(rafId);
+    };
   }, [ref]);
 }
 

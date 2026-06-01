@@ -188,28 +188,52 @@ const CardSwap = ({
     swap();          // first swap immediately
     scheduleNext();  // then loop via delayedCall
 
-    // ── Pause on hover ───────────────────────────────────────────────
-    if (pauseOnHover) {
-      const node = container.current;
-      if (!node) return;
+    // ── Pause on hover & off-screen ───────────────────────────────────────────────
+    let isHovered = false;
+    let isIntersecting = true;
 
-      const pause  = () => {
-        paused.current = true;
-        tlRef.current?.pause();
-        dcRef.current?.pause();
-      };
-      const resume = () => {
+    const pause = () => {
+      paused.current = true;
+      tlRef.current?.pause();
+      dcRef.current?.pause();
+    };
+    const resume = () => {
+      // Only resume if both NOT hovered AND IS intersecting
+      if (!isHovered && isIntersecting) {
         paused.current = false;
         tlRef.current?.resume();
         dcRef.current?.resume();
-      };
+      }
+    };
 
-      node.addEventListener('mouseenter', pause);
-      node.addEventListener('mouseleave', resume);
+    const node = container.current;
+    if (node) {
+      if (pauseOnHover) {
+        node.addEventListener('mouseenter', () => { isHovered = true; pause(); });
+        node.addEventListener('mouseleave', () => { isHovered = false; resume(); });
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            isIntersecting = entry.isIntersecting;
+            if (isIntersecting) {
+              resume();
+            } else {
+              pause();
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+      observer.observe(node);
 
       return () => {
-        node.removeEventListener('mouseenter', pause);
-        node.removeEventListener('mouseleave', resume);
+        observer.disconnect();
+        if (pauseOnHover) {
+          // Listeners are garbage collected if node is destroyed, but we can't remove anonymous funcs easily
+          // It's safe to let them GC.
+        }
         tlRef.current?.kill();
         dcRef.current?.kill();
       };

@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { animate } from 'animejs';
+import { useEffect, useRef, useState } from 'react';
 
 export function useMagnetic() {
   const elementRef = useRef<HTMLElement>(null);
@@ -28,89 +27,55 @@ export function MagneticButton({
   rel,
 }: MagneticButtonProps) {
   const buttonRef = useRef<HTMLElement | null>(null);
-  const innerRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const node = buttonRef.current;
-    const inner = innerRef.current;
-    if (!node || !inner) return;
+    if (!node) return;
 
-    const reset = () => {
-      animate(node, { translateX: 0, translateY: 0, rotate: 0, duration: 420, ease: 'out(4)' });
-      animate(inner, { translateX: 0, translateY: 0, scale: 1, duration: 460, ease: 'out(4)' });
-    };
-
+    let rafId = 0;
     const move = (event: MouseEvent) => {
       const rect = node.getBoundingClientRect();
-      const offsetX = (event.clientX - (rect.left + rect.width / 2)) / (rect.width / 2 || 1);
-      const offsetY = (event.clientY - (rect.top + rect.height / 2)) / (rect.height / 2 || 1);
-
-      animate(node, {
-        translateX: offsetX * 12 * strength,
-        translateY: offsetY * 12 * strength,
-        rotate: offsetX * 1.8,
-        duration: 220,
-        ease: 'out(3)',
-      });
-
-      animate(inner, {
-        translateX: offsetX * 20 * strength,
-        translateY: offsetY * 20 * strength,
-        scale: 1.02,
-        duration: 220,
-        ease: 'out(3)',
+      const x = (event.clientX - (rect.left + rect.width / 2)) * (strength * 40);
+      const y = (event.clientY - (rect.top + rect.height / 2)) * (strength * 40);
+      
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        node.style.setProperty('--mx', `${x}px`);
+        node.style.setProperty('--my', `${y}px`);
       });
     };
 
-    const handleMouseEnter = () => {
-      animate(node, { scale: [0.985, 1], duration: 260, ease: 'out(3)' });
-    };
-
-    const handleMouseLeave = () => {
-      reset();
+    const reset = () => {
+      cancelAnimationFrame(rafId);
+      node.style.setProperty('--mx', `0px`);
+      node.style.setProperty('--my', `0px`);
     };
 
     node.addEventListener('mousemove', move);
-    node.addEventListener('mouseenter', handleMouseEnter);
-    node.addEventListener('mouseleave', handleMouseLeave);
+    node.addEventListener('mouseleave', reset);
 
     return () => {
       node.removeEventListener('mousemove', move);
-      node.removeEventListener('mouseenter', handleMouseEnter);
-      node.removeEventListener('mouseleave', handleMouseLeave);
+      node.removeEventListener('mouseleave', reset);
+      cancelAnimationFrame(rafId);
     };
   }, [strength]);
 
+  const props = {
+    className: `css-magnetic-btn ${className}`,
+    onClick,
+  };
+
+  const inner = <span className="css-magnetic-inner">{children}</span>;
+
   if (href) {
     return (
-      <a
-        ref={(node) => {
-          buttonRef.current = node;
-        }}
-        className={`magnetic-element ${className}`}
-        onClick={onClick}
-        href={href}
-        target={target}
-        rel={rel}
-        style={{ display: 'inline-block', willChange: 'transform' }}
-      >
-        <span ref={innerRef} style={{ display: 'inline-flex', willChange: 'transform' }}>{children}</span>
+      <a ref={(n) => { buttonRef.current = n; }} href={href} target={target} rel={rel} {...props}>
+        {inner}
       </a>
     );
   }
-
-  return (
-    <button
-      ref={(node) => {
-        buttonRef.current = node;
-      }}
-      className={`magnetic-element ${className}`}
-      onClick={onClick}
-      style={{ display: 'inline-block', willChange: 'transform' }}
-    >
-      <span ref={innerRef} style={{ display: 'inline-flex', willChange: 'transform' }}>{children}</span>
-    </button>
-  );
+  return <button ref={(n) => { buttonRef.current = n; }} {...props}>{inner}</button>;
 }
 
 interface MagneticCardProps {
@@ -140,44 +105,32 @@ export function MagneticCard({
     const sheen = sheenRef.current;
     if (!card || !sheen) return;
 
+    let rafId = 0;
     const handleMouseMove = (e: MouseEvent) => {
       const rect = card.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-
-      const mouseX = e.clientX - centerX;
-      const mouseY = e.clientY - centerY;
+      const mouseX = e.clientX - (rect.left + rect.width / 2);
+      const mouseY = e.clientY - (rect.top + rect.height / 2);
 
       const rotateX = (mouseY / (rect.height / 2)) * -rotationStrength;
       const rotateY = (mouseX / (rect.width / 2)) * rotationStrength;
-      const translateX = (mouseX / rect.width) * 8;
-      const translateY = (mouseY / rect.height) * 8;
 
-      animate(card, {
-        rotateX,
-        rotateY,
-        translateX,
-        translateY,
-        duration: 260,
-        ease: 'out(3)',
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        card.style.setProperty('--crx', `${rotateX}deg`);
+        card.style.setProperty('--cry', `${rotateY}deg`);
+
+        const px = ((e.clientX - rect.left) / rect.width) * 100;
+        const py = ((e.clientY - rect.top) / rect.height) * 100;
+        sheen.style.background = `radial-gradient(circle at ${px}% ${py}%, ${glowColor}, transparent 52%)`;
+        sheen.style.opacity = '1';
       });
-
-      const px = ((e.clientX - rect.left) / rect.width) * 100;
-      const py = ((e.clientY - rect.top) / rect.height) * 100;
-      sheen.style.background = `radial-gradient(circle at ${px}% ${py}%, ${glowColor}, transparent 52%)`;
-      sheen.style.opacity = '1';
     };
 
     const handleMouseLeave = () => {
-      animate(card, {
-        rotateX: 0,
-        rotateY: 0,
-        translateX: 0,
-        translateY: 0,
-        duration: 420,
-        ease: 'out(4)',
-      });
-      animate(sheen, { opacity: [1, 0], duration: 360, ease: 'out(3)' });
+      cancelAnimationFrame(rafId);
+      card.style.setProperty('--crx', `0deg`);
+      card.style.setProperty('--cry', `0deg`);
+      sheen.style.opacity = '0';
     };
 
     card.addEventListener('mousemove', handleMouseMove);
@@ -186,35 +139,32 @@ export function MagneticCard({
     return () => {
       card.removeEventListener('mousemove', handleMouseMove);
       card.removeEventListener('mouseleave', handleMouseLeave);
+      cancelAnimationFrame(rafId);
     };
   }, [glowColor, rotationStrength]);
 
   return (
     <div 
       ref={cardRef} 
-      className={`magnetic-card ${className}`}
-      style={{ 
-        position: 'relative', 
-        transformStyle: 'preserve-3d',
-        willChange: 'transform',
-        ...style,
-      }}
+      className={`css-magnetic-card ${className}`}
+      style={style}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <div ref={sheenRef} className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-200" aria-hidden="true" />
+      <div ref={sheenRef} className="css-magnetic-sheen" aria-hidden="true" />
       {children}
     </div>
   );
 }
 
 export function CustomCursor() {
-  const cursorRef = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
+  const cursorWrapperRef = useRef<HTMLDivElement>(null);
+  const ringWrapperRef = useRef<HTMLDivElement>(null);
+  const [isDown, setIsDown] = useState(false);
 
   useEffect(() => {
-    const cursor = cursorRef.current;
-    const ring = ringRef.current;
+    const cursor = cursorWrapperRef.current;
+    const ring = ringWrapperRef.current;
     if (!cursor || !ring) return;
 
     let x = window.innerWidth / 2;
@@ -228,13 +178,8 @@ export function CustomCursor() {
       ty = event.clientY;
     };
 
-    const onDown = () => {
-      animate([cursor, ring], { scale: [1, 0.88], duration: 140, ease: 'out(3)' });
-    };
-
-    const onUp = () => {
-      animate([cursor, ring], { scale: [0.88, 1], duration: 180, ease: 'out(3)' });
-    };
+    const onDown = () => setIsDown(true);
+    const onUp = () => setIsDown(false);
 
     const frame = () => {
       x += (tx - x) * 0.24;
@@ -259,8 +204,59 @@ export function CustomCursor() {
 
   return (
     <>
-      <div ref={ringRef} className="pointer-events-none fixed z-9998 h-8 w-8 rounded-full border border-cyan-300/55 mix-blend-screen" />
-      <div ref={cursorRef} className="pointer-events-none fixed z-9999 h-2 w-2 rounded-full bg-cyan-200 mix-blend-screen" />
+      <style dangerouslySetInnerHTML={{__html: `
+        .css-magnetic-btn {
+          display: inline-block;
+          transform: translate3d(var(--mx, 0), var(--my, 0), 0);
+          transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          will-change: transform;
+        }
+        .css-magnetic-btn:hover {
+          transition: transform 0.1s ease-out;
+        }
+        .css-magnetic-inner {
+          display: inline-flex;
+          transform: translate3d(calc(var(--mx, 0) * 1.2), calc(var(--my, 0) * 1.2), 0);
+          transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          will-change: transform;
+        }
+        .css-magnetic-btn:hover .css-magnetic-inner {
+          transition: transform 0.1s ease-out;
+        }
+
+        .css-magnetic-card {
+          position: relative;
+          transform-style: preserve-3d;
+          transform: perspective(1000px) rotateX(var(--crx, 0deg)) rotateY(var(--cry, 0deg));
+          transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+          will-change: transform;
+        }
+        .css-magnetic-card:hover {
+          transition: transform 0.1s ease-out;
+        }
+        .css-magnetic-sheen {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          opacity: 0;
+          transition: opacity 0.4s ease;
+        }
+
+        .cursor-scale-inner {
+          width: 100%; height: 100%;
+          border-radius: 50%;
+          transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .cursor-scale-down {
+          transform: scale(0.85);
+        }
+      `}} />
+      <div ref={ringWrapperRef} className="pointer-events-none fixed top-0 left-0 z-[9998] h-8 w-8 mix-blend-screen will-change-transform">
+        <div className={`cursor-scale-inner border border-cyan-300/55 ${isDown ? 'cursor-scale-down' : ''}`} />
+      </div>
+      <div ref={cursorWrapperRef} className="pointer-events-none fixed top-0 left-0 z-[9999] h-2 w-2 mix-blend-screen will-change-transform">
+        <div className={`cursor-scale-inner bg-cyan-200 ${isDown ? 'cursor-scale-down' : ''}`} />
+      </div>
     </>
   );
 }
