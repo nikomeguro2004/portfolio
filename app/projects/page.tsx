@@ -5,8 +5,7 @@ import Link from 'next/link';
 import { animate, stagger } from 'animejs';
 import { AnimatePresence, motion } from 'framer-motion';
 import { MagneticButton, MagneticCard } from '../components/MagneticInteractions';
-import ProjectsMilestoneDeck from '../components/ProjectsMilestoneDeck';
-import FloatingSectionNavbar from '../components/FloatingSectionNavbar';
+import SiteNav from '../components/SiteNav';
 import SiteFooter from '../components/SiteFooter';
 import { projects, type Project } from './projectData';
 
@@ -354,7 +353,7 @@ export default function ProjectsPage() {
 
   return (
     <div className="relative min-h-screen overflow-x-clip">
-      <FloatingSectionNavbar />
+      <SiteNav />
 
       <div className="pointer-events-none fixed inset-0 opacity-35" style={{
         backgroundImage:
@@ -396,10 +395,6 @@ export default function ProjectsPage() {
             totalProjects={sortedProjects.length}
             activeProjects={sortedProjects.filter((project) => project.status !== 'Completed').length}
           />
-
-          <div className="mb-10">
-            <ProjectsMilestoneDeck />
-          </div>
 
           <div className="grid items-start gap-7 md:grid-cols-[230px_minmax(0,1fr)]">
             <ProjectNavigator

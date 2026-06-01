@@ -2,48 +2,45 @@ import Link from 'next/link';
 
 export default function SiteFooter() {
   return (
-    <footer className="border-t py-10" style={{ borderColor: 'var(--border)' }}>
-      <div className="container">
-        <div className="rounded-2xl border border-cyan-400/10 bg-slate-900/20 p-6 sm:p-7">
-          <div className="grid gap-7 md:grid-cols-[1.2fr_1fr_1fr]">
-            <div>
-              <p className="text-xs uppercase tracking-[0.16em] text-cyan-300/80">S Adityan</p>
-              <p className="mt-3 text-base font-semibold">Full-Stack Engineer & AI Developer</p>
-              <p className="mt-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
-                Building production-focused applications with scalable architecture and reliable delivery.
-              </p>
-            </div>
+    <footer style={{ borderTop: '1px solid var(--rule)' }}>
+      <div className="container py-8">
+        <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
 
-            <div>
-              <p className="text-xs uppercase tracking-[0.14em]" style={{ color: 'var(--text-tertiary)' }}>Navigate</p>
-              <div className="mt-3 flex flex-col gap-2 text-sm">
-                <Link href="/" className="transition-colors hover:text-cyan-300" style={{ color: 'var(--text-secondary)' }}>Home</Link>
-                <Link href="/#about" className="transition-colors hover:text-cyan-300" style={{ color: 'var(--text-secondary)' }}>About</Link>
-                <Link href="/#experience" className="transition-colors hover:text-cyan-300" style={{ color: 'var(--text-secondary)' }}>Experience</Link>
-                <Link href="/projects" className="transition-colors hover:text-cyan-300" style={{ color: 'var(--text-secondary)' }}>Projects</Link>
-              </div>
-            </div>
-
-            <div>
-              <p className="text-xs uppercase tracking-[0.14em]" style={{ color: 'var(--text-tertiary)' }}>Contact</p>
-              <div className="mt-3 flex flex-col gap-2 text-sm">
-                <a href="mailto:adihere2000@gmail.com" className="transition-colors hover:text-cyan-300" style={{ color: 'var(--text-secondary)' }}>
-                  adihere2000@gmail.com
-                </a>
-                <a href="https://github.com/nikomeguro2004" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-cyan-300" style={{ color: 'var(--text-secondary)' }}>
-                  GitHub
-                </a>
-                <a href="https://linkedin.com/in/adityan-suresh-781116256" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-cyan-300" style={{ color: 'var(--text-secondary)' }}>
-                  LinkedIn
-                </a>
-              </div>
-            </div>
+          <div>
+            <p className="label-mono mb-1" style={{ color: 'rgba(255,79,26,0.4)' }}>S Adityan</p>
+            <p
+              className="text-sm font-semibold"
+              style={{ fontFamily: 'var(--font-heading)', letterSpacing: '-0.01em' }}
+            >
+              Full-Stack Engineer &amp; AI Developer
+            </p>
           </div>
 
-          <div className="mt-7 flex flex-col gap-2 border-t border-cyan-400/10 pt-4 text-xs md:flex-row md:items-center md:justify-between" style={{ color: 'var(--text-tertiary)' }}>
-            <p>© {new Date().getFullYear()} S Adityan. All rights reserved.</p>
-            <p>Engineered with Next.js, TypeScript, and Tailwind CSS.</p>
-          </div>
+          <nav className="flex flex-wrap gap-x-5 gap-y-2">
+            {[
+              { href: '/#work',       label: 'Work' },
+              { href: '/#process',    label: 'Process' },
+              { href: '/#experience', label: 'Experience' },
+              { href: '/projects',    label: 'Projects' },
+              { href: '/#contact',    label: 'Contact' },
+            ].map((l) => (
+              <Link
+                key={l.href}
+                href={l.href}
+                className="label-mono transition-colors hover:text-current"
+                style={{ color: 'var(--text-3)' }}
+                onMouseEnter={(e) => ((e.target as HTMLElement).style.color = 'var(--accent)')}
+                onMouseLeave={(e) => ((e.target as HTMLElement).style.color = 'var(--text-3)')}
+              >
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+
+          <p className="label-mono" style={{ color: 'var(--text-3)', opacity: 0.5 }}>
+            © {new Date().getFullYear()} · Next.js · TypeScript
+          </p>
+
         </div>
       </div>
     </footer>

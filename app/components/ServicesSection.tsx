@@ -1,94 +1,253 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { animate, stagger } from 'animejs';
-import { MagneticCard } from './MagneticInteractions';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-interface ServiceItem {
-  title: string;
-  desc: string;
-  chips: string[];
-}
+const SERVICES = [
+  {
+    num: '01',
+    title: 'Product Engineering',
+    desc: 'From concept to deployment — balancing technical excellence with user experience and shipping velocity. I own the entire delivery cycle.',
+    chips: ['Product Discovery', 'Execution Strategy', 'Delivery Ownership'],
+    accent: 'var(--accent)',
+  },
+  {
+    num: '02',
+    title: 'Full-Stack Development',
+    desc: 'End-to-end applications with React, Next.js, Node.js, and modern cloud infrastructure that scales from day one.',
+    chips: ['Frontend Architecture', 'Backend Design', 'Platform Integration'],
+    accent: 'var(--accent)',
+  },
+  {
+    num: '03',
+    title: 'AI & Machine Learning',
+    desc: 'LLM integration, RAG systems, vector search, and ML inference pipelines — applied AI for real-world product features.',
+    chips: ['Intelligent Workflows', 'Inference Pipelines', 'Applied AI'],
+    accent: 'var(--accent)',
+  },
+  {
+    num: '04',
+    title: 'Cloud Architecture',
+    desc: 'Scalable AWS solutions with Docker, CI/CD automation, and reliability engineering for production-grade systems.',
+    chips: ['Scalable Infrastructure', 'Deployment Automation', 'Reliability'],
+    accent: 'var(--accent)',
+  },
+  {
+    num: '05',
+    title: 'Security & DevOps',
+    desc: 'Web security best practices, automated deployment pipelines, and quality gates that keep production stable.',
+    chips: ['Security Hardening', 'Operational Quality', 'Release Discipline'],
+    accent: 'var(--accent)',
+  },
+  {
+    num: '06',
+    title: 'Commerce & Content',
+    desc: 'Subscription-ready product stacks with Stripe/Razorpay integrations, CMS operations, and secure checkout journeys.',
+    chips: ['Checkout Experience', 'Subscription Flows', 'CMS Operations'],
+    accent: 'var(--accent)',
+  },
+];
 
-interface ServicesSectionProps {
-  items: ServiceItem[];
-  quote: string;
-}
-
-export default function ServicesSection({ items, quote }: ServicesSectionProps) {
-  const rootRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!rootRef.current) return;
-    const cards = rootRef.current.querySelectorAll('.svc-matrix-card');
-
-    animate(cards, {
-      translateY: [28, 0],
-      opacity: [0, 1],
-      delay: stagger(80, { start: 120 }),
-      duration: 620,
-      ease: 'out(3)',
-    });
-
-    animate(cards, {
-      boxShadow: [
-        '0 0 0 rgba(56, 189, 248, 0)',
-        '0 0 14px rgba(56, 189, 248, 0.1)',
-      ],
-      delay: stagger(80, { start: 320 }),
-      duration: 500,
-      ease: 'out(3)',
-    });
-  }, []);
+export default function ServicesSection() {
+  const [open, setOpen] = useState<number | null>(null);
+  const [hovered, setHovered] = useState<number | null>(null);
 
   return (
-    <section id="about" className="py-16">
+    <section id="services" className="py-20">
       <div className="container">
-        <div className="mb-8 grid lg:grid-cols-[1fr_auto] gap-6 items-center">
-          <div>
-            <h2 className="text-3xl font-bold mb-3">What I Do</h2>
-            <p className="text-sm max-w-3xl" style={{ color: 'var(--text-secondary)' }}>
-              Core service areas focused on product delivery, platform reliability, and business impact.
-            </p>
-          </div>
-          <div className="relative rounded-full border border-cyan-400/20 bg-cyan-500/5 px-4 py-2 text-xs uppercase tracking-[0.16em] text-cyan-300">
-            Service Areas
-          </div>
+        <motion.p
+          className="body-text mb-12 max-w-lg"
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          Six capability areas — every one backed by shipped products.
+          I own the full delivery, not just a layer.
+        </motion.p>
+
+        <div style={{ borderTop: '1px solid var(--rule)' }}>
+          {SERVICES.map((svc, i) => {
+            const isOpen = open === i;
+            const isHov  = hovered === i;
+            return (
+              <motion.div
+                key={svc.num}
+                initial={{ opacity: 0, x: -16 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.5, delay: i * 0.055, ease: [0.16, 1, 0.3, 1] }}
+                style={{ borderBottom: '1px solid var(--rule)', overflow: 'hidden', position: 'relative' }}
+                onMouseEnter={() => setHovered(i)}
+                onMouseLeave={() => setHovered(null)}
+              >
+                {/* Hover warm-wash */}
+                <motion.div
+                  style={{
+                    position: 'absolute', inset: 0,
+                    background: 'rgba(255,79,26,0.025)',
+                    pointerEvents: 'none',
+                  }}
+                  animate={{ opacity: (isHov || isOpen) ? 1 : 0 }}
+                  transition={{ duration: 0.22 }}
+                />
+
+                {/* Sliding bottom accent line */}
+                <motion.div
+                  style={{
+                    position: 'absolute', bottom: 0, left: 0,
+                    height: '1.5px',
+                    background: 'linear-gradient(90deg, var(--accent) 0%, rgba(255,79,26,0.15) 70%, transparent 100%)',
+                    transformOrigin: 'left',
+                  }}
+                  animate={{ scaleX: isOpen ? 1 : 0 }}
+                  transition={{ duration: 0.5, ease: [0.16,1,0.3,1] }}
+                />
+
+                {/* Row trigger */}
+                <button
+                  onClick={() => setOpen(isOpen ? null : i)}
+                  style={{
+                    width: '100%', background: 'none', border: 'none', cursor: 'none',
+                    display: 'flex', alignItems: 'center', gap: '1.5rem',
+                    padding: '1.4rem 0', textAlign: 'left',
+                    position: 'relative', zIndex: 1,
+                  }}
+                >
+                  {/* Number — circle on open */}
+                  <motion.span
+                    animate={{
+                      color: isOpen ? '#FF4F1A' : isHov ? 'var(--text-3)' : 'var(--text-3)',
+                    }}
+                    transition={{ duration: 0.2 }}
+                    style={{
+                      fontFamily: 'var(--font-geist-mono), monospace',
+                      fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.2em',
+                      flexShrink: 0, width: '28px',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}
+                  >
+                    {isOpen ? (
+                      <motion.span
+                        layoutId={`svc-num-${i}`}
+                        style={{
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          width: '22px', height: '22px', borderRadius: '50%',
+                          border: '1px solid rgba(255,79,26,0.4)',
+                          background: 'rgba(255,79,26,0.06)',
+                          fontSize: '8px', color: 'var(--accent)',
+                        }}
+                      >
+                        {svc.num}
+                      </motion.span>
+                    ) : svc.num}
+                  </motion.span>
+
+                  {/* Accent bar */}
+                  <motion.span
+                    style={{
+                      width: '3px', height: '24px', borderRadius: '2px',
+                      background: 'var(--accent)', flexShrink: 0,
+                    }}
+                    animate={{ opacity: isOpen ? 1 : 0, scaleY: isOpen ? 1 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  />
+
+                  {/* Title */}
+                  <motion.span
+                    animate={{
+                      color: isOpen ? 'var(--text)' : isHov ? 'var(--text)' : 'var(--text-2)',
+                      fontWeight: isOpen ? 700 : 600,
+                    }}
+                    transition={{ duration: 0.18 }}
+                    style={{
+                      fontFamily: 'var(--font-heading), "Syne", sans-serif',
+                      fontSize: 'clamp(1.1rem, 2.2vw, 1.6rem)',
+                      letterSpacing: '-0.025em',
+                      flex: 1,
+                    }}
+                  >
+                    {svc.title}
+                  </motion.span>
+
+                  {/* Arrow — rotates on open */}
+                  <motion.span
+                    animate={{
+                      rotate: isOpen ? 45 : isHov ? 22 : 0,
+                      color: isOpen ? 'var(--accent)' : isHov ? 'var(--text-2)' : 'var(--text-3)',
+                    }}
+                    transition={{ duration: 0.28, ease: [0.16,1,0.3,1] }}
+                    style={{ fontFamily: 'var(--font-geist-mono)', fontSize: '14px', flexShrink: 0 }}
+                  >
+                    →
+                  </motion.span>
+                </button>
+
+                {/* Expanded content */}
+                <AnimatePresence>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
+                      style={{ overflow: 'hidden', position: 'relative', zIndex: 1 }}
+                    >
+                      <div style={{
+                        paddingLeft: 'calc(28px + 1.5rem + 3px + 1.5rem)',
+                        paddingBottom: '1.75rem',
+                        display: 'flex', flexWrap: 'wrap',
+                        gap: '1.5rem', alignItems: 'flex-start',
+                      }}>
+                        <p style={{
+                          fontSize: '15px', lineHeight: 1.75, color: 'var(--text-2)',
+                          maxWidth: '520px', flex: '1 1 280px',
+                        }}>
+                          {svc.desc}
+                        </p>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+                          {svc.chips.map((c, ci) => (
+                            <motion.span
+                              key={c}
+                              initial={{ opacity: 0, y: 6 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: ci * 0.06, duration: 0.3 }}
+                              style={{
+                                fontFamily: 'var(--font-geist-mono), monospace',
+                                fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.14em',
+                                color: 'var(--accent)', border: '1px solid rgba(255,79,26,0.22)',
+                                borderRadius: '2px', padding: '0.3rem 0.7rem',
+                                background: 'rgba(255,79,26,0.05)',
+                              }}
+                            >
+                              {c}
+                            </motion.span>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
         </div>
 
-        <div ref={rootRef} className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 max-w-6xl">
-          {items.map((item, index) => (
-            <MagneticCard
-              key={item.title}
-              className="svc-matrix-card card h-full relative overflow-hidden opacity-0"
-              rotationStrength={3.3}
-              glowColor="rgba(56, 189, 248, 0.3)"
-            >
-              <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(circle at 88% 12%, rgba(56, 189, 248, 0.15), transparent 40%)' }} />
-              <div className="mb-3 flex items-center justify-between gap-3 rounded-lg border border-white/10 bg-black/25 px-3 py-2">
-                <div className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-rose-400" />
-                  <span className="h-2 w-2 rounded-full bg-amber-400" />
-                  <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                </div>
-                <span className="text-[10px] uppercase tracking-[0.12em] text-cyan-300/70">area {String(index + 1).padStart(2, '0')}</span>
-              </div>
-
-              <h3 className="font-semibold mb-2 text-lg text-cyan-400">{item.title}</h3>
-              <p className="text-sm mb-4" style={{ color: 'var(--text-secondary)' }}>{item.desc}</p>
-
-              <div className="flex flex-wrap gap-2 mb-3">
-                {item.chips.map((chip) => (
-                  <span key={chip} className="skill-badge text-xs">{chip}</span>
-                ))}
-              </div>
-            </MagneticCard>
-          ))}
-        </div>
-
-        <div className="mt-8 max-w-3xl">
-          <p className="text-sm italic" style={{ color: 'var(--text-secondary)' }}>{quote}</p>
-        </div>
+        {/* Quote */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          style={{
+            marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid var(--rule)',
+            fontFamily: 'var(--font-heading), "Syne", sans-serif',
+            fontSize: 'clamp(1.1rem, 2vw, 1.5rem)', fontWeight: 500,
+            letterSpacing: '-0.02em', color: 'var(--text-2)', fontStyle: 'italic',
+          }}
+        >
+          &ldquo;Impress nobody, ship everything.&rdquo;
+        </motion.p>
       </div>
     </section>
   );

@@ -1,373 +1,375 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { animate, stagger } from 'animejs';
+import { motion } from 'framer-motion';
 import { MagneticButton } from './components/MagneticInteractions';
-import HeroDeliveryPanel from './components/HeroDeliveryPanel';
-import PinnedEvolutionSection from './components/PinnedEvolutionSection';
+import SiteNav from './components/SiteNav';
+import DeliveryPanel from './components/DeliveryPanel';
+import ProjectGrid from './components/ProjectGrid';
+import ProcessSection from './components/ProcessSection';
+import ExperienceSection from './components/ExperienceSection';
 import ServicesSection from './components/ServicesSection';
-import ExperienceBroadcastSection from './components/ExperienceBroadcastSection';
-import SkillsWorkspaceSection from './components/SkillsWorkspaceSection';
-import ContactSection from './components/ContactSection';
-import FloatingSectionNavbar from './components/FloatingSectionNavbar';
-import { TextRevealCard } from '@/components/ui/text-reveal-card';
+import SkillsSection from './components/SkillsSection';
+import ContactBlock from './components/ContactBlock';
+import DualModeSection from './components/DualModeSection';
+import TechOrbitSection from './components/TechOrbitSection';
 
-const skills = {
-  'Frontend Systems': [
-    'React',
-    'Next.js (App Router)',
-    'TypeScript',
-    'Tailwind CSS',
-    'Framer Motion',
-    'Anime.js',
-    'Matter.js',
-    'Canvas 2D',
-    'Astro',
-    'Nuxt.js',
-  ],
-  'Backend & APIs': [
-    'Node.js',
-    'NestJS',
-    'FastAPI',
-    'Express',
-    'Python',
-    'REST APIs',
-    'Auth & RBAC',
-    'Webhook Integrations',
-  ],
-  'Data & Storage': [
-    'PostgreSQL',
-    'MongoDB',
-    'Supabase',
-    'Sanity CMS',
-    'Redis Basics',
-    'Schema Design',
-    'Query Optimization',
-  ],
-  'AI Engineering': [
-    'LLM Integrations',
-    'RAG Workflows',
-    'Prompt Engineering',
-    'Hugging Face',
-    'Ollama',
-    'Inference Pipelines',
-  ],
-  'Cloud & Delivery': [
-    'AWS',
-    'Docker',
-    'Kubernetes Basics',
-    'CI/CD Pipelines',
-    'Vercel Deployments',
-    'Monitoring & Logs',
-  ],
-};
-
-const whatIDo = [
-  {
-    title: 'Product Engineering',
-    desc: 'From concept to deployment, balancing technical excellence with user experience.',
-    chips: ['Product Discovery', 'Execution Strategy', 'Delivery Ownership'],
-  },
-  {
-    title: 'Full-Stack Development',
-    desc: 'End-to-end applications with React, Next.js, Node.js, and modern cloud infrastructure.',
-    chips: ['Frontend Architecture', 'Backend Design', 'Platform Integration'],
-  },
-  {
-    title: 'AI & Machine Learning',
-    desc: 'LLM integration, RAG systems, and ML models for real-world applications.',
-    chips: ['Intelligent Workflows', 'Inference Design', 'Applied AI Features'],
-  },
-  {
-    title: 'Cloud Architecture',
-    desc: 'Scalable AWS solutions with Docker, Kubernetes, and CI/CD automation.',
-    chips: ['Scalable Infrastructure', 'Deployment Automation', 'Reliability Focus'],
-  },
-  {
-    title: 'Security & DevOps',
-    desc: 'Web security best practices, SSL/HTTPS implementation, and automated deployment pipelines.',
-    chips: ['Security Hardening', 'Operational Quality', 'Release Discipline'],
-  },
-  {
-    title: 'Commerce & Content Systems',
-    desc: 'Subscription-ready product stacks with CMS control and secure payment journeys.',
-    chips: ['Checkout Experience', 'Subscription Flows', 'CMS Operations'],
-  },
+// ─── Tech marquee ─────────────────────────────────────────────────────────────
+const TECH_STRIP = [
+  'React', 'Next.js', 'TypeScript', 'Node.js', 'Python',
+  'AWS Lambda', 'Supabase', 'Docker', 'FastAPI', 'PostgreSQL',
+  'Prisma ORM', 'OpenAI API', 'LLM Pipelines', 'NestJS', 'Stripe',
+  'Razorpay', 'Redis', 'Framer Motion', 'RAG Systems', 'Kubernetes',
+  'Drizzle ORM', 'Whisper', 'Hugging Face', 'Ollama', 'Sanity CMS',
 ];
 
-const guidingQuote = '“Building systems that work, not systems that impress.”';
+function TechMarquee() {
+  const doubled = [...TECH_STRIP, ...TECH_STRIP];
+  return (
+    <div
+      className="marquee-outer"
+      aria-hidden="true"
+      style={{
+        borderTop: '1px solid var(--rule)',
+        borderBottom: '1px solid var(--rule)',
+        padding: '0.9rem 0',
+        overflow: 'hidden',
+      }}
+    >
+      <div className="marquee-track">
+        {doubled.map((item, i) => (
+          <span key={i} className="marquee-item">
+            <span className="marquee-sep">·</span>
+            {item}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
 
-const socials = [
-  {
-    href: 'https://github.com/nikomeguro2004',
-    label: 'GitHub',
-    icon: 'M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z',
-  },
-  {
-    href: 'https://linkedin.com/in/adityan-suresh-781116256',
-    label: 'LinkedIn',
-    icon: 'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z',
-  },
-  {
-    href: 'https://leetcode.com/u/NikoMeguro/',
-    label: 'LeetCode',
-    icon: 'M13.483 0a1.374 1.374 0 0 0-.961.438L7.116 6.226l-3.854 4.126a5.266 5.266 0 0 0-1.209 2.104 5.35 5.35 0 0 0-.125.513 5.527 5.527 0 0 0 .062 2.362 5.83 5.83 0 0 0 .349 1.017 5.938 5.938 0 0 0 1.271 1.818l4.277 4.193.039.038c2.248 2.165 5.852 2.133 8.063-.074l2.396-2.392c.54-.54.54-1.414.003-1.955a1.378 1.378 0 0 0-1.951-.003l-2.396 2.392a3.021 3.021 0 0 1-4.205.038l-.02-.019-4.276-4.193c-.652-.64-.972-1.469-.948-2.263a2.68 2.68 0 0 1 .066-.523 2.545 2.545 0 0 1 .619-1.164L9.13 8.114c1.058-1.134 3.204-1.27 4.43-.278l3.501 2.831c.593.48 1.461.387 1.94-.207a1.384 1.384 0 0 0-.207-1.943l-3.5-2.831c-.8-.647-1.766-1.045-2.774-1.202l2.015-2.158A1.384 1.384 0 0 0 13.483 0zm-2.866 12.815a1.38 1.38 0 0 0-1.38 1.382 1.38 1.38 0 0 0 1.38 1.382H20.79a1.38 1.38 0 0 0 1.38-1.382 1.38 1.38 0 0 0-1.38-1.382z',
-  },
-];
+// ─── Chapter label — the Swiss spine ──────────────────────────────────────────
+function ChapterLabel({ num, title, sub }: { num: string; title: string; sub: string }) {
+  return (
+    <motion.div
+      className="relative container pt-8 mb-0"
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.7 }}
+      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <span className="chapter-num-bg" aria-hidden="true">{num}</span>
+      <div className="chapter-bar relative z-10">
+        <span className="label-mono" style={{ color: 'rgba(255,79,26,0.45)' }}>{num}</span>
+        <span className="h-3 w-px" style={{ background: 'var(--rule)' }} />
+        <span className="chapter-title">{title}</span>
+        <span className="flex-1" style={{ height: '1px', background: 'var(--rule)', margin: '0 0.25rem' }} />
+        <span className="label-mono">{sub}</span>
+      </div>
+    </motion.div>
+  );
+}
 
-const storySteps = [
-  {
-    title: 'Discover',
-    content: 'Define goals, scope, user journeys, and delivery constraints before implementation.',
-    highlight: 'Requirements and planning',
-    metric: { value: '01', label: 'Discovery' },
-    weight: 1,
-    animationType: 'slide' as const,
-  },
-  {
-    title: 'Design',
-    content: 'Select an appropriate stack and define scalable architecture for maintainability and growth.',
-    highlight: 'Architecture and stack selection',
-    metric: { value: '02', label: 'Design' },
-    weight: 1.2,
-    animationType: 'scale' as const,
-  },
-  {
-    title: 'Ship',
-    content: 'Implement and release production-ready features with testing, integrations, and quality controls.',
-    highlight: 'Implementation and release',
-    metric: { value: '03', label: 'Delivery' },
-    weight: 1.2,
-    animationType: 'snap' as const,
-  },
-  {
-    title: 'Evolve',
-    content: 'Improve performance and reliability through analytics, monitoring, and iterative updates.',
-    highlight: 'Optimization and scale',
-    metric: { value: '04', label: 'Optimization' },
-    weight: 1,
-    animationType: 'fade' as const,
-  },
-];
-
-export default function Home() {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
-  const statsRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!heroRef.current) return;
-
-    const title = heroRef.current.querySelector('.hero-name');
-    const subtitles = heroRef.current.querySelectorAll('.hero-subtitle');
-
-    if (title) {
-      animate(title, { translateY: [60, 0], opacity: [0, 1], duration: 900, ease: 'out(4)', delay: 180 });
-    }
-
-    if (subtitles.length) {
-      animate(subtitles, {
-        translateY: [24, 0],
-        opacity: [0, 1],
-        duration: 700,
-        ease: 'out(3)',
-        delay: stagger(90, { start: 300 }),
-      });
-    }
-
-    if (ctaRef.current?.children.length) {
-      animate(ctaRef.current.children, {
-        translateY: [24, 0],
-        opacity: [0, 1],
-        delay: stagger(100, { start: 420 }),
-        duration: 640,
-        ease: 'out(3)',
-      });
-    }
-
-    if (statsRef.current?.children.length) {
-      animate(statsRef.current.children, {
-        translateY: [18, 0],
-        opacity: [0, 1],
-        delay: stagger(90, { start: 620 }),
-        duration: 520,
-        ease: 'out(3)',
-      });
-    }
-
-    const reveals = document.querySelectorAll('.anime-reveal');
-    const staggerGroups = document.querySelectorAll('.anime-stagger');
-
-    const revealObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          animate(entry.target, {
-            translateY: [26, 0],
-            opacity: [0, 1],
-            duration: 650,
-            ease: 'out(3)',
-          });
-          revealObserver.unobserve(entry.target);
-        });
-      },
-      { threshold: 0.14, rootMargin: '0px 0px -8% 0px' }
-    );
-
-    const staggerObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const children = (entry.target as HTMLElement).querySelectorAll('.anime-stagger-child');
-          animate(children, {
-            translateY: [30, 0],
-            opacity: [0, 1],
-            delay: stagger(75),
-            duration: 600,
-            ease: 'out(3)',
-          });
-          staggerObserver.unobserve(entry.target);
-        });
-      },
-      { threshold: 0.16 }
-    );
-
-    reveals.forEach((el) => revealObserver.observe(el));
-    staggerGroups.forEach((el) => staggerObserver.observe(el));
-
-    return () => {
-      revealObserver.disconnect();
-      staggerObserver.disconnect();
-    };
-  }, []);
+// ─── Hero Editorial Panel (cream/on-brand) ────────────────────────────────────
+function HeroEditorialPanel() {
+  const domains = [
+    'React · Next.js · TypeScript',
+    'Node.js · FastAPI · Supabase',
+    'AI / LLMs · RAG · OpenAI',
+  ];
 
   return (
-    <div className="relative" style={{ position: 'relative', zIndex: 10 }}>
-      <FloatingSectionNavbar />
+    <motion.div
+      initial={{ opacity: 0, y: 28 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.9, delay: 1.15, ease: [0.16, 1, 0.3, 1] }}
+      style={{
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
+        width: '100%',
+        maxWidth: '340px',
+        border: '1px solid var(--rule-strong)',
+        borderRadius: 'var(--r-md)',
+        background: 'var(--surface)',
+        overflow: 'hidden',
+      }}
+    >
+      {/* Orange top accent bar */}
+      <div style={{ height: '2px', background: 'var(--accent)' }} />
 
-      <div
-        className="fixed pointer-events-none"
-        style={{
-          width: '500px',
-          height: '500px',
-          background: 'radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, transparent 60%)',
-          top: '-100px',
-          right: '-100px',
-          filter: 'blur(50px)',
-        }}
-        aria-hidden="true"
-      />
+      {/* Header */}
+      <div style={{
+        padding: '0.9rem 1.3rem',
+        borderBottom: '1px solid var(--rule)',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      }}>
+        <span className="label-mono" style={{ color: 'var(--text-3)' }}>AVAILABILITY</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+          <span className="animate-pulse" style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#22c55e', display: 'inline-block' }} />
+          <span className="label-mono" style={{ color: '#22c55e' }}>OPEN TO WORK</span>
+        </div>
+      </div>
 
-      <div
-        className="fixed pointer-events-none left-[8%] top-[40%] h-85 w-85 rounded-full blur-3xl"
-        style={{
-          background: 'radial-gradient(circle, rgba(123,97,255,0.2), transparent 72%)',
-          opacity: 0.24,
-        }}
-        aria-hidden="true"
-      />
+      {/* Info rows */}
+      <div style={{ padding: '1rem 1.3rem', borderBottom: '1px solid var(--rule)' }}>
+        {([
+          ['FOCUS',    'Full-Stack · AI Engineering'],
+          ['RESPONSE', '< 24 hours'],
+          ['MODE',     'Async-first · Ship-first'],
+          ['BASE',     'Chennai, India'],
+        ] as [string, string][]).map(([l, v]) => (
+          <div key={l} style={{
+            display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
+            marginBottom: '0.55rem',
+          }}>
+            <span className="label-mono" style={{ color: 'var(--text-3)' }}>{l}</span>
+            <span style={{
+              fontFamily: 'var(--font-geist-mono), monospace',
+              fontSize: '10px', letterSpacing: '0.08em',
+              color: 'var(--text-2)',
+            }}>{v}</span>
+          </div>
+        ))}
+      </div>
 
-      <section id="home" ref={heroRef} className="flex min-h-[90vh] items-center pt-12 pb-12 sm:min-h-[92vh]">
-        <div className="container">
-          <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-8 items-center">
-            <div className="max-w-3xl">
-              <p className="hero-subtitle text-xs uppercase tracking-[0.2em] mb-4 opacity-0" style={{ color: 'var(--text-tertiary)' }}>
-                Full-Stack Engineer · AI Developer
+      {/* Core domains */}
+      <div style={{ padding: '1rem 1.3rem', borderBottom: '1px solid var(--rule)' }}>
+        <p className="label-mono" style={{ color: 'rgba(255,79,26,0.45)', marginBottom: '0.65rem' }}>CORE STACK</p>
+        {domains.map((d) => (
+          <div key={d} style={{
+            fontFamily: 'var(--font-geist-mono), monospace',
+            fontSize: '10px', letterSpacing: '0.07em',
+            color: 'var(--text-2)',
+            padding: '0.3rem 0',
+            borderBottom: '1px solid var(--rule)',
+          }}>{d}</div>
+        ))}
+      </div>
+
+      {/* Stats */}
+      <div style={{ padding: '1rem 1.3rem', display: 'flex', gap: '2rem' }}>
+        {([['12+', 'SHIPPED'], ['30+', 'TOOLS'], ['95+', 'LIGHTHOUSE']] as [string, string][]).map(([v, l]) => (
+          <div key={l}>
+            <div style={{
+              fontFamily: 'var(--font-heading), "Syne", sans-serif',
+              fontSize: '1.4rem', fontWeight: 700,
+              color: 'var(--accent)', letterSpacing: '-0.03em',
+            }}>{v}</div>
+            <div className="label-mono" style={{ color: 'var(--text-3)', marginTop: '2px' }}>{l}</div>
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+// ─── Page ──────────────────────────────────────────────────────────────────────
+export default function Home() {
+  return (
+    <>
+      <SiteNav />
+
+      {/* ════════════════════════════════════════════════════════════════
+          01 — HERO
+      ════════════════════════════════════════════════════════════════ */}
+      <section id="home" className="relative min-h-screen flex flex-col justify-center pt-24 pb-16 overflow-hidden">
+
+        {/* Floating ambient orbs */}
+        <div className="pointer-events-none absolute inset-0" style={{ zIndex: 0 }}>
+          <motion.div
+            animate={{ x: [0, 34, -20, 0], y: [0, -48, 24, 0] }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+            style={{
+              position: 'absolute', top: '0%', left: '-10%',
+              width: '55vw', height: '55vw',
+              background: 'radial-gradient(circle, rgba(255,79,26,0.08) 0%, transparent 65%)',
+              filter: 'blur(90px)',
+            }}
+          />
+          <motion.div
+            animate={{ x: [0, -48, 20, 0], y: [0, 32, -38, 0] }}
+            transition={{ duration: 26, repeat: Infinity, ease: 'easeInOut', delay: 6 }}
+            style={{
+              position: 'absolute', top: '20%', right: '-8%',
+              width: '42vw', height: '42vw',
+              background: 'radial-gradient(circle, rgba(255,160,26,0.06) 0%, transparent 65%)',
+              filter: 'blur(110px)',
+            }}
+          />
+          <motion.div
+            animate={{ x: [0, 24, -32, 0], y: [0, -22, 42, 0] }}
+            transition={{ duration: 32, repeat: Infinity, ease: 'easeInOut', delay: 14 }}
+            style={{
+              position: 'absolute', bottom: '5%', left: '28%',
+              width: '36vw', height: '36vw',
+              background: 'radial-gradient(circle, rgba(255,79,26,0.045) 0%, transparent 65%)',
+              filter: 'blur(100px)',
+            }}
+          />
+        </div>
+
+        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+
+          {/* Status row */}
+          <motion.div
+            className="flex items-center justify-between pb-4 mb-12"
+            style={{ borderBottom: '1px solid var(--rule)' }}
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            <div className="flex items-center gap-4 flex-wrap">
+              <span className="label-mono" style={{ color: 'rgba(255,79,26,0.4)' }}>001 / Portfolio</span>
+              <span className="h-3 w-px hidden sm:block" style={{ background: 'var(--rule)' }} />
+              <span className="label-mono hidden sm:block">Chennai · Full-Stack · AI · Cloud</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ background: '#4ade80' }} />
+              <span className="label-mono" style={{ color: 'rgba(74,222,128,0.8)' }}>Open to Work</span>
+            </div>
+          </motion.div>
+
+          {/* NAME */}
+          <div className="overflow-hidden mb-4">
+            <motion.h1
+              className="hero-name"
+              initial={{ y: '106%' }}
+              animate={{ y: '0%' }}
+              transition={{ duration: 1.05, ease: [0.16, 1, 0.3, 1], delay: 0.28 }}
+            >
+              S Adityan
+            </motion.h1>
+          </div>
+
+          {/* Accent rule */}
+          <motion.div
+            className="mb-14 rule-accent"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            style={{ transformOrigin: 'left' }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.88 }}
+          />
+
+          {/* 2-col: Left = full narrative, Right = CardSwap */}
+          <div className="grid lg:grid-cols-2 gap-12 items-end mb-16">
+
+            {/* Left — complete narrative */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 1.0, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <h2 className="section-heading mb-5">
+                Full-Stack Engineer<br />&amp; AI Developer
+              </h2>
+              <p className="body-text max-w-md mb-8" style={{ lineHeight: 1.8 }}>
+                Not wireframes — deployed products.
+                12+ shipped across startup, SaaS, and AI domains in 18 months.
+                If it has a deadline and a stack, I ship it.
               </p>
-              <div className="hero-name opacity-0 mb-6">
-                <TextRevealCard
-                  text="S Adityan"
-                  revealText="Frontend Lead"
-                  className="bg-transparent border-0 p-0 m-0 w-full"
-                >
-                </TextRevealCard>
-              </div>
 
-              <p className="hero-subtitle text-xl md:text-2xl mb-4 leading-relaxed opacity-0" style={{ color: 'var(--text-secondary)' }}>
-                Full-Stack Engineer & AI Developer crafting scalable systems and intelligent applications.
-              </p>
-
-              <p className="hero-subtitle text-sm md:text-base mb-5 opacity-0" style={{ color: 'var(--text-tertiary)' }}>
-                Building production-ready applications with modern frontend systems, scalable backends, and reliable delivery practices.
-              </p>
-
-              <div className="mb-6 w-full max-w-2xl">
-                <HeroDeliveryPanel />
-              </div>
-
-              <div ref={ctaRef} className="flex flex-wrap gap-4 mb-10">
-                <MagneticButton href="/projects" className="btn-primary" strength={0.15}>
-                  View Work
+              {/* CTAs */}
+              <div className="flex flex-wrap gap-3 mb-9">
+                <MagneticButton href="#work" className="btn-primary" strength={0.15}>
+                  See Work ↗
                 </MagneticButton>
-                <MagneticButton href="#contact" className="btn-secondary" strength={0.15}>
-                  Get in Touch
+                <MagneticButton href="#contact" className="btn-ghost" strength={0.15}>
+                  Let&apos;s Build →
                 </MagneticButton>
               </div>
 
-              <div ref={statsRef} className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-xl">
+              {/* Stats */}
+              <div className="pt-6 flex flex-wrap gap-8" style={{ borderTop: '1px solid var(--rule)' }}>
                 {[
-                  { value: '7+', label: 'Projects' },
-                  { value: '25+', label: 'Technologies' },
-                  { value: '14', label: 'Certifications' },
-                ].map((stat) => (
-                  <div key={stat.label} className="rounded-xl border border-cyan-400/10 bg-slate-900/30 px-4 py-3 opacity-0">
-                    <div className="text-2xl font-bold text-gradient">{stat.value}</div>
-                    <div className="text-xs mt-1 uppercase tracking-[0.14em]" style={{ color: 'var(--text-tertiary)' }}>
-                      {stat.label}
-                    </div>
-                  </div>
+                  { value: '12+', label: 'Shipped'    },
+                  { value: '30+', label: 'Stack'      },
+                  { value: '6wk', label: 'Avg Cycle'  },
+                  { value: '95+', label: 'Lighthouse' },
+                ].map((stat, i) => (
+                  <motion.div
+                    key={stat.label}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 1.28 + i * 0.07 }}
+                  >
+                    <div className="stat-value">{stat.value}</div>
+                    <div className="stat-label">{stat.label}</div>
+                  </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
 
-            <div className="anime-reveal space-y-4">
-              <div className="rounded-2xl border border-cyan-400/15 bg-slate-950/70 p-5">
-                <div className="mb-3 flex items-center justify-between rounded-lg border border-white/10 bg-black/25 px-3 py-2">
-                  <div className="flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-rose-400" />
-                    <span className="h-2 w-2 rounded-full bg-amber-400" />
-                    <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                  </div>
-                  <p className="text-[10px] uppercase tracking-[0.14em] text-cyan-200/80">Project Overview</p>
-                </div>
-                <p className="text-xs uppercase tracking-[0.16em] text-cyan-300/80">Delivery Process</p>
-                <p className="mt-3 text-sm" style={{ color: 'var(--text-secondary)' }}>
-                  Discover → Design → Build → Improve using clear milestones and measurable outcomes.
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-indigo-400/15 bg-indigo-500/5 p-5">
-                <p className="text-xs uppercase tracking-[0.16em] text-indigo-300/80">System Dashboard</p>
-                <div className="mt-3 grid grid-cols-2 gap-3">
-                  {[
-                    { label: 'Build rhythm', value: 'Weekly' },
-                    { label: 'Delivery mode', value: 'Ship-first' },
-                    { label: 'Scope', value: 'Startup web' },
-                    { label: 'Focus', value: 'Growth + scale' },
-                  ].map((item) => (
-                    <div key={item.label} className="rounded-lg border border-indigo-300/20 bg-black/20 p-3">
-                      <p className="text-[10px] uppercase tracking-[0.12em]" style={{ color: 'var(--text-tertiary)' }}>{item.label}</p>
-                      <p className="mt-1 text-sm font-semibold text-indigo-200">{item.value}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
+            {/* Right — Editorial availability panel (desktop only) */}
+            <div className="hidden lg:block" style={{ position: 'relative', height: '420px' }}>
+              <HeroEditorialPanel />
             </div>
           </div>
+
+          {/* Delivery Panel */}
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.85, delay: 1.4, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <DeliveryPanel />
+          </motion.div>
+
         </div>
       </section>
 
-      <div id="process">
-        <PinnedEvolutionSection steps={storySteps} />
-      </div>
+      {/* ── Tech strip ──────────────────────────────────────────────── */}
+      <TechMarquee />
 
-      <ServicesSection items={whatIDo} quote={guidingQuote} />
+      {/* ════════════════════════════════════════════════════════════════
+          02 — SHIP RECORD
+      ════════════════════════════════════════════════════════════════ */}
+      <ChapterLabel num="02" title="Ship Record" sub="Every card is live production" />
+      <ProjectGrid />
 
-      <ExperienceBroadcastSection />
+      {/* ════════════════════════════════════════════════════════════════
+          DUAL MODE — I CAN DESIGN · I CAN DEVELOP
+      ════════════════════════════════════════════════════════════════ */}
+      <DualModeSection />
 
-      <SkillsWorkspaceSection skills={skills} />
+      {/* ════════════════════════════════════════════════════════════════
+          TECH ORBIT — PRODUCTION TOOLKIT
+      ════════════════════════════════════════════════════════════════ */}
+      <TechOrbitSection />
 
-      <ContactSection socials={socials} />
-    </div>
+      {/* ════════════════════════════════════════════════════════════════
+          03 — PROCESS
+      ════════════════════════════════════════════════════════════════ */}
+      <ChapterLabel num="03" title="Process" sub="How I think and ship" />
+      <ProcessSection />
+
+      <div className="section-thread" aria-hidden="true" />
+
+      {/* ════════════════════════════════════════════════════════════════
+          04 — EXPERIENCE
+      ════════════════════════════════════════════════════════════════ */}
+      <ChapterLabel num="04" title="Experience" sub="Production environments, real users" />
+      <ExperienceSection />
+
+      <div className="section-thread" aria-hidden="true" />
+
+      {/* ════════════════════════════════════════════════════════════════
+          05 — SERVICES
+      ════════════════════════════════════════════════════════════════ */}
+      <ChapterLabel num="05" title="Services" sub="Six areas, all shipped to production" />
+      <ServicesSection />
+
+      <div className="section-thread" aria-hidden="true" />
+
+      {/* ════════════════════════════════════════════════════════════════
+          06 — SKILLS
+      ════════════════════════════════════════════════════════════════ */}
+      <ChapterLabel num="06" title="Skills" sub="30+ tools — all used in production" />
+      <SkillsSection />
+
+      <div className="section-thread" aria-hidden="true" />
+
+      {/* Contact */}
+      <ContactBlock />
+    </>
   );
 }

@@ -1,9 +1,13 @@
 {
-  "name": "S Adityan | Full-Stack Engineer & AI Developer",
+  "name": "S Adityan | Full-Stack & AI Engineer",
   "short_name": "Adityan",
-  "description": "Full-Stack Engineer specializing in AI systems, cloud architecture, and scalable web applications.",
+  "description": "Full-Stack Engineer — 12+ shipped products across startup, SaaS, and AI domains. React, Next.js, Python, AWS, LLMs.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0B0F14",
-  "theme_color": "#38BDF8"
+  "background_color": "#F5F1E8",
+  "theme_color": "#FF4F1A",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/favicon.ico", "sizes": "48x48", "type": "image/x-icon" }
+  ]
 }

@@ -1,0 +1,68 @@
+/* ═══════════════════════════════════════════════════════════
+   CardSwap — Chalk Ember light theme
+   Warm cream cards matching the site palette
+═══════════════════════════════════════════════════════════ */
+
+.card-swap-container {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transform: translate(-8%, 4%);
+  transform-origin: bottom right;
+  perspective: 900px;
+  overflow: visible;
+}
+
+.card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  border-radius: 10px;
+  border: 1px solid var(--rule-strong, rgba(0,0,0,0.14));
+  background: var(--bg, #F5F1E8);
+  color: var(--text, #141210);
+
+  transform-style: preserve-3d;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+
+  /* Subtle lift shadow */
+  box-shadow: 0 8px 32px rgba(0,0,0,0.09), 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* Soft warm top glow */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    ellipse 80% 50% at 50% 0%,
+    rgba(255, 79, 26, 0.05) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+/* Orange top accent line on each card */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent, #FF4F1A), rgba(255,79,26,0.25) 70%, transparent);
+  z-index: 1;
+  pointer-events: none;
+}
+
+@media (max-width: 1280px) {
+  .card-swap-container {
+    transform: scale(0.88) translate(-4%, 4%);
+    transform-origin: bottom right;
+  }
+}

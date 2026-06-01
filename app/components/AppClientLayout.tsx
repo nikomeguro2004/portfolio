@@ -1,9 +1,11 @@
 'use client';
 
 import { useSyncExternalStore, useCallback, useState, createContext, useContext, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
-import AppLoadingSequence from '@/app/components/AppLoadingSequence';
-import ImmersiveStarfieldBackdrop from './ImmersiveStarfieldBackdrop';
+import SpiralLoadingScreen from './SpiralLoadingScreen';
+import CustomCursor from './CustomCursor';
+import LenisProvider from './LenisProvider';
 
 // EXPERIENCE CONTEXT: Global narrative state
 type ExperiencePhase = 'loading' | 'live';
@@ -62,26 +64,6 @@ function usePrefersReducedMotion(): boolean {
   return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }
 
-// SIMPLIFIED SCENE FOR TOUCH: Fewer particles, no scroll coupling
-function SimplifiedSceneFallback() {
-  return (
-    <div 
-      className="fixed inset-0 pointer-events-none"
-      style={{ zIndex: 0 }}
-    >
-      {/* Static gradient atmosphere for mobile */}
-      <div 
-        className="absolute inset-0"
-        style={{
-          background: `
-            radial-gradient(ellipse at 20% 30%, rgba(56, 189, 248, 0.08) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 70%, rgba(139, 92, 246, 0.06) 0%, transparent 50%)
-          `,
-        }}
-      />
-    </div>
-  );
-}
 
 interface AppClientLayoutProps {
   children: React.ReactNode;
@@ -95,9 +77,8 @@ export default function AppClientLayout({ children }: AppClientLayoutProps) {
   const [scrollVelocity, setScrollVelocity] = useState(0);
   const lastScrollRef = useRef(0);
   
-  // Always show loader on full reload unless reduced motion is enabled
   const [phase, setPhase] = useState<ExperiencePhase>(() => {
-    if (typeof window === 'undefined') return 'live'; // Default to live for SSR
+    if (typeof window === 'undefined') return 'live';
     const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
     if (reducedMotion) return 'live';
     return 'loading';
@@ -124,7 +105,7 @@ export default function AppClientLayout({ children }: AppClientLayoutProps) {
     };
   }, []);
 
-  const handleLoadingComplete = useCallback(() => {
+  const handleEnter = useCallback(() => {
     setPhase('live');
   }, []);
 
@@ -139,32 +120,38 @@ export default function AppClientLayout({ children }: AppClientLayoutProps) {
     scrollVelocity,
   };
 
-  // Determine if backdrop should show
-  const showStarfieldBackdrop = mounted && !isTouchDevice && !prefersReducedMotion;
-  const showSimplifiedScene = mounted && isTouchDevice && !prefersReducedMotion;
-  const showReducedScene = mounted && prefersReducedMotion;
+  // Starfield removed — using CSS dot grid background instead
+  const showStarfieldBackdrop = false;
+  const showSimplifiedScene = false;
+  const showReducedScene = false;
 
-  // Show loading on every full reload (except reduced motion users)
   const shouldShowLoader = mounted && effectivePhase === 'loading' && !prefersReducedMotion && pathname !== '/projects';
 
   return (
     <ExperienceContext.Provider value={contextValue}>
-      {/* Loading sequence - every full reload */}
+      <CustomCursor />
       {shouldShowLoader && (
-        <AppLoadingSequence onComplete={handleLoadingComplete} minDuration={2800} />
+        <SpiralLoadingScreen onEnter={handleEnter} />
       )}
       
-      {/* Minimal immersive starfield backdrop (desktop) */}
-      {showStarfieldBackdrop && <ImmersiveStarfieldBackdrop />}
+      {/* Background: CSS dot grid via globals.css — no canvas needed */}
+      {showStarfieldBackdrop && null}
+      {showSimplifiedScene && null}
+      {showReducedScene && null}
       
-      {/* TOUCH DEVICE: Simplified atmosphere instead of nothing */}
-      {showSimplifiedScene && <SimplifiedSceneFallback />}
-      
-      {/* REDUCED MOTION: Static depth + color, no animation */}
-      {showReducedScene && <SimplifiedSceneFallback />}
-      
-      {/* Main content */}
-      {children}
+      {/* Main content — reveals with cinematic entrance after Enter */}
+      <AnimatePresence>
+        {effectivePhase === 'live' && (
+          <motion.div
+            key="main-content"
+            initial={{ opacity: 0, clipPath: 'inset(0 0 100% 0)' }}
+            animate={{ opacity: 1, clipPath: 'inset(0 0 0% 0)' }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <LenisProvider>{children}</LenisProvider>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </ExperienceContext.Provider>
   );
 }
