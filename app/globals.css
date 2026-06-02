@@ -299,6 +299,29 @@ section {
   .marquee-track { animation: none; }
 }
 
+/* ── Skill tape animations ───────────────────────────────────────── */
+@keyframes tapeLTR {
+  from { transform: translateX(0); }
+  to   { transform: translateX(calc(-100% / 3)); }
+}
+
+@keyframes tapeRTL {
+  from { transform: translateX(calc(-100% / 3)); }
+  to   { transform: translateX(0); }
+}
+
+.skill-tape {
+  will-change: transform;
+}
+
+.skill-tape-row:hover .skill-tape {
+  animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-tape { animation: none !important; }
+}
+
 /* ── Buttons ─────────────────────────────────────────────────────── */
 .btn-primary {
   display: inline-flex;

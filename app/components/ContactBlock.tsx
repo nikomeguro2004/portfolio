@@ -64,12 +64,20 @@ export default function ContactBlock() {
             </p>
             <h2 style={{
               fontFamily: 'var(--font-heading), "Syne", sans-serif',
-              fontSize: 'clamp(2.5rem, 8vw, 6.5rem)',
-              fontWeight: 800, letterSpacing: '-0.045em', lineHeight: 0.92,
-              color: '#F5F1E8', maxWidth: '16ch',
+              fontSize: 'clamp(3rem, 11vw, 10rem)',
+              fontWeight: 800, letterSpacing: '-0.05em', lineHeight: 0.88,
+              color: '#F5F1E8', maxWidth: '14ch',
             }}>
-              Have a Deadline?{' '}
-              <span style={{ color: 'var(--accent)' }}>Let&apos;s Ship It.</span>
+              Have a{' '}
+              <span style={{
+                color: 'var(--accent)',
+                display: 'block',
+              }}>Deadline?</span>
+              <span style={{
+                color: 'rgba(245,241,232,0.55)',
+                display: 'block',
+                fontSize: '0.62em',
+              }}>Let&apos;s Ship It.</span>
             </h2>
             <motion.div
               initial={{ scaleX: 0 }}

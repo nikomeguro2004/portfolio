@@ -12,6 +12,7 @@ import SkillsSection from './components/SkillsSection';
 import ContactBlock from './components/ContactBlock';
 import DualModeSection from './components/DualModeSection';
 import TechOrbitSection from './components/TechOrbitSection';
+import StatsSection from './components/StatsSection';
 
 // ─── Tech marquee ─────────────────────────────────────────────────────────────
 const TECH_STRIP = [
@@ -350,7 +351,10 @@ export default function Home() {
       <ChapterLabel num="04" title="Experience" sub="Production environments, real users" />
       <ExperienceSection />
 
-      <div className="section-thread" aria-hidden="true" />
+      {/* ════════════════════════════════════════════════════════════════
+          STATS — By the numbers
+      ════════════════════════════════════════════════════════════════ */}
+      <StatsSection />
 
       {/* ════════════════════════════════════════════════════════════════
           05 — SERVICES

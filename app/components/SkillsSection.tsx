@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
 
 const SKILLS = [
   { cat: 'Frontend',       tags: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Anime.js', 'Matter.js', 'Canvas 2D', 'Astro', 'Nuxt.js'] },
@@ -12,135 +12,150 @@ const SKILLS = [
   { cat: 'Payments & CMS', tags: ['Razorpay', 'Stripe', 'Webhooks', 'Sanity', 'Subscriptions', 'Checkout Flows'] },
 ];
 
+const SPEEDS = [52, 44, 58, 48, 54, 46]; // seconds per loop
+
 export default function SkillsSection() {
-  const [activeRow, setActiveRow] = useState<number | null>(null);
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: '-10% 0px' });
+  const total = SKILLS.reduce((acc, s) => acc + s.tags.length, 0);
 
   return (
-    <section id="skills" className="py-20">
-      <div className="container">
+    <section id="skills" className="py-20 overflow-hidden" ref={ref}>
+      {/* Header — constrained */}
+      <div className="container mb-12">
         <motion.p
-          className="body-text mb-12 max-w-lg"
+          className="body-text max-w-lg"
           initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
         >
           30+ tools across the full stack — every one used in a shipped product.
           No padding tools, no checkbox skills.
         </motion.p>
+      </div>
 
-        <div style={{ borderTop: '1px solid var(--rule)' }}>
-          {SKILLS.map((row, i) => {
-            const isActive = activeRow === i;
-            return (
-              <motion.div
-                key={row.cat}
-                initial={{ opacity: 0, y: 14 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.5, delay: i * 0.07, ease: [0.16, 1, 0.3, 1] }}
-                onMouseEnter={() => setActiveRow(i)}
-                onMouseLeave={() => setActiveRow(null)}
+      {/* Tape rows — full viewport width */}
+      <div>
+        {SKILLS.map((row, i) => {
+          const isRTL = i % 2 === 1;
+          // Triple for seamless looping at any viewport width
+          const tripled = [...row.tags, ...row.tags, ...row.tags];
+          const speed = SPEEDS[i];
+
+          return (
+            <motion.div
+              key={row.cat}
+              initial={{ opacity: 0, x: isRTL ? 40 : -40 }}
+              animate={inView ? { opacity: 1, x: 0 } : {}}
+              transition={{ duration: 0.65, delay: i * 0.09, ease: [0.16, 1, 0.3, 1] }}
+              className="skill-tape-row"
+              style={{
+                borderTop: '1px solid var(--rule)',
+                display: 'flex',
+                alignItems: 'center',
+                padding: '0.6rem 0',
+                position: 'relative',
+              }}
+            >
+              {/* Category label — fixed left, overlaid */}
+              <div
                 style={{
-                  display: 'grid',
-                  gridTemplateColumns: '160px 1fr auto',
-                  gap: '1.5rem',
+                  position: 'absolute',
+                  left: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: 'clamp(110px, 14vw, 160px)',
+                  display: 'flex',
                   alignItems: 'center',
-                  padding: '1.1rem 0.75rem',
-                  borderBottom: '1px solid var(--rule)',
-                  borderRadius: '4px',
-                  margin: '0 -0.75rem',
-                  position: 'relative',
-                  overflow: 'hidden',
-                  transition: 'background 0.2s',
-                  background: isActive ? 'rgba(255,79,26,0.03)' : 'transparent',
+                  paddingLeft: 'clamp(1.5rem, 5vw, 5.5rem)',
+                  zIndex: 2,
+                  background: `linear-gradient(to right, var(--bg) 0%, var(--bg) 70%, transparent 100%)`,
+                  pointerEvents: 'none',
                 }}
-                className="sm:grid-cols-[200px_1fr_auto]"
               >
-                {/* Hover accent left edge */}
-                <motion.div
-                  style={{
-                    position: 'absolute', left: 0, top: 0, bottom: 0,
-                    width: '2px',
-                    background: 'var(--accent)',
-                    transformOrigin: 'top',
-                  }}
-                  animate={{ scaleY: isActive ? 1 : 0, opacity: isActive ? 1 : 0 }}
-                  transition={{ duration: 0.25, ease: [0.16,1,0.3,1] }}
-                />
-
-                {/* Category label */}
                 <span style={{
                   fontFamily: 'var(--font-geist-mono), monospace',
-                  fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.22em',
-                  color: isActive ? 'var(--text-2)' : 'var(--text-3)',
-                  flexShrink: 0,
-                  transition: 'color 0.2s',
+                  fontSize: '8px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.24em',
+                  color: 'rgba(255,79,26,0.45)',
+                  whiteSpace: 'nowrap',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '2px',
                 }}>
-                  <span style={{
-                    color: isActive ? 'rgba(255,79,26,0.7)' : 'rgba(255,79,26,0.35)',
-                    marginRight: '0.5rem',
-                    transition: 'color 0.2s',
-                  }}>
+                  <span style={{ color: 'rgba(255,79,26,0.25)' }}>
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   {row.cat}
                 </span>
+              </div>
 
-                {/* Tags */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
-                  {row.tags.map((tag, j) => (
-                    <motion.span
-                      key={tag}
-                      initial={{ opacity: 0, scale: 0.88 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.28, delay: i * 0.04 + j * 0.025 }}
-                      className="skill-tag"
-                      style={isActive ? {
-                        borderColor: 'rgba(255,79,26,0.2)',
-                        color: 'var(--text)',
-                        background: 'rgba(255,79,26,0.04)',
-                      } : {}}
-                    >
-                      {tag}
-                    </motion.span>
-                  ))}
-                </div>
+              {/* Fade-out right edge */}
+              <div
+                aria-hidden
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  top: 0,
+                  bottom: 0,
+                  width: '80px',
+                  background: `linear-gradient(to left, var(--bg) 0%, transparent 100%)`,
+                  zIndex: 2,
+                  pointerEvents: 'none',
+                }}
+              />
 
-                {/* Count badge */}
-                <motion.span
-                  animate={{ opacity: isActive ? 1 : 0 }}
-                  transition={{ duration: 0.2 }}
+              {/* Scrolling tape */}
+              <div style={{ overflow: 'hidden', width: '100%' }}>
+                <div
+                  className="skill-tape"
                   style={{
-                    fontFamily: 'var(--font-geist-mono), monospace',
-                    fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.18em',
-                    color: 'rgba(255,79,26,0.5)',
-                    flexShrink: 0,
-                    whiteSpace: 'nowrap',
+                    display: 'flex',
+                    gap: '0.5rem',
+                    width: 'max-content',
+                    paddingLeft: 'clamp(110px, 14vw, 160px)',
+                    animationName: isRTL ? 'tapeRTL' : 'tapeLTR',
+                    animationDuration: `${speed}s`,
+                    animationTimingFunction: 'linear',
+                    animationIterationCount: 'infinite',
                   }}
                 >
-                  {row.tags.length} tools
-                </motion.span>
-              </motion.div>
-            );
-          })}
-        </div>
+                  {tripled.map((tag, j) => (
+                    <span
+                      key={`${tag}-${j}`}
+                      className="skill-tag"
+                      style={{ flexShrink: 0 }}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
+        <div style={{ borderTop: '1px solid var(--rule)' }} />
+      </div>
 
-        {/* Total count */}
+      {/* Footer count */}
+      <div className="container">
         <motion.div
           initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.4, duration: 0.5 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ delay: 0.5, duration: 0.5 }}
           style={{
             marginTop: '1.5rem',
-            display: 'flex', alignItems: 'center', gap: '1rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1rem',
           }}
         >
           <span style={{
             fontFamily: 'var(--font-geist-mono), monospace',
-            fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.24em',
+            fontSize: '9px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.24em',
             color: 'var(--text-3)',
           }}>
             Total
@@ -148,10 +163,12 @@ export default function SkillsSection() {
           <span style={{ flex: 1, height: '1px', background: 'var(--rule)' }} />
           <span style={{
             fontFamily: 'var(--font-heading), "Syne", sans-serif',
-            fontSize: '13px', fontWeight: 700,
-            color: 'var(--accent)', letterSpacing: '-0.01em',
+            fontSize: '13px',
+            fontWeight: 700,
+            color: 'var(--accent)',
+            letterSpacing: '-0.01em',
           }}>
-            {SKILLS.reduce((acc, s) => acc + s.tags.length, 0)} skills across {SKILLS.length} categories
+            {total} skills · {SKILLS.length} categories
           </span>
         </motion.div>
       </div>
