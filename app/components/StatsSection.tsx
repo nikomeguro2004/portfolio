@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 
 const STATS = [
-  { value: 12,  suffix: '+',  label: 'Products Shipped',  sub: 'All live in production'      },
-  { value: 4,   suffix: '',   label: 'Companies',          sub: 'Real environments'            },
-  { value: 18,  suffix: 'mo', label: 'Track Record',       sub: 'End-to-end delivery'          },
-  { value: 95,  suffix: '+',  label: 'Lighthouse Score',   sub: 'Performance across all sites' },
+  { value: 12,  suffix: '+',  label: 'Projects Shipped',  sub: 'All live, all real'              },
+  { value: 4,   suffix: '',   label: 'Companies',          sub: 'Startups to enterprise'          },
+  { value: 18,  suffix: 'mo', label: 'Track Record',       sub: 'From first gig to now'           },
+  { value: 95,  suffix: '+',  label: 'Lighthouse Score',   sub: 'Avg across all sites'            },
 ];
 
 function CountUp({ target, suffix, active }: { target: number; suffix: string; active: boolean }) {

@@ -7,7 +7,7 @@ const PROJECTS = [
   {
     num: '002',
     name: 'GameDen OS',
-    scope: 'IoT-powered gaming café SaaS — Raspberry Pi nodes track every station in real-time. Next.js dashboard for operators, automated session billing, and Flutter mobile apps for owners and customers.',
+    scope: 'Café management system for gaming centres. Raspberry Pi nodes at each station report session state in real-time. Operators get a web dashboard; owners get a Flutter app.',
     timeline: '—',
     metric: 'IoT · Cross-platform',
     category: 'IoT · SaaS',
@@ -20,7 +20,7 @@ const PROJECTS = [
   {
     num: '003',
     name: 'Triangle Field Sandbox',
-    scope: 'Real-time physics engine — Matter.js rigid-body collision, deterministic simulation loop, locked 60 FPS on HTML5 canvas.',
+    scope: 'Matter.js physics playground — rigid-body collision at 60 FPS on HTML5 canvas. Built to understand how game engines handle high object counts.',
     timeline: '4 weeks',
     metric: '60 FPS locked',
     category: 'Creative Engineering',
@@ -33,7 +33,7 @@ const PROJECTS = [
   {
     num: '004',
     name: 'SivaComics Publishing',
-    scope: 'Full-stack comic platform — React + Vite frontend, AWS S3 media, Razorpay subscriptions. Full content delivery pipeline from creator upload to reader.',
+    scope: 'Comic subscription platform — creators upload, readers subscribe. AWS S3 for media, Razorpay for billing, 95+ Lighthouse out of the box.',
     timeline: '6 weeks',
     metric: '95+ Lighthouse',
     category: 'Platform',
@@ -46,7 +46,7 @@ const PROJECTS = [
   {
     num: '005',
     name: 'EssayRaccoon SaaS',
-    scope: 'AI writing SaaS — Next.js, Supabase auth & storage, live Razorpay subscription checkout. Essay generation with real payments from day one.',
+    scope: 'AI writing tool with a working subscription. Supabase for auth, Razorpay for payments. Shipped in 2 weeks — collecting money from day one.',
     timeline: '2 weeks',
     metric: 'Live payments',
     category: 'SaaS Product',
@@ -59,7 +59,7 @@ const PROJECTS = [
   {
     num: '006',
     name: 'MACT Calc',
-    scope: 'Compensation calculator for accident victims — MACT tribunal-ready claim estimates and legal report generation.',
+    scope: 'Motor accident claim calculator used in tribunal filings. Input injury details, get a court-ready compensation estimate and printable legal report.',
     timeline: '8 weeks',
     metric: 'Mobile + Web',
     category: 'LegalTech',
@@ -72,7 +72,7 @@ const PROJECTS = [
   {
     num: '007',
     name: 'Support Chatbot RAG',
-    scope: 'Vector DB + LLM inference pipeline — Pinecone, OpenAI embeddings, streaming responses under 200ms p95.',
+    scope: 'RAG pipeline over a company knowledge base. Pinecone + OpenAI embeddings for retrieval, FastAPI serving it, streaming responses at under 200ms.',
     timeline: '3 weeks',
     metric: '<200ms p95',
     category: 'AI Engineering',
@@ -83,12 +83,12 @@ const PROJECTS = [
     featured: false,
   },
   {
-    num: '007',
+    num: '001',
     name: 'CA Practice OS',
-    scope: 'Enterprise SaaS platform built for Chartered Accountant firms — AI-assisted ITR preparation, automated GST reconciliation, multi-client ledger management, and real-time compliance dashboards. Multi-tenant architecture with role-based access, dual-ORM data layer (Prisma + Drizzle) across PostgreSQL and SQL Server, and a fully offline-capable PWA so CAs can work without connectivity during audits.',
+    scope: 'Practice management system for CA firms handling 100+ clients. ITR prep, GST reconciliation, compliance tracking — all in one place. Offline-first PWA, multi-tenant with RBAC, dual ORM across PostgreSQL and SQL Server.',
     timeline: '—',
     metric: 'PWA · Multi-tenant',
-    category: 'FinTech · Enterprise SaaS',
+    category: 'FinTech · Enterprise',
     status: 'Active',
     href: 'https://github.com/nikomeguro2004',
     image: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=900&q=85&auto=format&fit=crop',
@@ -171,67 +171,69 @@ function FeaturedCard({ p }: { p: typeof PROJECTS[0] }) {
           (e.currentTarget as HTMLElement).style.boxShadow = 'none';
         }}
       >
-        {/* Image — right half, more visible */}
-        <div style={{
-          position: 'absolute', top: 0, right: 0, bottom: 0, width: '58%',
-          backgroundImage: `url(${p.image})`, backgroundSize: 'cover', backgroundPosition: 'center',
-          opacity: 0.28,
-          transition: 'opacity 0.4s ease',
-        }}
-          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = '0.38'; }}
-          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = '0.28'; }}
+        {/* Background image — full on mobile, right half on desktop */}
+        <div
+          className="featured-img"
+          style={{
+            position: 'absolute', top: 0, right: 0, bottom: 0,
+            backgroundImage: `url(${p.image})`, backgroundSize: 'cover', backgroundPosition: 'center',
+            opacity: 0.22, transition: 'opacity 0.4s ease',
+          }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = '0.32'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = '0.22'; }}
         />
-        <div style={{
-          position: 'absolute', top: 0, right: 0, bottom: 0, width: '58%',
-          background: 'linear-gradient(to right, var(--surface) 0%, rgba(237,233,223,0.2) 55%, transparent 85%)',
+        {/* Gradient overlay */}
+        <div className="featured-grad" style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(to right, var(--surface) 40%, rgba(237,233,223,0.6) 70%, transparent 100%)',
         }} />
 
-        {/* Huge project number watermark */}
-        <span style={{
-          position: 'absolute', top: '-0.1em', right: '0.1em',
-          fontFamily: 'var(--font-heading), "Syne", sans-serif',
-          fontSize: 'clamp(6rem, 14vw, 12rem)', fontWeight: 800,
-          letterSpacing: '-0.07em', lineHeight: 1,
-          color: 'var(--accent)', opacity: 0.04, userSelect: 'none', pointerEvents: 'none',
-        }}>
-          {p.num}
-        </span>
-
-        {/* Content */}
-        <div style={{ position: 'relative', zIndex: 1, padding: '2rem 2.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1, maxWidth: '60%' }}>
+        {/* Content — full width on mobile, 60% on desktop */}
+        <div
+          className="featured-card-content"
+          style={{ position: 'relative', zIndex: 1, padding: '1.75rem 1.75rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}
+        >
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
               <span style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.24em', color: 'rgba(255,79,26,0.5)' }}>Featured</span>
               <span style={{ height: '1px', flex: 1, background: 'var(--rule)' }} />
               <span className="label-mono">{p.category}</span>
             </div>
-            <h3 style={{ fontFamily: 'var(--font-heading), "Syne", sans-serif', fontSize: 'clamp(1.6rem, 3vw, 2.5rem)', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '0.75rem' }}>
+            <h3
+              className="featured-card-title"
+              style={{ fontFamily: 'var(--font-heading), "Syne", sans-serif', fontSize: 'clamp(1.5rem, 3vw, 2.4rem)', fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.1, marginBottom: '0.65rem' }}
+            >
               {p.name}
             </h3>
-            <p style={{ fontSize: '15px', lineHeight: 1.75, color: 'var(--text-2)', maxWidth: '380px' }}>{p.scope}</p>
+            <p
+              className="featured-card-desc"
+              style={{ fontSize: '13.5px', lineHeight: 1.65, color: 'var(--text-2)' }}
+            >
+              {p.scope}
+            </p>
           </div>
 
           {/* Stack tags */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginTop: '1rem' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem', marginTop: '0.9rem' }}>
             {p.stack.map(s => (
               <span key={s} style={{
                 fontFamily: 'var(--font-geist-mono), monospace', fontSize: '9px',
                 textTransform: 'uppercase', letterSpacing: '0.16em',
                 color: 'var(--text-3)', border: '1px solid var(--rule)',
-                borderRadius: '2px', padding: '0.2rem 0.55rem',
+                borderRadius: '2px', padding: '0.2rem 0.5rem',
                 background: 'rgba(0,0,0,0.03)',
               }}>{s}</span>
             ))}
           </div>
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', marginTop: '1.25rem', paddingTop: '1.25rem', borderTop: '1px solid var(--rule)', alignItems: 'flex-end' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.25rem', marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--rule)', alignItems: 'flex-end' }}>
             {[
-              { l: 'Key Metric', v: p.metric },
+              { l: 'Metric', v: p.metric },
               { l: 'Status', v: p.status },
             ].map(d => (
               <div key={d.l}>
-                <p className="label-mono" style={{ marginBottom: '3px', color: 'rgba(255,79,26,0.4)' }}>{d.l}</p>
-                <p style={{ fontFamily: 'var(--font-heading), "Syne", sans-serif', fontSize: '13px', fontWeight: 600, color: d.l === 'Key Metric' ? 'var(--accent)' : 'var(--text)' }}>{d.v}</p>
+                <p className="label-mono" style={{ marginBottom: '2px', color: 'rgba(255,79,26,0.4)' }}>{d.l}</p>
+                <p style={{ fontFamily: 'var(--font-heading), "Syne", sans-serif', fontSize: '12px', fontWeight: 600, color: d.l === 'Metric' ? 'var(--accent)' : 'var(--text)' }}>{d.v}</p>
               </div>
             ))}
             <a
@@ -243,7 +245,7 @@ function FeaturedCard({ p }: { p: typeof PROJECTS[0] }) {
                 fontFamily: 'var(--font-geist-mono), monospace', fontSize: '10px',
                 textTransform: 'uppercase', letterSpacing: '0.14em', fontWeight: 700,
                 color: 'var(--accent)', textDecoration: 'none',
-                padding: '0.5rem 0.9rem', border: '1px solid rgba(255,79,26,0.3)',
+                padding: '0.45rem 0.85rem', border: '1px solid rgba(255,79,26,0.3)',
                 borderRadius: '3px', transition: 'background 0.2s, transform 0.2s',
               }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'rgba(255,79,26,0.06)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)'; }}
@@ -378,12 +380,12 @@ export default function ProjectGrid() {
           viewport={{ once: true, amount: 0.6 }}
           transition={{ duration: 0.5 }}
         >
-          Every card is a real product shipped to production. No concepts, no mockups.
+          12+ projects, all live. These aren&apos;t case studies — they&apos;re URLs you can open.
         </motion.p>
 
         <FeaturedCard p={featured} />
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '0.875rem' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ gap: '0.875rem' }}>
           {rest.map((p, i) => <ProjectCard key={p.num} p={p} i={i} />)}
         </div>
       </div>

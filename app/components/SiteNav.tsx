@@ -61,9 +61,9 @@ export default function SiteNav() {
         S·ADI
       </a>
 
-      {/* Center links — absolutely positioned for true center */}
-      <nav style={{
-        display: 'flex', alignItems: 'center', gap: '0.125rem',
+      {/* Center links — hidden on mobile, absolutely centered on md+ */}
+      <nav className="hidden md:flex" style={{
+        alignItems: 'center', gap: '0.125rem',
         position: 'absolute', left: '50%', transform: 'translateX(-50%)',
       }}>
         {NAV_ITEMS.map((item) => (

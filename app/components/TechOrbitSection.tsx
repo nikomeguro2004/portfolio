@@ -62,12 +62,12 @@ export default function TechOrbitSection() {
       }}
     >
       <div
-        className="container"
+        className="container orbit-container"
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          height: '520px',
+          minHeight: '520px',
           position: 'relative',
           gap: '2rem',
         }}
@@ -130,14 +130,14 @@ export default function TechOrbitSection() {
           </div>
         </motion.div>
 
-        {/* ─ Right: Orbit system ─────────────────────────────────── */}
+        {/* ─ Right: Orbit system — hidden on mobile ──────────────── */}
         <div
+          className="hidden md:flex"
           style={{
             flex: 1,
             height: '100%',
             overflow: 'hidden',
             position: 'relative',
-            display: 'flex',
             alignItems: 'center',
             justifyContent: 'flex-end',
           }}

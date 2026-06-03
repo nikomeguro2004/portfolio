@@ -69,8 +69,8 @@ export default function ExperienceSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          Four companies. Real products, real deadlines, real users.
-          Every role was production — no sandbox work.
+          Four companies in 18 months. Joined when things needed to ship,
+          left having shipped them.
         </motion.p>
 
         <div>
@@ -105,37 +105,35 @@ export default function ExperienceSection() {
               )}
 
               {/* Top row: company name + period */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', justifyContent: 'space-between', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '1rem', flexWrap: 'wrap' }}>
-                  {/* Company in display scale */}
+              <div style={{ marginBottom: '0.5rem' }}>
+                {/* Company + role label — stack on mobile */}
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '0.4rem' }}>
                   <h3 style={{
                     fontFamily: 'var(--font-heading), "Syne", sans-serif',
-                    fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+                    fontSize: 'clamp(1.75rem, 5vw, 3.5rem)',
                     fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1,
                     color: role.current ? 'var(--text)' : 'var(--text-2)',
                   }}>
                     {role.company}
                   </h3>
-                  {/* Role in small caps */}
                   <span style={{
                     fontFamily: 'var(--font-geist-mono), monospace',
-                    fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.22em',
+                    fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.22em',
                     color: role.current ? 'var(--accent)' : 'var(--text-3)',
                   }}>
                     {role.role}
                   </span>
                 </div>
-
-                {/* Period + location */}
-                <div style={{ textAlign: 'right' }}>
+                {/* Period + location + current badge — always on its own row */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
                   {role.current && (
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '0.35rem', marginBottom: '2px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
                       <span style={{ width:'5px',height:'5px',borderRadius:'50%',background:'var(--accent)' }} className="animate-pulse" />
                       <span style={{ fontFamily: 'var(--font-geist-mono), monospace', fontSize: '9px', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--accent)' }}>Current</span>
                     </div>
                   )}
                   <p className="label-mono">{role.period}</p>
-                  <p className="label-mono" style={{ marginTop: '2px' }}>{role.location}</p>
+                  <p className="label-mono">{role.location}</p>
                 </div>
               </div>
 
@@ -143,7 +141,7 @@ export default function ExperienceSection() {
               <div style={{ height: '1px', background: 'var(--rule)', margin: '1.25rem 0' }} />
 
               {/* Bullets + Tags in two columns */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '2rem', alignItems: 'start' }} className="sm:grid-cols-[1fr_200px]">
+              <div className="grid grid-cols-1 sm:grid-cols-[1fr_180px]" style={{ gap: '1.25rem', alignItems: 'start' }}>
                 <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
                   {role.bullets.map(b => (
                     <li key={b} style={{ display: 'flex', gap: '0.75rem', fontSize: '15px', color: 'var(--text-2)', lineHeight: 1.7 }}>

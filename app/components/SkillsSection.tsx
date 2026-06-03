@@ -29,8 +29,8 @@ export default function SkillsSection() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
         >
-          30+ tools across the full stack — every one used in a shipped product.
-          No padding tools, no checkbox skills.
+          30+ tools. Every one comes from a project that shipped — not from a
+          course, not from a tutorial.
         </motion.p>
       </div>
 

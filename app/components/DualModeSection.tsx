@@ -33,6 +33,7 @@ export default function DualModeSection() {
           position: 'absolute',
           inset: 0,
           zIndex: 0,
+          overflow: 'hidden',
         }}
       >
         {isNear && (
@@ -65,6 +66,19 @@ export default function DualModeSection() {
             <Spline scene={SCENE_URL} style={{ width: '100%', height: '100%' }} />
           </Suspense>
         )}
+        {/* Hide Spline watermark */}
+        <div
+          aria-hidden
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            right: 0,
+            width: '180px',
+            height: '48px',
+            background: '#080C18',
+            zIndex: 10,
+          }}
+        />
       </div>
 
       {/* ── Side vignettes to keep text readable ───────────────────── */}
@@ -95,6 +109,7 @@ export default function DualModeSection() {
 
       {/* ── Content layer ──────────────────────────────────────────── */}
       <div
+        className="dual-content"
         style={{
           position: 'relative',
           zIndex: 2,
@@ -102,8 +117,8 @@ export default function DualModeSection() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '6rem clamp(2rem, 7vw, 9rem)',
-          gap: '2rem',
+          padding: '6rem clamp(1.25rem, 7vw, 9rem)',
+          gap: '1rem',
         }}
       >
         {/* ─ Left: I CAN DESIGN ──────────────────────────────────── */}
@@ -138,6 +153,7 @@ export default function DualModeSection() {
             </p>
 
             <h2
+              className="dual-heading"
               style={{
                 fontFamily: 'var(--font-heading), "Syne", sans-serif',
                 fontSize: 'clamp(2.8rem, 5.5vw, 6rem)',
@@ -154,6 +170,7 @@ export default function DualModeSection() {
 
             {/* Animated underline */}
             <motion.div
+              className="dual-underline"
               animate={{ width: active === 'design' ? '100%' : '36%' }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               style={{
@@ -194,11 +211,12 @@ export default function DualModeSection() {
           </motion.div>
         </motion.button>
 
-        {/* ─ Center spacer (robot lives here in the BG) ───────────── */}
-        <div style={{ flex: 1, minWidth: 0 }} />
+        {/* ─ Center spacer (robot lives here in the BG) — hidden on mobile ── */}
+        <div className="dual-spacer" style={{ flex: 1, minWidth: 0 }} />
 
         {/* ─ Right: I CAN DEVELOP ────────────────────────────────── */}
         <motion.button
+          className="dual-develop-btn"
           onHoverStart={() => setActive('develop')}
           onHoverEnd={() => setActive(null)}
           style={{
@@ -230,6 +248,7 @@ export default function DualModeSection() {
             </p>
 
             <h2
+              className="dual-heading"
               style={{
                 fontFamily: 'var(--font-heading), "Syne", sans-serif',
                 fontSize: 'clamp(2.8rem, 5.5vw, 6rem)',
@@ -247,6 +266,7 @@ export default function DualModeSection() {
 
             {/* Animated underline — grows from right */}
             <motion.div
+              className="dual-underline"
               animate={{ width: active === 'develop' ? '100%' : '36%' }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               style={{

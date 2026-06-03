@@ -574,9 +574,86 @@ section {
 
 /* ── Hero mobile ─────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .hero-name { font-size: clamp(3.5rem, 18vw, 5.5rem); }
+  /* Keep name on one line, small enough to fit 375px minus padding */
+  .hero-name {
+    font-size: clamp(2rem, 11vw, 5rem);
+    white-space: nowrap;
+    overflow: visible;
+  }
   .section-display { font-size: clamp(2rem, 8vw, 3rem); }
   .btn-primary, .btn-ghost { padding: 0.625rem 1.125rem; font-size: 0.65rem; }
+  /* Tighten container on small screens */
+  .container { padding-left: clamp(1rem, 4vw, 5.5rem); padding-right: clamp(1rem, 4vw, 5.5rem); }
+}
+
+/* ── Skills tape — mobile: slower ───────────────────────────────── */
+@media (max-width: 640px) {
+  .skill-tape { animation-duration: 30s !important; }
+}
+
+/* ── Services — cap hover font on mobile ────────────────────────── */
+@media (max-width: 640px) {
+  /* Framer Motion animates fontSize via inline style — we cap it with max-width approach */
+  .service-title-wrap { overflow: hidden; }
+}
+
+/* ── Featured project card — responsive layout ───────────────────── */
+.featured-img   { width: 100%; }
+.featured-grad  { background: linear-gradient(to bottom, rgba(237,233,223,0.1) 0%, var(--surface) 60%) !important; }
+
+/* Desktop: image on right half, content left 60% */
+@media (min-width: 640px) {
+  .featured-img  { width: 58%; left: auto; }
+  .featured-grad { background: linear-gradient(to right, var(--surface) 40%, rgba(237,233,223,0.6) 70%, transparent 100%) !important; }
+  .featured-card-content { max-width: 60%; }
+}
+
+/* Mobile: full width content, image as bg */
+@media (max-width: 639px) {
+  .featured-card-content { max-width: 100%; }
+  .featured-card-title   { font-size: 1.4rem !important; }
+  .featured-card-desc    { font-size: 13px !important; max-width: 100% !important; }
+}
+
+/* ── TechOrbit — collapse height on mobile ───────────────────────── */
+@media (max-width: 768px) {
+  .orbit-container { min-height: auto !important; padding-top: 2.5rem; padding-bottom: 2.5rem; }
+}
+
+/* ── DualMode section — mobile: stack vertically, center both ───── */
+@media (max-width: 768px) {
+  .dual-content {
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3rem !important;
+    padding: 4rem 2rem !important;
+  }
+  .dual-spacer { display: none !important; }
+  .dual-heading {
+    font-size: clamp(2rem, 10vw, 3.2rem) !important;
+    text-align: center !important;
+  }
+  /* Force right button text to center on mobile */
+  .dual-develop-btn {
+    text-align: center !important;
+  }
+  .dual-develop-btn h2 {
+    text-align: center !important;
+  }
+  /* Underline lines under each heading — centre them */
+  .dual-underline {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+/* ── StatsSection — 2-col on mobile already via sm:grid-cols-4 ───── */
+/* ── ContactBlock headline — constrain on mobile ─────────────────── */
+@media (max-width: 640px) {
+  .contact-headline {
+    font-size: clamp(2.5rem, 14vw, 4rem) !important;
+  }
 }
 
 /* ── Loading sequence (inherited) ────────────────────────────────── */

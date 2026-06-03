@@ -62,7 +62,7 @@ export default function ContactBlock() {
             }}>
               07 / Contact
             </p>
-            <h2 style={{
+            <h2 className="contact-headline" style={{
               fontFamily: 'var(--font-heading), "Syne", sans-serif',
               fontSize: 'clamp(3rem, 11vw, 10rem)',
               fontWeight: 800, letterSpacing: '-0.05em', lineHeight: 0.88,

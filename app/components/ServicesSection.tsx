@@ -7,43 +7,43 @@ const SERVICES = [
   {
     num: '01',
     title: 'Product Engineering',
-    desc: 'From concept to deployment — balancing technical excellence with user experience and shipping velocity. I own the entire delivery cycle.',
-    chips: ['Product Discovery', 'Execution Strategy', 'Delivery Ownership'],
+    desc: 'Take a brief, figure out what to build, build it. I handle the full cycle — spec, architecture, development, deployment. No handoffs.',
+    chips: ['Scoping', 'Full Delivery', 'Launch'],
     metric: '12+ shipped',
   },
   {
     num: '02',
     title: 'Full-Stack Development',
-    desc: 'End-to-end applications with React, Next.js, Node.js, and modern cloud infrastructure that scales from day one.',
-    chips: ['Frontend Architecture', 'Backend Design', 'Platform Integration'],
+    desc: 'React/Next.js on the front, Node or FastAPI on the back, Postgres underneath. Clean APIs, proper auth, something you can hand off to another developer.',
+    chips: ['Frontend', 'Backend', 'Databases'],
     metric: '30+ tools',
   },
   {
     num: '03',
-    title: 'AI & Machine Learning',
-    desc: 'LLM integration, RAG systems, vector search, and ML inference pipelines — applied AI for real-world product features.',
-    chips: ['Intelligent Workflows', 'Inference Pipelines', 'Applied AI'],
+    title: 'AI Integration',
+    desc: 'LLMs, RAG pipelines, vector search — the useful parts of AI, wired into your product. Not demos. Things your users actually interact with.',
+    chips: ['LLM Wiring', 'RAG Pipelines', 'OpenAI / Ollama'],
     metric: 'LLMs + RAG',
   },
   {
     num: '04',
-    title: 'Cloud Architecture',
-    desc: 'Scalable AWS solutions with Docker, CI/CD automation, and reliability engineering for production-grade systems.',
-    chips: ['Scalable Infrastructure', 'Deployment Automation', 'Reliability'],
+    title: 'Cloud & DevOps',
+    desc: 'AWS, Docker, CI/CD. Get your app deployed, auto-scaling, and not waking anyone up at 3am. Lambda, ECS, Vercel — whatever fits.',
+    chips: ['AWS', 'Docker', 'CI/CD'],
     metric: 'AWS + Docker',
   },
   {
     num: '05',
-    title: 'Security & DevOps',
-    desc: 'Web security best practices, automated deployment pipelines, and quality gates that keep production stable.',
-    chips: ['Security Hardening', 'Operational Quality', 'Release Discipline'],
-    metric: 'CI/CD + QA',
+    title: 'Security & Auth',
+    desc: 'RBAC, OAuth, JWT, session management — done properly. Not bolted on later. Supabase, NextAuth, or custom — set up before the first user signs in.',
+    chips: ['Auth & RBAC', 'Secure APIs', 'Supabase / NextAuth'],
+    metric: 'Zero breaches',
   },
   {
     num: '06',
-    title: 'Commerce & Content',
-    desc: 'Subscription-ready product stacks with Stripe/Razorpay integrations, CMS operations, and secure checkout journeys.',
-    chips: ['Checkout Experience', 'Subscription Flows', 'CMS Operations'],
+    title: 'Payments & CMS',
+    desc: 'Stripe or Razorpay — subscriptions, one-time, webhooks, refunds. Sanity or Supabase for content. Working checkout flows, not just UI mocks.',
+    chips: ['Stripe / Razorpay', 'Subscriptions', 'Sanity CMS'],
     metric: 'Stripe + CMS',
   },
 ];
@@ -61,8 +61,8 @@ export default function ServicesSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          Six capability areas — every one backed by shipped products.
-          I own the full delivery, not just a layer.
+          Six areas I can own end-to-end. Each one comes from having
+          actually built it, not just read about it.
         </motion.p>
       </div>
 
@@ -242,8 +242,8 @@ export default function ServicesSection() {
                     </AnimatePresence>
                   </div>
 
-                  {/* Metric + arrow */}
-                  <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.3rem' }}>
+                  {/* Metric + arrow — hidden on mobile to prevent overflow */}
+                  <div className="hidden sm:flex" style={{ flexShrink: 0, flexDirection: 'column', alignItems: 'flex-end', gap: '0.3rem' }}>
                     <motion.span
                       animate={{ opacity: isHov ? 1 : 0, y: isHov ? 0 : 4 }}
                       transition={{ duration: 0.2 }}
@@ -295,7 +295,7 @@ export default function ServicesSection() {
             fontStyle: 'italic',
           }}
         >
-          &ldquo;Impress nobody, ship everything.&rdquo;
+          &ldquo;Build something people can use. The rest follows.&rdquo;
         </motion.p>
       </div>
     </section>

@@ -6,31 +6,31 @@ import CardSwap, { Card } from './CardSwap';
 const STEPS = [
   {
     num: '01',
-    title: 'Discover',
+    title: 'Scope',
     verb: 'Mapping Goals',
-    desc: 'Define scope, user journeys, and delivery constraints before a single line of code is written.',
+    desc: 'What are we building, for who, and by when? Scope, constraints, and what "done" looks like — agreed before writing any code.',
     tags: ['Requirements', 'Risk Framing', 'Timeline'],
   },
   {
     num: '02',
-    title: 'Design',
-    verb: 'Architecting',
-    desc: 'Select the right stack and architect for scale, maintainability, and first-week velocity.',
-    tags: ['Stack Fit', 'System Design', 'API Contracts'],
+    title: 'Architect',
+    verb: 'Designing',
+    desc: 'Pick the stack that fits the timeline and the team. Design the data model and API contracts before the first sprint.',
+    tags: ['Stack Selection', 'Data Modelling', 'API Design'],
   },
   {
     num: '03',
     title: 'Ship',
     verb: 'Deploying',
-    desc: 'Production-ready features released in weekly loops with QA gates and measurable outcomes.',
-    tags: ['Weekly Loops', 'Quality Gates', 'CI/CD'],
+    desc: 'Working software out every week. Not a demo — deployed, tested, measurable. Fix what breaks, keep what works.',
+    tags: ['Weekly Deploy', 'QA Gates', 'CI/CD'],
   },
   {
     num: '04',
-    title: 'Evolve',
+    title: 'Improve',
     verb: 'Iterating',
-    desc: 'Post-launch telemetry drives the next loop — performance tuning, reliability, growth.',
-    tags: ['Live Signals', 'Optimization', 'Scaling'],
+    desc: 'Look at what users actually do. Fix the slow parts, fix the confusing parts. Keep shipping.',
+    tags: ['Analytics', 'Performance', 'Iteration'],
   },
 ];
 
@@ -39,15 +39,10 @@ export default function ProcessSection() {
     <section id="process" className="py-20 overflow-hidden">
       <div className="container">
         {/* ── 2-col layout: left narrative + right CardSwap ── */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: 'clamp(3rem, 6vw, 7rem)',
-            alignItems: 'center',
-          }}
-          className="lg:grid-cols-2 grid-cols-1"
-        >
+        <div className="grid grid-cols-1 lg:grid-cols-2" style={{
+          gap: 'clamp(3rem, 6vw, 7rem)',
+          alignItems: 'center',
+        }}>
           {/* Left — narrative + step index */}
           <motion.div
             initial={{ opacity: 0, x: -24 }}
@@ -56,8 +51,8 @@ export default function ProcessSection() {
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           >
             <p className="body-text mb-10 max-w-md">
-              Four phases, then repeat. No surprises, no scope creep —
-              just a loop that ships working software every single week.
+              Four phases, then repeat. Scope first, architecture second,
+              then ship — and do it again the following week.
             </p>
 
             {/* Numbered step index */}
@@ -123,12 +118,13 @@ export default function ProcessSection() {
                 color: 'var(--text-3)',
               }}
             >
-              Loop repeats until the product is done.
+              Steps 3 and 4 repeat until the job is done.
             </motion.p>
           </motion.div>
 
-          {/* Right — CardSwap with process step cards */}
+          {/* Right — CardSwap with process step cards — hidden on mobile */}
           <motion.div
+            className="hidden lg:block"
             initial={{ opacity: 0, x: 24 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.1 }}

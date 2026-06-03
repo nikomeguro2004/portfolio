@@ -61,10 +61,10 @@ function ChapterLabel({ num, title, sub }: { num: string; title: string; sub: st
       <span className="chapter-num-bg" aria-hidden="true">{num}</span>
       <div className="chapter-bar relative z-10">
         <span className="label-mono" style={{ color: 'rgba(255,79,26,0.45)' }}>{num}</span>
-        <span className="h-3 w-px" style={{ background: 'var(--rule)' }} />
+        <span className="h-3 w-px hidden sm:block" style={{ background: 'var(--rule)' }} />
         <span className="chapter-title">{title}</span>
         <span className="flex-1" style={{ height: '1px', background: 'var(--rule)', margin: '0 0.25rem' }} />
-        <span className="label-mono">{sub}</span>
+        <span className="label-mono hidden sm:inline">{sub}</span>
       </div>
     </motion.div>
   );
@@ -173,7 +173,7 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════
           01 — HERO
       ════════════════════════════════════════════════════════════════ */}
-      <section id="home" className="relative min-h-screen flex flex-col justify-center pt-24 pb-16 overflow-hidden">
+      <section id="home" className="relative min-h-screen flex flex-col justify-center pt-24 pb-16 overflow-x-hidden">
 
         {/* Floating ambient orbs */}
         <div className="pointer-events-none absolute inset-0" style={{ zIndex: 0 }}>
@@ -264,9 +264,9 @@ export default function Home() {
                 Full-Stack Engineer<br />&amp; AI Developer
               </h2>
               <p className="body-text max-w-md mb-8" style={{ lineHeight: 1.8 }}>
-                Not wireframes — deployed products.
-                12+ shipped across startup, SaaS, and AI domains in 18 months.
-                If it has a deadline and a stack, I ship it.
+                I build things that go live — 12+ projects shipped across
+                startups, SaaS, and AI in 18 months. Give me a stack and a
+                deadline. I&apos;ll handle the rest.
               </p>
 
               {/* CTAs */}
@@ -280,7 +280,7 @@ export default function Home() {
               </div>
 
               {/* Stats */}
-              <div className="pt-6 flex flex-wrap gap-8" style={{ borderTop: '1px solid var(--rule)' }}>
+              <div className="pt-6 grid grid-cols-4 gap-3 sm:flex sm:flex-wrap sm:gap-8" style={{ borderTop: '1px solid var(--rule)' }}>
                 {[
                   { value: '12+', label: 'Shipped'    },
                   { value: '30+', label: 'Stack'      },
@@ -324,7 +324,7 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════
           02 — SHIP RECORD
       ════════════════════════════════════════════════════════════════ */}
-      <ChapterLabel num="02" title="Ship Record" sub="Every card is live production" />
+      <ChapterLabel num="02" title="Ship Record" sub="Open most of these in a new tab" />
       <ProjectGrid />
 
       {/* ════════════════════════════════════════════════════════════════
@@ -340,7 +340,7 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════
           03 — PROCESS
       ════════════════════════════════════════════════════════════════ */}
-      <ChapterLabel num="03" title="Process" sub="How I think and ship" />
+      <ChapterLabel num="03" title="Process" sub="How a project goes from idea to deployed" />
       <ProcessSection />
 
       <div className="section-thread" aria-hidden="true" />
@@ -348,7 +348,7 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════
           04 — EXPERIENCE
       ════════════════════════════════════════════════════════════════ */}
-      <ChapterLabel num="04" title="Experience" sub="Production environments, real users" />
+      <ChapterLabel num="04" title="Experience" sub="Four companies, eighteen months" />
       <ExperienceSection />
 
       {/* ════════════════════════════════════════════════════════════════
@@ -359,7 +359,7 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════
           05 — SERVICES
       ════════════════════════════════════════════════════════════════ */}
-      <ChapterLabel num="05" title="Services" sub="Six areas, all shipped to production" />
+      <ChapterLabel num="05" title="Services" sub="What I can take ownership of, end to end" />
       <ServicesSection />
 
       <div className="section-thread" aria-hidden="true" />
@@ -367,7 +367,7 @@ export default function Home() {
       {/* ════════════════════════════════════════════════════════════════
           06 — SKILLS
       ════════════════════════════════════════════════════════════════ */}
-      <ChapterLabel num="06" title="Skills" sub="30+ tools — all used in production" />
+      <ChapterLabel num="06" title="Skills" sub="Every tool here has shipped in something" />
       <SkillsSection />
 
       <div className="section-thread" aria-hidden="true" />
