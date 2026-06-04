@@ -75,7 +75,7 @@ body {
   font-family: var(--font-body), "Epilogue", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
-  min-height: 100vh;
+  min-height: 100dvh;
   position: relative;
 }
 
@@ -628,6 +628,9 @@ section {
     justify-content: center !important;
     gap: 3rem !important;
     padding: 4rem 2rem !important;
+  }
+  .dual-vignette {
+    background: linear-gradient(to bottom, #080C18 0%, rgba(8,12,24,0.82) 15%, rgba(8,12,24,0.82) 85%, #080C18 100%) !important;
   }
   .dual-spacer { display: none !important; }
   .dual-heading {

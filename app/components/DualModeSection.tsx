@@ -21,7 +21,7 @@ export default function DualModeSection() {
       style={{
         position: 'relative',
         background: '#080C18',
-        minHeight: '100vh',
+        minHeight: '100dvh',
         overflow: 'hidden',
         display: 'flex',
         alignItems: 'center',
@@ -83,6 +83,7 @@ export default function DualModeSection() {
 
       {/* ── Side vignettes to keep text readable ───────────────────── */}
       <div
+        className="dual-vignette"
         aria-hidden="true"
         style={{
           position: 'absolute',

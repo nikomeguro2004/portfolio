@@ -82,7 +82,7 @@ function ProjectNavigator({
 }) {
   return (
     <aside className="hidden self-start md:sticky md:top-28 md:block md:h-fit">
-      <div className="rounded-xl border border-white/10 bg-black/20 p-4 backdrop-blur-sm md:max-h-[calc(100vh-8rem)] md:overflow-y-auto">
+      <div className="rounded-xl border border-white/10 bg-black/20 p-4 backdrop-blur-sm md:max-h-[calc(100dvh-8rem)] md:overflow-y-auto">
         <p className="mb-2 text-xs uppercase tracking-[0.16em]" style={{ color: 'var(--text-tertiary)' }}>Project Navigator</p>
         <div className="mb-4">
           <div className="mb-2 h-1.5 rounded-full bg-white/10">
