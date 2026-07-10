@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 
 const NAV_ITEMS = [
@@ -12,6 +13,7 @@ const NAV_ITEMS = [
 ];
 
 export default function SiteNav() {
+  const router = useRouter();
   const [active, setActive] = useState('');
   const [scrolled, setScrolled] = useState(false);
   const [visible, setVisible] = useState(true);
@@ -36,7 +38,7 @@ export default function SiteNav() {
 
   const scrollTo = (id: string, href?: string) => {
     if (href && href.startsWith('/')) {
-      window.location.href = href;
+      router.push(href);
       return;
     }
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });

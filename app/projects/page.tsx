@@ -178,7 +178,7 @@ function ProjectTimelineCard({
         <div className="relative">
           <div className="flex flex-col md:flex-row gap-6">
             <div className="flex-1">
-              <div className="mb-4 flex flex-wrap items-start justify-between gap-4 pr-24">
+              <div className="mb-4 flex flex-wrap items-start justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-3">
                     <h2 className="text-xl font-bold text-white">{project.title}</h2>
@@ -233,17 +233,6 @@ function ProjectTimelineCard({
                 ))}
               </div>
             </div>
-            {project.image && (
-              <div className="md:w-5/12 shrink-0 mt-4 md:mt-0 relative group rounded-xl overflow-hidden border border-white/10 aspect-video md:aspect-auto">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img 
-                  src={project.image} 
-                  alt={project.title} 
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
-              </div>
-            )}
           </div>
         </div>
       </MagneticCard>
