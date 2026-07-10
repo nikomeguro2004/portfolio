@@ -138,7 +138,8 @@ export const metadata: Metadata = {
     // Location
     "Chennai Developer", "Tamil Nadu Developer", "India Developer",
     "Remote Developer India", "Freelance Developer India",
-    "Full Stack Developer Chennai",
+    "Full Stack Developer Chennai", "Freelance Full Stack Developer",
+    "Independent Web Developer",
     // Hiring intent
     "Hire Full Stack Developer", "Hire React Developer India",
     "Full Stack Developer Portfolio", "Developer Portfolio",

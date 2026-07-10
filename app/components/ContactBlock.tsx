@@ -11,7 +11,7 @@ const SOCIALS = [
 
 const DETAILS = [
   { label: 'Response',     value: 'Within 24 hours'        },
-  { label: 'Availability', value: 'Internship / Full-time' },
+  { label: 'Availability', value: 'Freelance / Contract' },
   { label: 'Mode',         value: 'Async-first'            },
   { label: 'Focus',        value: 'Full-Stack + AI'        },
 ];

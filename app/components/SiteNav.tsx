@@ -4,12 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
 const NAV_ITEMS = [
-  { id: 'work',       label: 'Work'       },
-  { id: 'process',    label: 'Process'    },
-  { id: 'experience', label: 'Experience' },
-  { id: 'services',   label: 'Services'   },
-  { id: 'skills',     label: 'Skills'     },
-  { id: 'contact',    label: 'Contact'    },
+  { id: 'projects',   label: 'Projects', href: '/projects' },
+  { id: 'process',    label: 'Process', href: '/#process' },
+  { id: 'services',   label: 'Services', href: '/#services' },
+  { id: 'skills',     label: 'Skills', href: '/#skills' },
+  { id: 'contact',    label: 'Contact', href: '/#contact' },
 ];
 
 export default function SiteNav() {
@@ -35,7 +34,13 @@ export default function SiteNav() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  const scrollTo = (id: string, href?: string) => {
+    if (href && href.startsWith('/')) {
+      window.location.href = href;
+      return;
+    }
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <motion.header
@@ -69,7 +74,7 @@ export default function SiteNav() {
         {NAV_ITEMS.map((item) => (
           <button
             key={item.id}
-            onClick={() => scrollTo(item.id)}
+            onClick={() => scrollTo(item.id, item.href)}
             style={{
               position: 'relative', background: 'none', border: 'none',
               padding: '0.4rem 0.75rem', borderRadius: '100px',

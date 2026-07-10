@@ -4,9 +4,7 @@ import { motion } from 'framer-motion';
 import { MagneticButton } from './components/MagneticInteractions';
 import SiteNav from './components/SiteNav';
 import DeliveryPanel from './components/DeliveryPanel';
-import ProjectGrid from './components/ProjectGrid';
 import ProcessSection from './components/ProcessSection';
-import ExperienceSection from './components/ExperienceSection';
 import ServicesSection from './components/ServicesSection';
 import SkillsSection from './components/SkillsSection';
 import ContactBlock from './components/ContactBlock';
@@ -226,7 +224,7 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-2">
               <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ background: '#4ade80' }} />
-              <span className="label-mono" style={{ color: 'rgba(74,222,128,0.8)' }}>Open to Work</span>
+              <span className="label-mono" style={{ color: 'rgba(74,222,128,0.8)' }}>Available for Contract</span>
             </div>
           </motion.div>
 
@@ -264,14 +262,13 @@ export default function Home() {
                 Full-Stack Engineer<br />&amp; AI Developer
               </h2>
               <p className="body-text max-w-md mb-8" style={{ lineHeight: 1.8 }}>
-                I build things that go live — 12+ projects shipped across
-                startups, SaaS, and AI in 18 months. Give me a stack and a
-                deadline. I&apos;ll handle the rest.
+                I architect and build enterprise-grade software that scales. 
+                Specializing in high-performance SaaS and AI-driven platforms, I deliver robust solutions from concept to production with absolute ownership.
               </p>
 
               {/* CTAs */}
               <div className="flex flex-wrap gap-3 mb-9">
-                <MagneticButton href="#work" className="btn-primary" strength={0.15}>
+                <MagneticButton href="/projects" className="btn-primary" strength={0.15}>
                   See Work ↗
                 </MagneticButton>
                 <MagneticButton href="#contact" className="btn-ghost" strength={0.15}>
@@ -322,12 +319,6 @@ export default function Home() {
       <TechMarquee />
 
       {/* ════════════════════════════════════════════════════════════════
-          02 — SHIP RECORD
-      ════════════════════════════════════════════════════════════════ */}
-      <ChapterLabel num="02" title="Ship Record" sub="Open most of these in a new tab" />
-      <ProjectGrid />
-
-      {/* ════════════════════════════════════════════════════════════════
           DUAL MODE — I CAN DESIGN · I CAN DEVELOP
       ════════════════════════════════════════════════════════════════ */}
       <DualModeSection />
@@ -338,18 +329,12 @@ export default function Home() {
       <TechOrbitSection />
 
       {/* ════════════════════════════════════════════════════════════════
-          03 — PROCESS
+          02 — PROCESS
       ════════════════════════════════════════════════════════════════ */}
-      <ChapterLabel num="03" title="Process" sub="How a project goes from idea to deployed" />
+      <ChapterLabel num="02" title="Process" sub="Engineering workflows for production scale" />
       <ProcessSection />
 
       <div className="section-thread" aria-hidden="true" />
-
-      {/* ════════════════════════════════════════════════════════════════
-          04 — EXPERIENCE
-      ════════════════════════════════════════════════════════════════ */}
-      <ChapterLabel num="04" title="Experience" sub="Four companies, eighteen months" />
-      <ExperienceSection />
 
       {/* ════════════════════════════════════════════════════════════════
           STATS — By the numbers
@@ -357,17 +342,17 @@ export default function Home() {
       <StatsSection />
 
       {/* ════════════════════════════════════════════════════════════════
-          05 — SERVICES
+          03 — SERVICES
       ════════════════════════════════════════════════════════════════ */}
-      <ChapterLabel num="05" title="Services" sub="What I can take ownership of, end to end" />
+      <ChapterLabel num="03" title="Services" sub="Comprehensive technical execution and strategic architecture" />
       <ServicesSection />
 
       <div className="section-thread" aria-hidden="true" />
 
       {/* ════════════════════════════════════════════════════════════════
-          06 — SKILLS
+          04 — SKILLS
       ════════════════════════════════════════════════════════════════ */}
-      <ChapterLabel num="06" title="Skills" sub="Every tool here has shipped in something" />
+      <ChapterLabel num="04" title="Skills" sub="Battle-tested technologies driving production systems" />
       <SkillsSection />
 
       <div className="section-thread" aria-hidden="true" />

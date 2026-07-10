@@ -8,28 +8,28 @@ const STEPS = [
     num: '01',
     title: 'Scope',
     verb: 'Mapping Goals',
-    desc: 'What are we building, for who, and by when? Scope, constraints, and what "done" looks like — agreed before writing any code.',
+    desc: 'Defining technical requirements, system constraints, and success metrics. Eliminating ambiguity before a single line of code is written.',
     tags: ['Requirements', 'Risk Framing', 'Timeline'],
   },
   {
     num: '02',
     title: 'Architect',
     verb: 'Designing',
-    desc: 'Pick the stack that fits the timeline and the team. Design the data model and API contracts before the first sprint.',
+    desc: 'Selecting optimal tech stacks based on scale and velocity. Architecting robust data models, API contracts, and infrastructure topologies.',
     tags: ['Stack Selection', 'Data Modelling', 'API Design'],
   },
   {
     num: '03',
     title: 'Ship',
     verb: 'Deploying',
-    desc: 'Working software out every week. Not a demo — deployed, tested, measurable. Fix what breaks, keep what works.',
+    desc: 'Executing high-velocity sprints to deliver production-ready software. Implementing strict CI/CD pipelines, automated testing, and zero-downtime deployments.',
     tags: ['Weekly Deploy', 'QA Gates', 'CI/CD'],
   },
   {
     num: '04',
     title: 'Improve',
     verb: 'Iterating',
-    desc: 'Look at what users actually do. Fix the slow parts, fix the confusing parts. Keep shipping.',
+    desc: 'Leveraging telemetry and analytics to drive continuous optimization. Resolving bottlenecks and scaling systems to meet growing user demands.',
     tags: ['Analytics', 'Performance', 'Iteration'],
   },
 ];
@@ -51,8 +51,8 @@ export default function ProcessSection() {
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           >
             <p className="body-text mb-10 max-w-md">
-              Four phases, then repeat. Scope first, architecture second,
-              then ship — and do it again the following week.
+              Structured for scale. My engineering workflow prioritizes bulletproof architecture, 
+              rapid iteration, and measurable business impact on every deployment.
             </p>
 
             {/* Numbered step index */}

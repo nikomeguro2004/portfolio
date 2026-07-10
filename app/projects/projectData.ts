@@ -13,6 +13,38 @@ export type Project = {
 
 export const projects = [
   {
+    title: 'SiteElevate',
+    subtitle: 'AI-Powered Conversion Auditing',
+    period: 'Jul 2026',
+    status: 'Live',
+    priority: 'flagship',
+    description: 'An investor-grade website analysis platform that leverages AI to evaluate design aesthetics, trust signals, and conversion bottlenecks, providing real-time optimization insights.',
+    highlights: [
+      'Integrated LLM pipelines for deep semantic analysis of branding and trust signals',
+      'Engineered real-time DOM extraction and evaluation workflows for rapid feedback',
+      'Built a highly polished, glassmorphism UI with Framer Motion for a premium user experience'
+    ],
+    techStack: ['Next.js', 'React', 'Tailwind CSS', 'LLM APIs', 'TypeScript'],
+    link: 'https://sitescraper-kappa.vercel.app/',
+    orderKey: 202607,
+  },
+  {
+    title: 'Friendly Quiz',
+    subtitle: 'Dynamic Knowledge Assessment',
+    period: 'Jun 2026',
+    status: 'Live',
+    priority: 'flagship',
+    description: 'An interactive, adaptive learning engine that generates tailored assessments on any topic, dynamically adjusting difficulty based on real-time user performance.',
+    highlights: [
+      'Implemented intelligent quiz generation pipelines utilizing generative AI models',
+      'Architected a highly responsive, state-driven UI with complex micro-interactions',
+      'Designed an intuitive setup flow allowing precise control over difficulty and assessment length'
+    ],
+    techStack: ['Next.js', 'React', 'Framer Motion', 'Tailwind CSS', 'TypeScript'],
+    link: 'https://skilltester-ui.vercel.app/',
+    orderKey: 202606,
+  },
+  {
     title: 'Cursor Interaction Surface',
     subtitle: 'Shader-Driven Interaction Instrument',
     period: 'Mar 2026',

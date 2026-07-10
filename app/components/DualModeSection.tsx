@@ -191,7 +191,7 @@ export default function DualModeSection() {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               style={{ marginTop: '1rem', pointerEvents: 'none' }}
             >
-              {['UX-driven interfaces', 'Motion-first · pixel-perfect', 'Systems that feel right'].map(
+              {['Investor-grade product design', 'Fluid micro-interactions', 'Architected for retention'].map(
                 (line) => (
                   <p
                     key={line}
@@ -288,7 +288,7 @@ export default function DualModeSection() {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               style={{ marginTop: '1rem', pointerEvents: 'none' }}
             >
-              {['Full-stack · ship-first', 'Production-grade systems', 'Deadline? Consider it done'].map(
+              {['Enterprise-scale architecture', 'High-availability infrastructure', 'Rapid engineering velocity'].map(
                 (line) => (
                   <p
                     key={line}

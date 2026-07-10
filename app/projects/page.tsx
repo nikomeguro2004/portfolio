@@ -176,30 +176,31 @@ function ProjectTimelineCard({
         </div>
 
         <div className="relative">
-          <div className="flex-1">
-            <div className="mb-4 flex flex-wrap items-start justify-between gap-4 pr-24">
-              <div>
-                <div className="flex items-center gap-3">
-                  <h2 className="text-xl font-bold text-white">{project.title}</h2>
-                  {project.link && (
-                    <a
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 rounded-full bg-cyan-500/15 px-2.5 py-1 text-xs font-semibold text-cyan-400 transition-all hover:scale-105 hover:bg-cyan-500/25 group"
-                      style={{ pointerEvents: 'auto' }}
-                    >
-                      Open
-                      <svg className="w-3 h-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                    </a>
-                  )}
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex-1">
+              <div className="mb-4 flex flex-wrap items-start justify-between gap-4 pr-24">
+                <div>
+                  <div className="flex items-center gap-3">
+                    <h2 className="text-xl font-bold text-white">{project.title}</h2>
+                    {project.link && (
+                      <a
+                        href={project.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 rounded-full bg-cyan-500/15 px-2.5 py-1 text-xs font-semibold text-cyan-400 transition-all hover:scale-105 hover:bg-cyan-500/25 group"
+                        style={{ pointerEvents: 'auto' }}
+                      >
+                        Open
+                        <svg className="w-3 h-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </a>
+                    )}
+                  </div>
+                  <p className="mt-1 text-sm font-medium text-cyan-400">{project.subtitle}</p>
+                  <p className="mt-2 text-xs" style={{ color: 'var(--text-tertiary)' }}>{project.period}</p>
                 </div>
-                <p className="mt-1 text-sm font-medium text-cyan-400">{project.subtitle}</p>
-                <p className="mt-2 text-xs" style={{ color: 'var(--text-tertiary)' }}>{project.period}</p>
               </div>
-            </div>
 
             <AnimatePresence mode="wait">
               <motion.p
@@ -225,12 +226,24 @@ function ProjectTimelineCard({
             </ul>
 
             <div className="flex flex-wrap items-center gap-2">
-              {project.techStack.map((tech) => (
-                <span key={tech} className="skill-badge text-xs opacity-70 hover:opacity-100 transition-opacity">
-                  {tech}
-                </span>
-              ))}
+                {project.techStack.map((tech) => (
+                  <span key={tech} className="skill-badge text-xs opacity-70 hover:opacity-100 transition-opacity">
+                    {tech}
+                  </span>
+                ))}
+              </div>
             </div>
+            {project.image && (
+              <div className="md:w-5/12 shrink-0 mt-4 md:mt-0 relative group rounded-xl overflow-hidden border border-white/10 aspect-video md:aspect-auto">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img 
+                  src={project.image} 
+                  alt={project.title} 
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
+              </div>
+            )}
           </div>
         </div>
       </MagneticCard>

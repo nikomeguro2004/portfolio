@@ -7,42 +7,42 @@ const SERVICES = [
   {
     num: '01',
     title: 'Product Engineering',
-    desc: 'Take a brief, figure out what to build, build it. I handle the full cycle — spec, architecture, development, deployment. No handoffs.',
+    desc: 'Translate business requirements into scalable architectures. Delivering complete, production-ready systems from concept to deployment with absolute ownership.',
     chips: ['Scoping', 'Full Delivery', 'Launch'],
     metric: '12+ shipped',
   },
   {
     num: '02',
     title: 'Full-Stack Development',
-    desc: 'React/Next.js on the front, Node or FastAPI on the back, Postgres underneath. Clean APIs, proper auth, something you can hand off to another developer.',
+    desc: 'Architecting high-performance web applications. Building resilient backend services and robust APIs that scale to meet enterprise demands.',
     chips: ['Frontend', 'Backend', 'Databases'],
     metric: '30+ tools',
   },
   {
     num: '03',
     title: 'AI Integration',
-    desc: 'LLMs, RAG pipelines, vector search — the useful parts of AI, wired into your product. Not demos. Things your users actually interact with.',
+    desc: 'Integrating advanced machine learning and generative AI workflows into production systems. Turning complex models into tangible business value.',
     chips: ['LLM Wiring', 'RAG Pipelines', 'OpenAI / Ollama'],
     metric: 'LLMs + RAG',
   },
   {
     num: '04',
     title: 'Cloud & DevOps',
-    desc: 'AWS, Docker, CI/CD. Get your app deployed, auto-scaling, and not waking anyone up at 3am. Lambda, ECS, Vercel — whatever fits.',
+    desc: 'Designing secure, high-availability infrastructure. Automating deployments and establishing reliable CI/CD pipelines to guarantee zero-downtime scalability.',
     chips: ['AWS', 'Docker', 'CI/CD'],
     metric: 'AWS + Docker',
   },
   {
     num: '05',
     title: 'Security & Auth',
-    desc: 'RBAC, OAuth, JWT, session management — done properly. Not bolted on later. Supabase, NextAuth, or custom — set up before the first user signs in.',
+    desc: 'Implementing robust authentication and authorization frameworks from day one. Ensuring data integrity and compliance across all system boundaries.',
     chips: ['Auth & RBAC', 'Secure APIs', 'Supabase / NextAuth'],
     metric: 'Zero breaches',
   },
   {
     num: '06',
     title: 'Payments & CMS',
-    desc: 'Stripe or Razorpay — subscriptions, one-time, webhooks, refunds. Sanity or Supabase for content. Working checkout flows, not just UI mocks.',
+    desc: 'Integrating enterprise billing solutions and headless CMS platforms. Building resilient, event-driven architectures for seamless financial operations.',
     chips: ['Stripe / Razorpay', 'Subscriptions', 'Sanity CMS'],
     metric: 'Stripe + CMS',
   },
@@ -61,8 +61,8 @@ export default function ServicesSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          Six areas I can own end-to-end. Each one comes from having
-          actually built it, not just read about it.
+          Core competencies driving production value. Specialized expertise forged through 
+          architecting and shipping complex systems.
         </motion.p>
       </div>
 
@@ -295,7 +295,7 @@ export default function ServicesSection() {
             fontStyle: 'italic',
           }}
         >
-          &ldquo;Build something people can use. The rest follows.&rdquo;
+          &ldquo;Architecture is about optimizing for change. Build systems that scale, and products that endure.&rdquo;
         </motion.p>
       </div>
     </section>
