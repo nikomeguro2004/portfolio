@@ -147,7 +147,7 @@ function HeroEditorialPanel() {
 
       {/* Stats */}
       <div style={{ padding: '1rem 1.3rem', display: 'flex', gap: '2rem' }}>
-        {([['12+', 'SHIPPED'], ['30+', 'TOOLS'], ['95+', 'LIGHTHOUSE']] as [string, string][]).map(([v, l]) => (
+        {([['9+', 'SHIPPED'], ['30+', 'TOOLS'], ['95+', 'LIGHTHOUSE']] as [string, string][]).map(([v, l]) => (
           <div key={l}>
             <div style={{
               fontFamily: 'var(--font-heading), "Syne", sans-serif',
@@ -279,7 +279,7 @@ export default function Home() {
               {/* Stats */}
               <div className="pt-6 grid grid-cols-4 gap-3 sm:flex sm:flex-wrap sm:gap-8" style={{ borderTop: '1px solid var(--rule)' }}>
                 {[
-                  { value: '12+', label: 'Shipped'    },
+                  { value: '9+',  label: 'Shipped'    },
                   { value: '30+', label: 'Stack'      },
                   { value: '6wk', label: 'Avg Cycle'  },
                   { value: '95+', label: 'Lighthouse' },

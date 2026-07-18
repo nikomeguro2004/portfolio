@@ -50,7 +50,7 @@ const jsonLd = {
         "Python", "FastAPI", "AWS", "Supabase", "PostgreSQL",
         "Docker", "CI/CD", "LLM Integration", "RAG Systems",
         "Prompt Engineering", "Hugging Face", "Ollama",
-        "Razorpay", "Stripe", "Flutter", "Framer Motion"
+        "Razorpay", "Stripe", "Framer Motion"
       ],
       "sameAs": [
         "https://github.com/nikomeguro2004",
@@ -125,7 +125,7 @@ export const metadata: Metadata = {
     // Stack
     "React Developer", "Next.js Developer", "TypeScript Developer",
     "Node.js Developer", "Python Developer", "NestJS Developer",
-    "FastAPI Developer", "Flutter Developer", "Supabase Developer",
+    "FastAPI Developer", "Supabase Developer",
     // Cloud
     "AWS Developer", "AWS Solutions", "Cloud Architecture",
     "Docker", "CI/CD Engineer", "DevOps Engineer",
