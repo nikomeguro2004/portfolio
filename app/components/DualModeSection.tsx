@@ -1,7 +1,8 @@
 'use client';
 
-import { Suspense, lazy, useState, useRef } from 'react';
+import { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
+import type { Application } from '@splinetool/runtime';
 
 const Spline = lazy(() => import('@splinetool/react-spline'));
 
@@ -10,10 +11,37 @@ const SCENE_URL = 'https://prod.spline.design/PyzDhpQ9E5f1E3MT/scene.splinecode'
 export default function DualModeSection() {
   const [active, setActive] = useState<'design' | 'develop' | null>(null);
   const containerRef = useRef<HTMLElement>(null);
-  
+  const splineAppRef = useRef<Application | null>(null);
+
+  // The WebGL scene is heavy on phones (GPU + battery + a multi-MB wasm/scene
+  // download), so we skip it there entirely and fall back to a static background.
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
   // Only load the heavy WebGL Spline scene when we scroll within 800px of it.
   // This frees up massive resources for the top of the page.
   const isNear = useInView(containerRef, { once: true, margin: "800px" });
+
+  // Once loaded, stop the render loop while the section is scrolled out of
+  // view (and resume it when it scrolls back in) so it doesn't keep costing
+  // GPU time for the rest of the page on desktop.
+  const isVisible = useInView(containerRef, { margin: "200px" });
+  useEffect(() => {
+    const app = splineAppRef.current;
+    if (!app) return;
+    if (isVisible) app.play();
+    else app.stop();
+  }, [isVisible]);
+
+  const handleSplineLoad = (app: Application) => {
+    splineAppRef.current = app;
+    if (!isVisible) app.stop();
+  };
 
   return (
     <section
@@ -36,7 +64,7 @@ export default function DualModeSection() {
           overflow: 'hidden',
         }}
       >
-        {isNear && (
+        {isNear && !isMobile && (
           <Suspense
             fallback={
               <div
@@ -63,8 +91,19 @@ export default function DualModeSection() {
               </div>
             }
           >
-            <Spline scene={SCENE_URL} style={{ width: '100%', height: '100%' }} />
+            <Spline scene={SCENE_URL} style={{ width: '100%', height: '100%' }} onLoad={handleSplineLoad} />
           </Suspense>
+        )}
+        {isMobile && (
+          <div
+            aria-hidden
+            style={{
+              width: '100%',
+              height: '100%',
+              background:
+                'radial-gradient(60% 50% at 50% 45%, rgba(255,79,26,0.12) 0%, transparent 70%), #080C18',
+            }}
+          />
         )}
         {/* Hide Spline watermark */}
         <div

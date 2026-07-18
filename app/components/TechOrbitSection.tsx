@@ -7,8 +7,9 @@ import {
 import {
   SiNextdotjs, SiVercel, SiTypescript, SiSupabase,
   SiStripe, SiPostgresql, SiRedis, SiTailwindcss,
-  SiPrisma, SiOpenai, SiFramer, SiFastapi, SiRazorpay,
+  SiPrisma, SiFramer, SiFastapi, SiRazorpay,
 } from 'react-icons/si';
+import { RiOpenaiFill } from 'react-icons/ri';
 
 // ─── Stack used in real shipped products ──────────────────────────────────────
 
@@ -32,7 +33,7 @@ const ORBIT_ICONS = [
   { Icon: FaDocker,     color: '#2496ED', name: 'Docker'     },
   { Icon: SiVercel,     color: '#141210', name: 'Vercel'     },
   { Icon: FaGithub,     color: '#181717', name: 'GitHub'     },
-  { Icon: SiOpenai,     color: '#10A37F', name: 'OpenAI'     },
+  { Icon: RiOpenaiFill, color: '#10A37F', name: 'OpenAI'     },
   { Icon: SiStripe,     color: '#6259FF', name: 'Stripe'     },
   { Icon: SiRazorpay,   color: '#072654', name: 'Razorpay'   },
 ];

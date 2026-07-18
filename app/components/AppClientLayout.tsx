@@ -86,8 +86,14 @@ export default function AppClientLayout({ children }: AppClientLayoutProps) {
     setPhase('live');
   }, []);
 
+  // The loader intentionally never shows on /projects (see shouldShowLoader below).
+  // Without this, `phase` stays stuck at 'loading' forever on a direct visit to that
+  // route (bookmark, shared link, refresh) since nothing ever calls setPhase('live'),
+  // leaving the page permanently blank.
+  const skipsLoader = pathname === '/projects';
+
   // Sync phase for edge cases (mounted check)
-  const effectivePhase = mounted ? phase : 'live';
+  const effectivePhase = mounted ? (skipsLoader ? 'live' : phase) : 'live';
 
   const contextValue: ExperienceContextType = {
     phase: effectivePhase,
@@ -101,7 +107,7 @@ export default function AppClientLayout({ children }: AppClientLayoutProps) {
   const showSimplifiedScene = false;
   const showReducedScene = false;
 
-  const shouldShowLoader = mounted && effectivePhase === 'loading' && !prefersReducedMotion && pathname !== '/projects';
+  const shouldShowLoader = mounted && effectivePhase === 'loading' && !prefersReducedMotion;
 
   return (
     <ExperienceContext.Provider value={contextValue}>
