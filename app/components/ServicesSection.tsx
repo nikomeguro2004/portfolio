@@ -9,7 +9,7 @@ const SERVICES = [
     title: 'Product Engineering',
     desc: 'Translate business requirements into scalable architectures. Delivering complete, production-ready systems from concept to deployment with absolute ownership.',
     chips: ['Scoping', 'Full Delivery', 'Launch'],
-    metric: '12+ shipped',
+    metric: '9+ shipped',
   },
   {
     num: '02',
@@ -28,7 +28,7 @@ const SERVICES = [
   {
     num: '04',
     title: 'Cloud & DevOps',
-    desc: 'Designing secure, high-availability infrastructure. Automating deployments and establishing reliable CI/CD pipelines to guarantee zero-downtime scalability.',
+    desc: 'Designing secure, high-availability infrastructure. Automating deployments and establishing reliable CI/CD pipelines to build for high availability and scalability.',
     chips: ['AWS', 'Docker', 'CI/CD'],
     metric: 'AWS + Docker',
   },
@@ -37,7 +37,7 @@ const SERVICES = [
     title: 'Security & Auth',
     desc: 'Implementing robust authentication and authorization frameworks from day one. Ensuring data integrity and compliance across all system boundaries.',
     chips: ['Auth & RBAC', 'Secure APIs', 'Supabase / NextAuth'],
-    metric: 'Zero breaches',
+    metric: 'Secure by default',
   },
   {
     num: '06',

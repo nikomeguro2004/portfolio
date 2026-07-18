@@ -22,7 +22,7 @@ function ProjectsHeader({
     <div ref={headerRef} className="mb-14">
       <Link
         href="/"
-        className="projects-intro group mb-8 inline-flex items-center gap-2 text-sm opacity-0 transition-colors hover:text-cyan-400"
+        className="projects-intro group mb-8 inline-flex items-center gap-2 text-sm opacity-0 transition-colors hover:text-orange-500"
         style={{ color: 'var(--text-tertiary)' }}
       >
         <svg className="w-4 h-4 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -43,26 +43,26 @@ function ProjectsHeader({
         A selection of production projects with scope, implementation details, and delivery outcomes.
       </p>
 
-      <div className="projects-intro mt-5 rounded-xl border border-cyan-300/20 bg-slate-950/60 p-3 opacity-0">
+      <div className="projects-intro mt-5 rounded-xl border border-black/10 bg-orange-50 p-3 opacity-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-rose-400" />
-            <span className="h-2 w-2 rounded-full bg-amber-400" />
-            <span className="h-2 w-2 rounded-full bg-emerald-400" />
-            <span className="text-[11px] uppercase tracking-[0.14em] text-cyan-200/85">Projects Overview</span>
+            <span className="h-2 w-2 rounded-full bg-red-500" />
+            <span className="h-2 w-2 rounded-full bg-orange-400" />
+            <span className="h-2 w-2 rounded-full bg-green-500" />
+            <span className="text-[11px] uppercase tracking-[0.14em] text-gray-700">Projects Overview</span>
           </div>
-          <span className="text-[10px] uppercase tracking-[0.12em] text-indigo-200/80">Portfolio</span>
+          <span className="text-[10px] uppercase tracking-[0.12em] text-gray-500">Portfolio</span>
         </div>
       </div>
 
       <div className="projects-intro mt-8 grid gap-3 opacity-0 sm:grid-cols-2">
-        <div className="rounded-xl border border-cyan-400/20 bg-cyan-500/5 px-4 py-3">
+        <div className="rounded-xl border border-orange-500/20 bg-orange-50 px-4 py-3">
           <p className="text-xs uppercase tracking-[0.16em]" style={{ color: 'var(--text-tertiary)' }}>Total Projects</p>
-          <p className="mt-2 text-2xl font-bold text-white">{totalProjects}</p>
+          <p className="mt-2 text-2xl font-bold text-gray-900">{totalProjects}</p>
         </div>
-        <div className="rounded-xl border border-emerald-400/20 bg-emerald-500/5 px-4 py-3">
+        <div className="rounded-xl border border-green-500/20 bg-green-50 px-4 py-3">
           <p className="text-xs uppercase tracking-[0.16em]" style={{ color: 'var(--text-tertiary)' }}>Live / Active</p>
-          <p className="mt-2 text-2xl font-bold text-white">{activeProjects}</p>
+          <p className="mt-2 text-2xl font-bold text-gray-900">{activeProjects}</p>
         </div>
       </div>
     </div>
@@ -82,16 +82,16 @@ function ProjectNavigator({
 }) {
   return (
     <aside className="hidden self-start md:sticky md:top-28 md:block md:h-fit">
-      <div className="rounded-xl border border-white/10 bg-black/20 p-4 backdrop-blur-sm md:max-h-[calc(100dvh-8rem)] md:overflow-y-auto">
+      <div className="rounded-xl border border-black/10 bg-white/60 p-4 backdrop-blur-sm md:max-h-[calc(100dvh-8rem)] md:overflow-y-auto">
         <p className="mb-2 text-xs uppercase tracking-[0.16em]" style={{ color: 'var(--text-tertiary)' }}>Project Navigator</p>
         <div className="mb-4">
-          <div className="mb-2 h-1.5 rounded-full bg-white/10">
+          <div className="mb-2 h-1.5 rounded-full bg-black/10">
             <div
-              className="h-full rounded-full bg-linear-to-r from-cyan-300 to-indigo-300 transition-all duration-300"
+              className="h-full rounded-full bg-linear-to-r from-orange-400 to-red-400 transition-all duration-300"
               style={{ width: `${Math.max(progressRatio * 100, 5)}%` }}
             />
           </div>
-          <p className="text-[11px] uppercase tracking-[0.12em] text-cyan-200/80">
+          <p className="text-[11px] uppercase tracking-[0.12em] text-gray-600">
             {Math.min(activeProjectIndex + 1, visibleProjects.length)} / {visibleProjects.length}
           </p>
         </div>
@@ -118,10 +118,10 @@ function ProjectNavigator({
 function ProjectStatusPill({ status }: { status: Project['status'] }) {
   const statusClass =
     status === 'In Progress'
-      ? 'bg-amber-500/15 text-amber-400'
+      ? 'bg-orange-100 text-orange-400'
       : status === 'Live'
-        ? 'bg-emerald-500/15 text-emerald-400'
-        : 'bg-white/5 text-white/50';
+        ? 'bg-green-100 text-green-500'
+        : 'bg-gray-100 text-gray-500';
 
   return <span className={`px-2.5 py-1 rounded text-xs font-medium ${statusClass}`}>{status}</span>;
 }
@@ -157,17 +157,17 @@ function ProjectTimelineCard({
         onMouseEnter={() => onHover(project.title)}
         onMouseLeave={onLeave}
         style={{
-          boxShadow: isLive ? `0 0 ${isHovered ? 48 : 24}px rgba(56, 189, 248, 0.1)` : 'none',
-          borderColor: cardActive ? 'rgba(94, 234, 212, 0.36)' : undefined,
+          boxShadow: isLive ? `0 0 ${isHovered ? 48 : 24}px rgba(255, 79, 26, 0.1)` : 'none',
+          borderColor: cardActive ? 'rgba(255, 79, 26, 0.36)' : undefined,
         }}
       >
         <div className="absolute inset-0 pointer-events-none" style={{
           background: cardActive
-            ? 'radial-gradient(circle at 88% 16%, rgba(56, 189, 248, 0.16), transparent 44%)'
-            : 'radial-gradient(circle at 88% 16%, rgba(56, 189, 248, 0.08), transparent 40%)',
+            ? 'radial-gradient(circle at 88% 16%, rgba(255, 79, 26, 0.16), transparent 44%)'
+            : 'radial-gradient(circle at 88% 16%, rgba(255, 79, 26, 0.08), transparent 40%)',
         }} />
 
-        <div className="absolute right-3 top-3 rounded border border-white/10 bg-black/30 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-cyan-300">
+        <div className="absolute right-3 top-3 rounded border border-black/10 bg-gray-100 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-orange-400">
           Project {String(index + 1).padStart(2, '0')}
         </div>
 
@@ -181,13 +181,13 @@ function ProjectTimelineCard({
               <div className="mb-4 flex flex-wrap items-start justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-3">
-                    <h2 className="text-xl font-bold text-white">{project.title}</h2>
+                    <h2 className="text-xl font-bold text-gray-900">{project.title}</h2>
                     {project.link && (
                       <a
                         href={project.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 rounded-full bg-cyan-500/15 px-2.5 py-1 text-xs font-semibold text-cyan-400 transition-all hover:scale-105 hover:bg-cyan-500/25 group"
+                        className="inline-flex items-center gap-1 rounded-full bg-orange-100 px-2.5 py-1 text-xs font-semibold text-orange-500 transition-all hover:scale-105 hover:bg-orange-200 group"
                         style={{ pointerEvents: 'auto' }}
                       >
                         Open
@@ -197,7 +197,7 @@ function ProjectTimelineCard({
                       </a>
                     )}
                   </div>
-                  <p className="mt-1 text-sm font-medium text-cyan-400">{project.subtitle}</p>
+                  <p className="mt-1 text-sm font-medium text-orange-500">{project.subtitle}</p>
                   <p className="mt-2 text-xs" style={{ color: 'var(--text-tertiary)' }}>{project.period}</p>
                 </div>
               </div>
@@ -219,7 +219,7 @@ function ProjectTimelineCard({
             <ul className="mb-5 space-y-2">
               {project.highlights.map((item, itemIndex) => (
                 <li key={itemIndex} className="flex gap-2 text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
-                  <span className="text-cyan-400 font-bold">→</span>
+                  <span className="text-orange-500 font-bold">→</span>
                   <span>{item}</span>
                 </li>
               ))}
@@ -243,7 +243,7 @@ function ProjectTimelineCard({
 function ProjectsCta() {
   return (
     <div className="mt-20 text-center">
-      <p className="text-xl font-semibold mb-3 text-white">Need systems that scale?</p>
+      <p className="text-xl font-semibold mb-3 text-gray-900">Need systems that scale?</p>
       <p className="text-sm mb-6" style={{ color: 'var(--text-tertiary)' }}>
         From architecture to deployment, I build for production.
       </p>
@@ -359,7 +359,7 @@ export default function ProjectsPage() {
 
       <div className="pointer-events-none fixed inset-0 opacity-35" style={{
         backgroundImage:
-          'linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(129, 140, 248, 0.05) 1px, transparent 1px)',
+          'linear-gradient(to right, rgba(255, 79, 26, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px)',
         backgroundSize: '72px 72px',
         maskImage: 'radial-gradient(ellipse at center, black 30%, transparent 85%)',
       }} />
@@ -370,7 +370,7 @@ export default function ProjectsPage() {
         style={{
           width: '620px',
           height: '620px',
-          background: 'radial-gradient(circle, rgba(56, 189, 248, 0.14) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(255, 79, 26, 0.14) 0%, transparent 70%)',
           top: '60px',
           left: '-180px',
           filter: 'blur(72px)',
@@ -383,7 +383,7 @@ export default function ProjectsPage() {
         style={{
           width: '540px',
           height: '540px',
-          background: 'radial-gradient(circle, rgba(129, 140, 248, 0.16) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(0, 0, 0, 0.10) 0%, transparent 70%)',
           top: '34%',
           right: '-190px',
           filter: 'blur(78px)',
@@ -408,8 +408,8 @@ export default function ProjectsPage() {
 
             <div ref={projectsRef} className="space-y-7">
               {!visibleProjects.length && (
-                <div className="rounded-2xl border border-white/10 bg-slate-950/55 p-8 text-center">
-                  <p className="text-lg font-semibold text-white">No projects available</p>
+                <div className="rounded-2xl border border-black/10 bg-white/60 p-8 text-center">
+                  <p className="text-lg font-semibold text-gray-900">No projects available</p>
                   <p className="mt-2 text-sm" style={{ color: 'var(--text-tertiary)' }}>
                     Add project data to begin rendering the timeline.
                   </p>

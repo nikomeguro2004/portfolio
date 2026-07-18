@@ -5,7 +5,7 @@ import SiteFooter from './SiteFooter';
 
 const SOCIALS = [
   { label: 'GitHub',   href: 'https://github.com/nikomeguro2004',                handle: 'nikomeguro2004'    },
-  { label: 'LinkedIn', href: 'https://linkedin.com/in/adityan-suresh-781116256', handle: 'adityan-suresh'    },
+  { label: 'LinkedIn', href: 'https://linkedin.com/in/adityan-suresh', handle: 'adityan-suresh'    },
   { label: 'Email',    href: 'mailto:adihere2000@gmail.com',                     handle: 'adihere2000@gmail.com' },
 ];
 

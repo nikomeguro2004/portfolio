@@ -36,7 +36,7 @@ const jsonLd = {
       "url": "https://adityan.dev",
       "image": "https://adityan.dev/og-image.png",
       "jobTitle": "Full-Stack Engineer & AI Developer",
-      "description": "Full-Stack Engineer with 12+ shipped products across startup, SaaS, and AI domains. Specialises in React, Next.js, TypeScript, Python, AWS, and LLM pipelines.",
+      "description": "Full-Stack Engineer with 9+ shipped products across startup, SaaS, and AI domains. Specialises in React, Next.js, TypeScript, Python, AWS, and LLM pipelines.",
       "email": "adihere2000@gmail.com",
       "address": {
         "@type": "PostalAddress",
@@ -54,7 +54,7 @@ const jsonLd = {
       ],
       "sameAs": [
         "https://github.com/nikomeguro2004",
-        "https://linkedin.com/in/adityan-suresh-781116256",
+        "https://linkedin.com/in/adityan-suresh",
         "https://calendly.com/adihere2000/30min"
       ],
       "makesOffer": [
@@ -80,7 +80,7 @@ const jsonLd = {
       "@id": "https://adityan.dev/#website",
       "url": "https://adityan.dev",
       "name": "S Adityan — Full-Stack & AI Engineer",
-      "description": "Portfolio of S Adityan — 12+ shipped products, React, Next.js, Python, AWS, LLMs.",
+      "description": "Portfolio of S Adityan — 9+ shipped products, React, Next.js, Python, AWS, LLMs.",
       "author": { "@id": "https://adityan.dev/#person" },
       "inLanguage": "en-US",
       "potentialAction": {
@@ -113,7 +113,7 @@ export const metadata: Metadata = {
     default: "S Adityan | Full-Stack & AI Engineer — Chennai",
     template: "%s | S Adityan"
   },
-  description: "S Adityan — Full-Stack Engineer with 12+ shipped products across startup, SaaS, and AI domains. Expert in React, Next.js, TypeScript, Python, AWS, and LLM pipelines. Based in Chennai, available globally.",
+  description: "S Adityan — Full-Stack Engineer with 9+ shipped products across startup, SaaS, and AI domains. Expert in React, Next.js, TypeScript, Python, AWS, and LLM pipelines. Based in Chennai, available globally.",
 
   keywords: [
     // Core identity
@@ -174,7 +174,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     siteName: 'S Adityan Portfolio',
     title: 'S Adityan | Full-Stack & AI Engineer',
-    description: '12+ shipped products. React, Next.js, TypeScript, Python, AWS, LLMs. If it has a deadline and a stack, I ship it.',
+    description: '9+ shipped products. React, Next.js, TypeScript, Python, AWS, LLMs. If it has a deadline and a stack, I ship it.',
     url: 'https://adityan.dev',
     images: [
       {
@@ -190,7 +190,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'S Adityan | Full-Stack & AI Engineer',
-    description: '12+ shipped products. React, Next.js, Python, AWS, LLMs. Based in Chennai.',
+    description: '9+ shipped products. React, Next.js, Python, AWS, LLMs. Based in Chennai.',
     images: ['/og-image.png'],
     creator: '@adityandev',
   },

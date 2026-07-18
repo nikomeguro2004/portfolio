@@ -18,10 +18,10 @@ export default function SiteFooter() {
 
           <nav className="flex flex-wrap gap-x-5 gap-y-2">
             {[
-              { href: '/#work',       label: 'Work' },
-              { href: '/#process',    label: 'Process' },
-              { href: '/#experience', label: 'Experience' },
               { href: '/projects',    label: 'Projects' },
+              { href: '/#process',    label: 'Process' },
+              { href: '/#services',   label: 'Services' },
+              { href: '/#skills',     label: 'Skills' },
               { href: '/#contact',    label: 'Contact' },
             ].map((l) => (
               <Link

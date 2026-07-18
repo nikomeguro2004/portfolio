@@ -79,22 +79,6 @@ export const projects = [
     orderKey: 202603,
   },
   {
-    title: 'CuiSync',
-    subtitle: 'Restaurant Management Platform',
-    period: 'Nov 2025 – Present',
-    status: 'In Progress',
-    priority: 'flagship',
-    description:
-      'Real-time restaurant operations platform with role-based access, offline-tolerant workflows, and cross-device synchronization.',
-    highlights: [
-      'Multi-role access control with auditable operations',
-      'Real-time sync with local persistence fallback',
-      'Cross-platform Flutter & Next.js interfaces',
-    ],
-    techStack: ['Flutter', 'Next.js', 'SQLite', 'Supabase', 'TypeScript'],
-    orderKey: 202611,
-  },
-  {
     title: 'SivaComics',
     subtitle: 'Comic Publishing Platform',
     period: 'Oct 2025 – Jan 2026',

@@ -16,7 +16,7 @@ Production portfolio for S Adityan, focused on full-stack engineering, applied A
 ## Links
 
 - GitHub: https://github.com/nikomeguro2004
-- LinkedIn: https://linkedin.com/in/adityan-suresh-781116256
+- LinkedIn: https://linkedin.com/in/adityan-suresh
 - LeetCode: https://leetcode.com/u/NikoMeguro/
 
 ## Snapshot
@@ -85,19 +85,6 @@ Key points:
 - Deterministic cleanup pipeline with mobile-aware DPR tuning and visibility pause/resume.
 
 Stack: Next.js, TypeScript, Matter.js, HTML5 Canvas 2D
-
-### 2) CuiSync
-Restaurant Management Platform  
-Period: November 2025 to Present · Status: In Progress
-
-Real-time operations platform with role-based access and offline-tolerant synchronization.
-
-Highlights:
-- Multi-role access control with auditable operations
-- Real-time synchronization with local persistence fallback
-- Cross-platform interfaces using Flutter and Next.js
-
-Stack: Flutter, Next.js, SQLite, Supabase, TypeScript
 
 ### 3) SivaComics
 Comic Publishing Platform · Live: https://sivacomics.com  

@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 
 const STATS = [
-  { value: 12,  suffix: '+',  label: 'Projects Shipped',  sub: 'All live, all real'              },
-  { value: 4,   suffix: '',   label: 'Companies',          sub: 'Startups to enterprise'          },
-  { value: 18,  suffix: 'mo', label: 'Track Record',       sub: 'From first gig to now'           },
+  { value: 9,   suffix: '+',  label: 'Projects Shipped',  sub: 'All live, all real'              },
+  { value: 100, suffix: '%',  label: 'Delivery Rate',      sub: 'On time, on spec'                },
+  { value: 30,  suffix: '+',  label: 'Tech Stack',         sub: 'Tools & Frameworks'              },
   { value: 95,  suffix: '+',  label: 'Lighthouse Score',   sub: 'Avg across all sites'            },
 ];
 
