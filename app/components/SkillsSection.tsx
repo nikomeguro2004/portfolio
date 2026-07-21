@@ -5,10 +5,10 @@ import { useRef } from 'react';
 
 const SKILLS = [
   { cat: 'Frontend',       tags: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Anime.js', 'Matter.js', 'Canvas 2D', 'Astro', 'Nuxt.js'] },
-  { cat: 'Backend & APIs', tags: ['Node.js', 'NestJS', 'FastAPI', 'Express', 'Python', 'REST APIs', 'Auth & RBAC', 'Webhooks'] },
-  { cat: 'Data & Storage', tags: ['PostgreSQL', 'Prisma', 'Drizzle ORM', 'MongoDB', 'Supabase', 'Sanity CMS', 'Redis', 'DynamoDB'] },
-  { cat: 'AI Engineering', tags: ['LLM Integrations', 'RAG Workflows', 'Prompt Engineering', 'Whisper', 'TTS Models', 'Hugging Face', 'Ollama', 'Pinecone'] },
-  { cat: 'Cloud & DevOps', tags: ['AWS', 'Docker', 'Kubernetes Basics', 'CI/CD', 'Vercel', 'Lambda', 'Amplify', 'S3'] },
+  { cat: 'Backend & APIs', tags: ['Node.js', 'FastAPI', 'Express', 'Python', 'REST APIs', 'Auth & RBAC', 'Webhooks'] },
+  { cat: 'Data & Storage', tags: ['PostgreSQL', 'Prisma', 'Drizzle ORM', 'MongoDB', 'Supabase', 'Sanity CMS', 'Redis'] },
+  { cat: 'AI Engineering', tags: ['LLM Integrations', 'RAG Workflows', 'Prompt Engineering', 'Hugging Face', 'Ollama'] },
+  { cat: 'Cloud & DevOps', tags: ['AWS', 'Docker', 'Kubernetes Basics', 'CI/CD', 'Vercel', 'Lambda', 'S3'] },
   { cat: 'Payments & CMS', tags: ['Razorpay', 'Stripe', 'Webhooks', 'Sanity', 'Subscriptions', 'Checkout Flows'] },
 ];
 
