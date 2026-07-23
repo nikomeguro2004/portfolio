@@ -11,6 +11,7 @@ import ContactBlock from './components/ContactBlock';
 import DualModeSection from './components/DualModeSection';
 import TechOrbitSection from './components/TechOrbitSection';
 import StatsSection from './components/StatsSection';
+import LiveBuildSection from './components/LiveBuildSection';
 
 // ─── Tech marquee ─────────────────────────────────────────────────────────────
 const TECH_STRIP = [
@@ -327,6 +328,11 @@ export default function Home() {
           TECH ORBIT — PRODUCTION TOOLKIT
       ════════════════════════════════════════════════════════════════ */}
       <TechOrbitSection />
+
+      {/* ════════════════════════════════════════════════════════════════
+          LIVE BUILD — interactive proof, not a screenshot
+      ════════════════════════════════════════════════════════════════ */}
+      <LiveBuildSection />
 
       {/* ════════════════════════════════════════════════════════════════
           02 — PROCESS
